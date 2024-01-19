@@ -1,0 +1,140 @@
+
+.mountain-content {
+    max-width: 900px; 
+    margin-left: 390px;
+    margin: 1 auto; 
+    margin-top: 20px;
+    height: 555px;
+    background-color: #f0f0f0; 
+}
+
+.sky-content {
+    max-width: 350px; 
+    width: 295px;
+    position: absolute;
+    margin-top: -555px;
+    margin-left: 1305px;
+    height: 255px;
+    background-color: aqua; 
+   
+}
+
+.temperature-content {
+    max-width: 350px;
+    width: 295px;
+    position: absolute;
+    margin-top: -555px;
+    margin-left: 1610px;
+    height: 255px;
+    background-color: lightpink; 
+   
+   
+}
+
+.rain-content {
+    max-width: 350px; 
+    width: 295px;
+    margin-top: -255px;
+    margin-left: 1305px;
+    height: 255px;
+    background-color: coral; 
+  
+}
+
+.humidity-content {
+    max-width: 350px; 
+    width: 295px;
+    margin-top: -255px;
+    margin-left: 1610px;
+    height: 255px;
+    background-color: greenyellow;
+
+}
+
+.snow-content {
+    max-width: 350px;
+    width: 295px;
+    margin-top: 25px;
+    margin-left: 390px;
+    height: 255px;
+    background-color: yellowgreen; 
+}
+
+.wind-content {
+    max-width: 350px; 
+    width: 295px;
+    margin-top: -255px;
+    margin-left: 995px;
+    height: 255px;
+    background-color: cornflowerblue; 
+}
+
+.ocean-content {
+    max-width: 350px; 
+    width: 295px;
+    margin-top: -255px;
+    margin-left: 1610px;
+    height: 255px;
+    background-color: darkslategrey; 
+}
+
+.mountain-layout{
+    /* all: initial; */
+    /* 위의 코드는 기존 css 를 무효화하고, 나만의 css 만을 적용시키게 해주는 역할을 함. 해제하여도 레이아웃 유지됌 */
+ color: black;
+ background-color: #e5e8ec;
+}
+
+/* 산 정보 CSS 끝 */
+
+.mountain-review{
+    
+    height: 500px; /* 높이 지정 (적절한 값으로 조절) */
+    padding: 10px; /* 내용 주변의 간격 지정 */
+    background-color: aqua;
+    
+}
+
+.mountain-review-title{
+ color: black;
+ font-size:25px;
+ margin-top: 40px;
+ margin-left: 385px;
+}
+
+.mountain-review-subtitle{
+    color: black;
+    font-size:18px;
+    margin-top: -40px;
+    margin-left: 385px;
+}
+
+#review-table{
+    margin-left: 385px;
+    width: 1490px;
+    font-size: 20px;
+}
+
+/* 산 후기 CSS 끝 */
+
+.mountain-search{
+    border: solid #81adab 3px; 
+    width: 600px; 
+    height: 70px; 
+    margin-bottom: 60px; 
+    background: transparent; 
+    
+    color: black;
+}
+
+#OAuthLogin{
+    margin-right: 60px;
+}
+
+#naverButton{
+    width: 190px;height: 50px;
+}
+
+#kakaoButton{
+    width: 190px;height: 50px;
+}
