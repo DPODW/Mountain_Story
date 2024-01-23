@@ -1,7 +1,7 @@
 package com.mountainstory.project.config.security;
 
+import com.mountainstory.project.config.auth.OAuthMemberService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.XSlf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +13,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final OAuthMemberService OAuthMemberService;
     String[] publicForm = {"/home","/home/result",
 
             "/assets/css/**", "/assets/js/**", "/images/**"};
@@ -24,8 +26,17 @@ public class SecurityConfig {
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.disable())
                 .authorizeHttpRequests(request -> request.requestMatchers(publicForm).permitAll().anyRequest().authenticated())
-                .oauth2Login();
+                .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
+                        .successHandler(successHandler())
+                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(OAuthMemberService)));
         return httpSecurity.build();
+    }
+
+
+    private AuthenticationSuccessHandler successHandler() {
+        return (request, response, authentication) -> {
+            response.sendRedirect("/home");
+        };
     }
 
 

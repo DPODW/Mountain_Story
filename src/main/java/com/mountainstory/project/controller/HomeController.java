@@ -21,12 +21,4 @@ public class HomeController {
     public String resultPage(){
         return "main/SearchResult";
     }
-
-
-
-
-
-
-
-
 }

@@ -1,22 +1,26 @@
 package com.mountainstory.project.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter
+
 @Getter
 @Entity
 public class Member {
 
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "MEMBER_NUMBER")
+//    private Long number;
+
     @Id
+    @Column(name = "MEMBER_ID")
+    private String id;
+
     @Column(name = "MEMBER_EMAIL")
     private String email;
 
@@ -36,4 +40,20 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Comment> commentList = new ArrayList<Comment>();
+
+
+    public Member createMemberInfo(String email,String name,LocalDateTime createTime,String id,String type){
+        this.email=email;
+        this.type=type;
+        this.name=name;
+        this.createTime=createTime;
+        this.id=id;
+        return this;
+        //회원 정보를 만들때 사용되는 생성자
+    }
+
+    public Member update(String name){
+        this.name=name;
+        return this;
+    }
 }
