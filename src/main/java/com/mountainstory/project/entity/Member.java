@@ -11,12 +11,6 @@ import java.util.List;
 @Getter
 @Entity
 public class Member {
-
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "MEMBER_NUMBER")
-//    private Long number;
-
     @Id
     @Column(name = "MEMBER_ID")
     private String id;
@@ -42,7 +36,7 @@ public class Member {
     private List<Comment> commentList = new ArrayList<Comment>();
 
 
-    public Member createMemberInfo(String email,String name,LocalDateTime createTime,String id,String type){
+    public Member createMemberInfo(String email,String name,String id,String type,LocalDateTime createTime){
         this.email=email;
         this.type=type;
         this.name=name;

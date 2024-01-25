@@ -1,9 +1,11 @@
 package com.mountainstory.project.config.auth;
 
 import com.mountainstory.project.entity.Member;
+import lombok.Getter;
 
 import java.io.Serializable;
 
+@Getter
 public class OAuthMemberSession implements Serializable {
 
     private String name;

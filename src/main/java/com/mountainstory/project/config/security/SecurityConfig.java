@@ -1,21 +1,27 @@
 package com.mountainstory.project.config.security;
 
 import com.mountainstory.project.config.auth.OAuthMemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+
+import java.io.IOException;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final OAuthMemberService OAuthMemberService;
-    String[] publicForm = {"/home","/home/result",
+    String[] publicForm = {"/home","/home/result","/home/oauthLogout",
 
             "/assets/css/**", "/assets/js/**", "/images/**"};
 
@@ -28,7 +34,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request.requestMatchers(publicForm).permitAll().anyRequest().authenticated())
                 .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
                         .successHandler(successHandler())
-                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(OAuthMemberService)));
+                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(OAuthMemberService)))
+                .logout(logoutConfig -> logoutConfig.logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler()));
         return httpSecurity.build();
     }
 
@@ -38,6 +45,14 @@ public class SecurityConfig {
             response.sendRedirect("/home");
         };
     }
+
+    private LogoutSuccessHandler logoutSuccessHandler() {
+        return (request, response, authentication) -> {
+            response.sendRedirect("/home");
+        };
+    }
+
+
 
 
     @Bean
