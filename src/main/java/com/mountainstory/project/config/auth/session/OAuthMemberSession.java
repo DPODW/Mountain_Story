@@ -1,4 +1,4 @@
-package com.mountainstory.project.config.auth;
+package com.mountainstory.project.config.auth.session;
 
 import com.mountainstory.project.entity.Member;
 import lombok.Getter;
@@ -11,8 +11,14 @@ public class OAuthMemberSession implements Serializable {
     private String name;
     private String email;
 
-    public OAuthMemberSession(Member member) {
+    private String type;
+
+    private String accessToken;
+
+    public OAuthMemberSession(Member member,String accessToken) {
         this.name = member.getName();
         this.email = member.getEmail();
+        this.type = member.getType();
+        this.accessToken = accessToken;
     }
 }

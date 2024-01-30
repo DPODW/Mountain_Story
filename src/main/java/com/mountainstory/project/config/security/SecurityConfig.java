@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
@@ -21,7 +23,8 @@ import java.io.IOException;
 public class SecurityConfig {
 
     private final OAuthMemberService OAuthMemberService;
-    String[] publicForm = {"/home","/home/result","/home/oauthLogout",
+
+    String[] publicForm = {"/home","/home/result",
 
             "/assets/css/**", "/assets/js/**", "/images/**"};
 
@@ -34,6 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request.requestMatchers(publicForm).permitAll().anyRequest().authenticated())
                 .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
                         .successHandler(successHandler())
+                        .failureHandler(failureHandler())
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(OAuthMemberService)))
                 .logout(logoutConfig -> logoutConfig.logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler()));
         return httpSecurity.build();
@@ -42,18 +46,26 @@ public class SecurityConfig {
 
     private AuthenticationSuccessHandler successHandler() {
         return (request, response, authentication) -> {
-            response.sendRedirect("/home");
+            redirectUrl(response);
+        };
+    }
+
+
+    private AuthenticationFailureHandler failureHandler() {
+        return (request, response, authentication) -> {
+            redirectUrl(response);
         };
     }
 
     private LogoutSuccessHandler logoutSuccessHandler() {
         return (request, response, authentication) -> {
-            response.sendRedirect("/home");
+            redirectUrl(response);
         };
     }
 
-
-
+    private static void redirectUrl(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/home");
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {
