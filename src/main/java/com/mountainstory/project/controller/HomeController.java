@@ -2,6 +2,9 @@ package com.mountainstory.project.controller;
 import com.mountainstory.project.config.auth.OAuthMemberService;
 import com.mountainstory.project.config.auth.session.LoginMember;
 import com.mountainstory.project.config.auth.session.OAuthMemberSession;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +29,7 @@ public class HomeController {
         } else if(oAuthMemberSession != null && oAuthMemberSession.getType().equals("kakao")) {
             model.addAttribute("kakao","kakao");
         }
+        model.addAttribute("loginMember",oAuthMemberSession);
         return "main/Home";
     }
 
@@ -41,6 +45,9 @@ public class HomeController {
         oAuthMemberService.naverMemberLogout(oAuthMemberSession.getAccessToken());
         return "redirect:/logout";
     }
+
+
+
 
 
 }

@@ -61,7 +61,7 @@ public class OAuthAttributes {
     }
 
 
-    //가입시에 필요한 메소드 (이미 존재하는 회원이면 필요 x 인듯)
+    //가입시에 필요한 메소드 (이미 존재하는 회원이면 필요 x)
     public Member toEntity(){
         Member member = new Member();
         member.createMemberInfo(email,name,id,type,LocalDateTime.now());

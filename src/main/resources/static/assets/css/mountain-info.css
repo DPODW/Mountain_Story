@@ -138,3 +138,24 @@
 #kakaoButton{
     width: 190px;height: 50px;
 }
+
+.logoutButton {
+    margin-right: 120px;
+    margin-top: 90px;
+    padding: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    background-color: #3498db;
+    color: #fff;
+    border-radius: 5px;
+}
+
+#LoginSuccess p{
+    font-size: 20px; float: left; margin-top: -15px;
+}
+
+#LoginSuccess p:last-child {
+    font-size: 15px;
+    float: left;
+}
+

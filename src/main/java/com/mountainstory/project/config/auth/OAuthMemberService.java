@@ -5,6 +5,7 @@ import com.mountainstory.project.entity.Member;
 import com.mountainstory.project.repository.member.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -24,6 +25,12 @@ public class OAuthMemberService implements OAuth2UserService<OAuth2UserRequest, 
 
     private final HttpSession httpSession;
     private final MemberRepository memberRepository;
+
+    @Value("${naver.client.id}")
+    private String naverClientId;
+
+    @Value("${naver.client.secret}")
+    private String naverClientSecret;
 
 
     public OAuthMemberService(HttpSession httpSession, MemberRepository memberRepository) {
@@ -64,8 +71,8 @@ public class OAuthMemberService implements OAuth2UserService<OAuth2UserRequest, 
         URI uri = UriComponentsBuilder
                 .fromUriString("https://nid.naver.com/oauth2.0/token")
                 .queryParam("grant_type","delete")
-                .queryParam("client_id","DYc8tzRY1McUUZsQecQV")
-                .queryParam("client_secret","d6jM7BWz0C")
+                .queryParam("client_id",naverClientId)
+                .queryParam("client_secret",naverClientSecret)
                 .queryParam("access_token",accessToken)
                 .queryParam("service_provider","NAVER")
                 .build()
@@ -75,4 +82,20 @@ public class OAuthMemberService implements OAuth2UserService<OAuth2UserRequest, 
         return forEntity.getBody();
     }
 
+
+    //네이버 재인증 메소드. 현재 사용중이지 않다.
+    public String naverRecertification(){
+        URI uri = UriComponentsBuilder
+                .fromUriString("https://nid.naver.com/oauth2.0/authorize")
+                .queryParam("response_type","code")
+                .queryParam("client_id",naverClientId)
+                .queryParam("redirect_uri","http://localhost:8080/login/oauth2/code/naver")
+                .queryParam("state","test")
+                .queryParam("auth_type","reauthenticate")
+                .build()
+                .toUri();
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> forEntity = restTemplate.getForEntity(uri, String.class);
+        return forEntity.getBody();
+    }
 }

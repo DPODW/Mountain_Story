@@ -10,7 +10,7 @@ public class OAuthMemberSession implements Serializable {
 
     private String name;
     private String email;
-
+    private String id;
     private String type;
 
     private String accessToken;
@@ -18,6 +18,7 @@ public class OAuthMemberSession implements Serializable {
     public OAuthMemberSession(Member member,String accessToken) {
         this.name = member.getName();
         this.email = member.getEmail();
+        this.id= member.getId();
         this.type = member.getType();
         this.accessToken = accessToken;
     }
