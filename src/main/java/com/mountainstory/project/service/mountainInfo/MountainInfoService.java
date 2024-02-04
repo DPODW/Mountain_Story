@@ -1,6 +1,7 @@
 package com.mountainstory.project.service.mountainInfo;
 
-import com.mountainstory.project.dto.mountainInfo.MountainInfoDto;
+import com.mountainstory.project.dto.mountain.mountainImg.MountainImgDto;
+import com.mountainstory.project.dto.mountain.mountainInfo.MountainInfoDto;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -11,9 +12,11 @@ public interface MountainInfoService {
 
     List<MountainInfoDto> searchMountainInfo(String mountainName) throws UnsupportedEncodingException;
 
+    List<MountainImgDto> searchMountainPhoto(String mountainNumber);
+
     String searchMountainWeather(String mountainName);
 
-    String searchMountainPhoto(String mountainNumber);
+
 
 
 }

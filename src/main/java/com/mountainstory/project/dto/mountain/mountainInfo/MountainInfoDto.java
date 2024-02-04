@@ -1,4 +1,4 @@
-package com.mountainstory.project.dto.mountainInfo;
+package com.mountainstory.project.dto.mountain.mountainInfo;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -30,12 +30,15 @@ public class MountainInfoDto {
     @XmlElement(name = "mntilistno")
     private String mountainNo;
 
+    private String testImg;
 
-    public MountainInfoDto(String mountainName, String mountainLocation, String mountainIntroduce, String mountainHigh, String mountainNo) {
+
+    public MountainInfoDto(String mountainName, String mountainLocation, String mountainIntroduce, String mountainHigh, String mountainNo ,String testImg) {
         this.mountainName = mountainName;
         this.mountainLocation = mountainLocation;
         this.mountainIntroduce = mountainIntroduce;
         this.mountainHigh = mountainHigh;
         this.mountainNo = mountainNo;
+        this.testImg=testImg;
     }
 }
