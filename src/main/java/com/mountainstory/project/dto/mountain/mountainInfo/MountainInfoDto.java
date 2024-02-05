@@ -30,15 +30,15 @@ public class MountainInfoDto {
     @XmlElement(name = "mntilistno")
     private String mountainNo;
 
-    private String testImg;
+    private String mountainImgUrl;
 
 
-    public MountainInfoDto(String mountainName, String mountainLocation, String mountainIntroduce, String mountainHigh, String mountainNo ,String testImg) {
+    public MountainInfoDto(String mountainName, String mountainLocation, String mountainIntroduce, String mountainHigh, String mountainNo ,String mountainImgUrl) {
         this.mountainName = mountainName;
         this.mountainLocation = mountainLocation;
         this.mountainIntroduce = mountainIntroduce;
         this.mountainHigh = mountainHigh;
         this.mountainNo = mountainNo;
-        this.testImg=testImg;
+        this.mountainImgUrl=mountainImgUrl;
     }
 }

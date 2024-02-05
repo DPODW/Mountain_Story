@@ -12,7 +12,7 @@ public interface MountainInfoService {
 
     List<MountainInfoDto> searchMountainInfo(String mountainName) throws UnsupportedEncodingException;
 
-    List<MountainImgDto> searchMountainPhoto(String mountainNumber);
+    List<MountainImgDto> searchMountainImg(String mountainNumber);
 
     String searchMountainWeather(String mountainName);
 
