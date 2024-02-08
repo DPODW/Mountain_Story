@@ -3,6 +3,9 @@ import com.mountainstory.project.dto.mountain.mountainImg.MountainImgDto;
 import com.mountainstory.project.dto.mountain.mountainImg.MountainImgXml;
 import com.mountainstory.project.dto.mountain.mountainInfo.MountainInfoDto;
 import com.mountainstory.project.dto.mountain.mountainInfo.MountainInfoXml;
+import com.mountainstory.project.dto.mountain.mountainregion.MountainCoordinate;
+import com.mountainstory.project.dto.mountain.mountainregion.MountainLocation;
+import com.mountainstory.project.repository.region.LocationRepository;
 import com.mountainstory.project.service.mountainInfo.MountainInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,13 +17,31 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Service
 public class MountainInfoServiceImpl implements MountainInfoService {
 
+    private final LocationRepository locationRepository;
     @Value("${openapi.serviceKey}")
     private String openApiServiceKey;
+
+    public MountainInfoServiceImpl(LocationRepository locationRepository) {
+        this.locationRepository = locationRepository;
+    }
+
+
+    @Override
+    public List<MountainInfoDto> getAllMountainInfo(String mountainName) throws UnsupportedEncodingException {
+        List<MountainInfoDto> mountainInfoDtoList = searchMountainInfo(mountainName);
+        setImgToDtoList(mountainInfoDtoList);
+        getMountainCoordinate(mountainInfoDtoList);
+        setCoordinateToDtoList(mountainInfoDtoList);
+
+        log.info(">{}",mountainInfoDtoList);
+        return mountainInfoDtoList;
+    }
 
     @Override
     public List<MountainInfoDto> searchMountainInfo(String mountainName) throws UnsupportedEncodingException {
@@ -36,10 +57,6 @@ public class MountainInfoServiceImpl implements MountainInfoService {
         RestTemplate restTemplate = new RestTemplate();
         MountainInfoXml mountainInfoXml = restTemplate.getForObject(uri, MountainInfoXml.class);
         List<MountainInfoDto> mountainInfoDtoList = mountainInfoXml.getBody().getMountainInfoDto();
-
-        setImgToDtoList(mountainInfoDtoList);
-
-        log.info("{}",mountainInfoDtoList);
         return mountainInfoDtoList;
     }
 
@@ -61,6 +78,7 @@ public class MountainInfoServiceImpl implements MountainInfoService {
     }
 
     private void setImgToDtoList(List<MountainInfoDto> mountainInfoDtoList) {
+        //TODO: 반복문 최적화 필요
         mountainInfoDtoList.forEach(mountainInfoDto -> {
             List<MountainImgDto> imageList = searchMountainImg(mountainInfoDto.getMountainNo());
             if (!imageList.isEmpty()) {
@@ -71,6 +89,47 @@ public class MountainInfoServiceImpl implements MountainInfoService {
             }
         });
     }
+
+    private void setCoordinateToDtoList(List<MountainInfoDto> mountainInfoDtoList){
+        List<MountainCoordinate> mountainCoordinate = getMountainCoordinate(mountainInfoDtoList);
+
+        //TODO: 분석 필요
+        IntStream.range(0, mountainInfoDtoList.size())
+                .forEach(i -> mountainInfoDtoList.get(i).setMountainCoordinate(mountainCoordinate.get(i)));
+    }
+
+
+    private List<MountainCoordinate> getMountainCoordinate(List<MountainInfoDto> mountainInfoDtoList){
+
+        List<MountainLocation> mountainLocationList = mountainInfoDtoList.stream().map(marketInfoDto -> {
+            MountainLocation mountainLocation = splitMountainLocation(marketInfoDto.getMountainLocation());
+            return mountainLocation;
+        }).collect(Collectors.toList());
+
+
+        List<MountainCoordinate> mountainCoordinateList = mountainLocationList.stream().map(
+                mountainLocation2 -> {
+                    MountainCoordinate locationToCoordinate = locationRepository.findCoordinateToLocation(mountainLocation2.getLocationParent(),
+                            mountainLocation2.getLocationChild(), mountainLocation2.getLocationChildDetail());
+                    return locationToCoordinate;
+                }
+        ).collect(Collectors.toList());
+
+        return mountainCoordinateList;
+    }
+
+
+    private MountainLocation splitMountainLocation(String mountainLocationAll){
+        MountainLocation mountainLocation = new MountainLocation();
+        String[] mountainLocationSplit = mountainLocationAll.split(" ");
+
+        mountainLocation.setLocationParent(mountainLocationSplit[0]);
+        mountainLocation.setLocationChild(mountainLocationSplit[1]);
+        mountainLocation.setLocationChildDetail(mountainLocationSplit[2]);
+
+        return mountainLocation;
+    }
+
 
 
     @Override

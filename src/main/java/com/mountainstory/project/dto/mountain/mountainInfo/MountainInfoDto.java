@@ -1,5 +1,6 @@
 package com.mountainstory.project.dto.mountain.mountainInfo;
 
+import com.mountainstory.project.dto.mountain.mountainregion.MountainCoordinate;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -32,13 +33,17 @@ public class MountainInfoDto {
 
     private String mountainImgUrl;
 
+    private MountainCoordinate mountainCoordinate;
 
-    public MountainInfoDto(String mountainName, String mountainLocation, String mountainIntroduce, String mountainHigh, String mountainNo ,String mountainImgUrl) {
+
+    public MountainInfoDto(String mountainName, String mountainLocation, String mountainIntroduce, String mountainHigh, String mountainNo ,String mountainImgUrl,
+                           MountainCoordinate mountainCoordinate) {
         this.mountainName = mountainName;
         this.mountainLocation = mountainLocation;
         this.mountainIntroduce = mountainIntroduce;
         this.mountainHigh = mountainHigh;
         this.mountainNo = mountainNo;
         this.mountainImgUrl=mountainImgUrl;
+        this.mountainCoordinate=mountainCoordinate;
     }
 }

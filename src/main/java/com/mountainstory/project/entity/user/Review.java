@@ -1,4 +1,4 @@
-package com.mountainstory.project.entity;
+package com.mountainstory.project.entity.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;

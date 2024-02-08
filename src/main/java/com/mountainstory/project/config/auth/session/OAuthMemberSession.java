@@ -1,6 +1,6 @@
 package com.mountainstory.project.config.auth.session;
 
-import com.mountainstory.project.entity.Member;
+import com.mountainstory.project.entity.user.Member;
 import lombok.Getter;
 
 import java.io.Serializable;

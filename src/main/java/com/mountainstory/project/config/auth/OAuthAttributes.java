@@ -1,6 +1,6 @@
 package com.mountainstory.project.config.auth;
 
-import com.mountainstory.project.entity.Member;
+import com.mountainstory.project.entity.user.Member;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

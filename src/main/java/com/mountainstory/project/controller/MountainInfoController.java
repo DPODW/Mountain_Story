@@ -25,7 +25,7 @@ public class MountainInfoController {
 
     @GetMapping("/mountain/info/search")
     public String searchMountainInfo(@RequestParam String mountainName) throws UnsupportedEncodingException {
-        mountainInfoService.searchMountainInfo(mountainName);
+        mountainInfoService.getAllMountainInfo(mountainName);
         return "redirect:/home/result";
     }
 }
