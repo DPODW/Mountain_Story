@@ -39,7 +39,8 @@ public class MountainInfoServiceImpl implements MountainInfoService {
         getMountainCoordinate(mountainInfoDtoList);
         setCoordinateToDtoList(mountainInfoDtoList);
 
-        log.info(">{}",mountainInfoDtoList);
+
+        log.info(">좌표 {}",getMountainCoordinate(mountainInfoDtoList));
         return mountainInfoDtoList;
     }
 
@@ -108,13 +109,19 @@ public class MountainInfoServiceImpl implements MountainInfoService {
 
 
         List<MountainCoordinate> mountainCoordinateList = mountainLocationList.stream().map(
-                mountainLocation2 -> {
-                    MountainCoordinate locationToCoordinate = locationRepository.findCoordinateToLocation(mountainLocation2.getLocationParent(),
-                            mountainLocation2.getLocationChild(), mountainLocation2.getLocationChildDetail());
+                mountainLocation -> {
+                    MountainCoordinate locationToCoordinate = locationRepository.findCoordinateToLocation(mountainLocation.getLocationParent(),
+                            mountainLocation.getLocationChild(), mountainLocation.getLocationChildDetail());
+
+                    if(locationToCoordinate==null){
+                        mountainLocation.setLocationChildDetail("");
+                        MountainCoordinate notChildDetailCoordinate = locationRepository.findCoordinateToLocation
+                                (mountainLocation.getLocationParent(), mountainLocation.getLocationChild(), mountainLocation.getLocationChildDetail());
+                        return notChildDetailCoordinate;
+                    }
                     return locationToCoordinate;
                 }
         ).collect(Collectors.toList());
-
         return mountainCoordinateList;
     }
 
@@ -122,6 +129,7 @@ public class MountainInfoServiceImpl implements MountainInfoService {
     private MountainLocation splitMountainLocation(String mountainLocationAll){
         MountainLocation mountainLocation = new MountainLocation();
         String[] mountainLocationSplit = mountainLocationAll.split(" ");
+        log.info("산 위치> {}",mountainLocationAll);
 
         mountainLocation.setLocationParent(mountainLocationSplit[0]);
         mountainLocation.setLocationChild(mountainLocationSplit[1]);
