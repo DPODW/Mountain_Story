@@ -1,4 +1,4 @@
-package com.mountainstory.project.dto.mountain.mountainInfo;
+package com.mountainstory.project.dto.mountain.mountaininfo;
 
 import com.mountainstory.project.dto.mountain.mountainregion.MountainCoordinate;
 import jakarta.xml.bind.annotation.XmlAccessType;

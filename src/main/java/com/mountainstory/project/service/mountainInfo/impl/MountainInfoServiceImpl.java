@@ -1,13 +1,15 @@
 package com.mountainstory.project.service.mountainInfo.impl;
-import com.mountainstory.project.dto.mountain.mountainImg.MountainImgDto;
-import com.mountainstory.project.dto.mountain.mountainImg.MountainImgXml;
-import com.mountainstory.project.dto.mountain.mountainInfo.MountainInfoDto;
-import com.mountainstory.project.dto.mountain.mountainInfo.MountainInfoXml;
-import com.mountainstory.project.dto.mountain.mountainregion.MountainCoordinate;
-import com.mountainstory.project.dto.mountain.mountainregion.MountainLocation;
-import com.mountainstory.project.repository.region.LocationRepository;
+import com.mountainstory.project.dto.mountain.mountainimg.MountainImgDto;
+import com.mountainstory.project.dto.mountain.mountainimg.MountainImgXml;
+import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoDto;
+import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoXml;
+import com.mountainstory.project.dto.mountain.mountaininfo.MountainWeather;
 import com.mountainstory.project.service.mountainInfo.MountainInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,20 +17,22 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Slf4j
 @Service
 public class MountainInfoServiceImpl implements MountainInfoService {
 
-    private final LocationRepository locationRepository;
+    private final MountainInfoServiceHelper mountainInfoServiceHelper;
+
     @Value("${openapi.serviceKey}")
     private String openApiServiceKey;
 
-    public MountainInfoServiceImpl(LocationRepository locationRepository) {
-        this.locationRepository = locationRepository;
+    public MountainInfoServiceImpl(MountainInfoServiceHelper mountainInfoServiceHelper) {
+        this.mountainInfoServiceHelper = mountainInfoServiceHelper;
     }
 
 
@@ -36,11 +40,10 @@ public class MountainInfoServiceImpl implements MountainInfoService {
     public List<MountainInfoDto> getAllMountainInfo(String mountainName) throws UnsupportedEncodingException {
         List<MountainInfoDto> mountainInfoDtoList = searchMountainInfo(mountainName);
         setImgToDtoList(mountainInfoDtoList);
-        getMountainCoordinate(mountainInfoDtoList);
-        setCoordinateToDtoList(mountainInfoDtoList);
+        mountainInfoServiceHelper.getMountainCoordinate(mountainInfoDtoList);
+        mountainInfoServiceHelper.setCoordinateToDtoList(mountainInfoDtoList);
 
-
-        log.info(">좌표 {}",getMountainCoordinate(mountainInfoDtoList));
+        log.info("검색 결과>{}",mountainInfoDtoList);
         return mountainInfoDtoList;
     }
 
@@ -78,8 +81,123 @@ public class MountainInfoServiceImpl implements MountainInfoService {
         return mountainImgDto;
     }
 
+
+
+
+    @Override
+    public  MountainWeather searchMountainWeather(Integer nx , Integer ny) throws ParseException {
+        //TODO: base_time: 특정 시간 지나면 자동 업데이트 하도록
+        URI uri = UriComponentsBuilder
+                .fromUriString("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst")
+                .queryParam("serviceKey",openApiServiceKey)
+                .queryParam("numOfRows","12")
+                .queryParam("pageNo","1")
+                .queryParam("dataType","JSON")
+                .queryParam("base_date",baseDate())
+                .queryParam("base_time","0500")
+                .queryParam("nx",nx.toString())
+                .queryParam("ny",ny.toString())
+                .build(true)
+                .toUri();
+        RestTemplate restTemplate = new RestTemplate();
+        String jsonWeatherData = restTemplate.getForObject(uri, String.class);
+
+        MountainWeather weatherInfoDto = getWeatherInfo(jsonWeatherData);
+        log.info(">>>{}",weatherInfoDto);
+        return weatherInfoDto;
+    }
+
+
+    private static String baseDate(){
+        LocalDateTime nowBaseDate = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        return nowBaseDate.format(formatter);
+    }
+
+    private static void bastTime() throws java.text.ParseException {
+        LocalDateTime nowTime = LocalDateTime.now();
+        SimpleDateFormat formatter =new SimpleDateFormat("HH:mm");
+        Date da = formatter.parse(nowTime.toString());
+
+    }
+
+
+    private static MountainWeather getWeatherInfo(String jsonWeatherData) throws ParseException {
+        JSONParser jsonParser = new JSONParser();
+        List<HashMap<String, Object>> weatherMapList = new ArrayList<>();
+
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonWeatherData);
+        JSONObject jsonResponse = (JSONObject) jsonObject.get("response");
+        JSONObject jsonBody = (JSONObject) jsonResponse.get("body");
+        JSONObject jsonItems = (JSONObject) jsonBody.get("items");
+        JSONArray jsonItem = (JSONArray) jsonItems.get("item");
+        log.info("{}",jsonResponse);
+
+        jsonItem.forEach(item -> {
+            JSONObject weatherInfo = (JSONObject) item;
+            String category = (String) weatherInfo.get("category");
+            Object fcstValue = weatherInfo.get("fcstValue");
+
+            HashMap<String,Object> weatherMap = new HashMap<>();
+            weatherMap.put(category,fcstValue);
+
+            weatherMapList.add(weatherMap);
+        });
+
+        return setMountainWeatherToDto(weatherMapList);
+    }
+
+    private static MountainWeather setMountainWeatherToDto(List<HashMap<String, Object>> weatherMapList) {
+        MountainWeather mountainWeather = new MountainWeather();
+
+        for (int i = 0; i < weatherMapList.size(); i++) {
+            Map<String, Object> weatherMap = weatherMapList.get(i);
+
+            switch (i) {
+                case 0:
+                    mountainWeather.setCurrentTemperature(Double.parseDouble(weatherMap.get("TMP").toString()));
+                    break;
+                case 1:
+                    mountainWeather.setEastAndWestWindSpeed(Double.parseDouble(weatherMap.get("UUU").toString()));
+                    break;
+                case 2:
+                    mountainWeather.setSouthAndNorthWindSpeed(Double.parseDouble(weatherMap.get("VVV").toString()));
+                    break;
+                case 3:
+                    mountainWeather.setWindDirection(Double.parseDouble(weatherMap.get("VEC").toString()));
+                    break;
+                case 4:
+                    mountainWeather.setAverageWindSpeed(Double.parseDouble(weatherMap.get("WSD").toString()));
+                    break;
+                case 5:
+                    mountainWeather.setSkyState(Double.parseDouble(weatherMap.get("SKY").toString()));
+                    break;
+                case 6:
+                    mountainWeather.setRainForm(Double.parseDouble(weatherMap.get("PTY").toString()));
+                    break;
+                case 7:
+                    mountainWeather.setRainPercentage(Double.parseDouble(weatherMap.get("POP").toString()));
+                    break;
+                case 8:
+                    mountainWeather.setWaveHeight(Double.parseDouble(weatherMap.get("WAV").toString()));
+                    break;
+                case 9:
+                    mountainWeather.setRainAmount(weatherMap.get("PCP").toString());
+                    break;
+                case 10:
+                    mountainWeather.setHumidity(Double.parseDouble(weatherMap.get("REH").toString()));
+                    break;
+                case 11:
+                    mountainWeather.setSnowAmount(weatherMap.get("SNO").toString());
+                    break;
+            }
+        }
+        return mountainWeather;
+    }
+
+
     private void setImgToDtoList(List<MountainInfoDto> mountainInfoDtoList) {
-        //TODO: 반복문 최적화 필요
+        //순환 참조 문제로 인하여 MountainInfoServiceHelper 에서 사용될수 없음.
         mountainInfoDtoList.forEach(mountainInfoDto -> {
             List<MountainImgDto> imageList = searchMountainImg(mountainInfoDto.getMountainNo());
             if (!imageList.isEmpty()) {
@@ -89,60 +207,6 @@ public class MountainInfoServiceImpl implements MountainInfoService {
                 mountainInfoDto.setMountainImgUrl("이미지 제공 되지 않음");
             }
         });
-    }
-
-    private void setCoordinateToDtoList(List<MountainInfoDto> mountainInfoDtoList){
-        List<MountainCoordinate> mountainCoordinate = getMountainCoordinate(mountainInfoDtoList);
-
-        //TODO: 분석 필요
-        IntStream.range(0, mountainInfoDtoList.size())
-                .forEach(i -> mountainInfoDtoList.get(i).setMountainCoordinate(mountainCoordinate.get(i)));
-    }
-
-
-    private List<MountainCoordinate> getMountainCoordinate(List<MountainInfoDto> mountainInfoDtoList){
-
-        List<MountainLocation> mountainLocationList = mountainInfoDtoList.stream().map(marketInfoDto -> {
-            MountainLocation mountainLocation = splitMountainLocation(marketInfoDto.getMountainLocation());
-            return mountainLocation;
-        }).collect(Collectors.toList());
-
-
-        List<MountainCoordinate> mountainCoordinateList = mountainLocationList.stream().map(
-                mountainLocation -> {
-                    MountainCoordinate locationToCoordinate = locationRepository.findCoordinateToLocation(mountainLocation.getLocationParent(),
-                            mountainLocation.getLocationChild(), mountainLocation.getLocationChildDetail());
-
-                    if(locationToCoordinate==null){
-                        mountainLocation.setLocationChildDetail("");
-                        MountainCoordinate notChildDetailCoordinate = locationRepository.findCoordinateToLocation
-                                (mountainLocation.getLocationParent(), mountainLocation.getLocationChild(), mountainLocation.getLocationChildDetail());
-                        return notChildDetailCoordinate;
-                    }
-                    return locationToCoordinate;
-                }
-        ).collect(Collectors.toList());
-        return mountainCoordinateList;
-    }
-
-
-    private MountainLocation splitMountainLocation(String mountainLocationAll){
-        MountainLocation mountainLocation = new MountainLocation();
-        String[] mountainLocationSplit = mountainLocationAll.split(" ");
-        log.info("산 위치> {}",mountainLocationAll);
-
-        mountainLocation.setLocationParent(mountainLocationSplit[0]);
-        mountainLocation.setLocationChild(mountainLocationSplit[1]);
-        mountainLocation.setLocationChildDetail(mountainLocationSplit[2]);
-
-        return mountainLocation;
-    }
-
-
-
-    @Override
-    public String searchMountainWeather(String mountainName) {
-        return null;
     }
 
 }

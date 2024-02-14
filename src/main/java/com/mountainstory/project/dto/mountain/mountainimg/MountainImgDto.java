@@ -1,11 +1,10 @@
-package com.mountainstory.project.dto.mountain.mountainImg;
+package com.mountainstory.project.dto.mountain.mountainimg;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 @ToString

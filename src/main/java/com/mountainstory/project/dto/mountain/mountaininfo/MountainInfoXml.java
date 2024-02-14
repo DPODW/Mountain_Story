@@ -1,4 +1,4 @@
-package com.mountainstory.project.dto.mountain.mountainInfo;
+package com.mountainstory.project.dto.mountain.mountaininfo;
 
 import jakarta.xml.bind.annotation.*;
 import lombok.Getter;

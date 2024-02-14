@@ -11,11 +11,11 @@ import lombok.ToString;
 @Setter
 public class MountainCoordinate {
 
-    private int nx;
+    private Integer nx;
 
-    private int ny;
+    private Integer ny;
 
-    public MountainCoordinate(int nx, int ny) {
+    public MountainCoordinate(Integer nx, Integer ny) {
         this.nx = nx;
         this.ny = ny;
     }

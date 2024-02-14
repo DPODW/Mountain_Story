@@ -1,4 +1,4 @@
-package com.mountainstory.project.dto.mountain.mountainImg;
+package com.mountainstory.project.dto.mountain.mountainimg;
 import jakarta.xml.bind.annotation.*;
 import lombok.Getter;
 import lombok.ToString;

@@ -1,10 +1,13 @@
 package com.mountainstory.project.service.mountainInfo;
 
-import com.mountainstory.project.dto.mountain.mountainImg.MountainImgDto;
-import com.mountainstory.project.dto.mountain.mountainInfo.MountainInfoDto;
+import com.mountainstory.project.dto.mountain.mountainimg.MountainImgDto;
+import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoDto;
+import com.mountainstory.project.dto.mountain.mountaininfo.MountainWeather;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -16,7 +19,7 @@ public interface MountainInfoService {
 
     List<MountainImgDto> searchMountainImg(String mountainNumber);
 
-    String searchMountainWeather(String mountainName);
+    MountainWeather searchMountainWeather(Integer nx , Integer ny) throws ParseException;
 
 
 
