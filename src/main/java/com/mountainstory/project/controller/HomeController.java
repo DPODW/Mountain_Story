@@ -33,7 +33,6 @@ public class HomeController {
         return "main/Home";
     }
 
-
     @GetMapping("/result")
     public String resultPage(){
         return "main/SearchResult";

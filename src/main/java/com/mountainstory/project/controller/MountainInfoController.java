@@ -12,8 +12,11 @@ import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoDto;
 
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -29,19 +32,14 @@ public class MountainInfoController {
 
     @GetMapping("/mountain/info/search")
     public String searchMountainInfo(@RequestParam(name = "mountainName") String mountainName) throws UnsupportedEncodingException, ParseException {
-        ss();
         List<MountainInfoDto> allMountainInfo = mountainInfoService.getAllMountainInfo(mountainName);
+        log.info("{}",allMountainInfo);
+
+        //TODO: 리스트로 수정하기
         MountainCoordinate mountainCoordinate = allMountainInfo.get(0).getMountainCoordinate();
         mountainInfoService.searchMountainWeather(mountainCoordinate.getNx(), mountainCoordinate.getNy());
 
         return "redirect:/home/result";
-    }
-
-    private void ss(){
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        String nnow = now.format(formatter);
-        log.info("{}",nnow);
     }
 
 }
