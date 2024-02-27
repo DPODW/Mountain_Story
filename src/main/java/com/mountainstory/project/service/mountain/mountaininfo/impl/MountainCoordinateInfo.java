@@ -1,4 +1,4 @@
-package com.mountainstory.project.service.mountainInfo.impl;
+package com.mountainstory.project.service.mountain.mountaininfo.impl;
 
 import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoDto;
 import com.mountainstory.project.dto.mountain.mountainregion.MountainCoordinate;
@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 
 @Slf4j
 @Service
-public class MountainInfoServiceHelper {
+public class MountainCoordinateInfo {
 
     private final LocationRepository locationRepository;
 
@@ -22,7 +22,7 @@ public class MountainInfoServiceHelper {
     private static final int CHILD_DETAIL_PART = 2;
 
 
-    public MountainInfoServiceHelper(LocationRepository locationRepository) {
+    public MountainCoordinateInfo(LocationRepository locationRepository) {
         this.locationRepository = locationRepository;
     }
 
@@ -46,7 +46,6 @@ public class MountainInfoServiceHelper {
                                 (mountainLocation.getLocationParent(), mountainLocation.getLocationChild(), mountainLocation.getLocationChildDetail());
                         return notChildDetailCoordinate;
                     }
-
                     return locationToCoordinate;
                 }
         ).collect(Collectors.toList());

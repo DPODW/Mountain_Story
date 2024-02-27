@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<title>산 스토리 - 검색결과</title>
 		<meta charset="utf-8" />
@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/assets/css/main.css" />
         <link rel="stylesheet" href="/assets/css/mountain-info.css" />
 
-    
+
 	</head>
 	<body class="is-preload">
 
@@ -52,51 +52,83 @@
 			</div>
 
              <!-- 옆에 사이드바 끝    -->
-            
+
              <div class="mountain-layout">
-                
+
                 <div class="mountain-content">
                     <p>산 정보 섹션</p>
                 </div>
 
 
-                <div class="sky-content">
-                    <p>하늘 정보 섹션</p>
-                </div>
+                 <div class="sky-content">
+                     <h4 class="todayTempAndSkyText">오늘의 하늘은 ?</h4>
+                     <img th:if="${mountainWeather.getSkyState() == '맑음'}" class="centerImg" src="/images/weather/sun.png">
+                     <img th:if="${mountainWeather.getSkyState() == '구름 많음'}" class="centerImg" src="/images/weather/cloud.png">
+                     <img th:if="${mountainWeather.getSkyState() == '흐림'}" class="centerImg" src="/images/weather/badCloud.png">
+                     <h4 class="skyText" th:text="${mountainWeather.getSkyState()}"></h4>
+                 </div>
 
-                <div class="temperature-content">
-                    <p>온도 정보 섹션</p>
-                </div>
+                 <div class="temperature-content">
+                     <img class="temperatureImg" src="/images/weather/temp.png">
+                     <h4 class="todayTempAndSkyText">오늘의 온도는 ?</h4>
+                     <h3 class="temperatureText" th:text="${mountainWeather.getCurrentTemperature()}+'°C'"></h3>
+                 </div>
 
                 <div class="rain-content">
-                    <p>강수 정보 섹션</p>
+                    <div th:unless="${mountainWeather.getRainForm() == 'X'}">
+                        <img th:if="${mountainWeather.getRainForm() == '비' or mountainWeather.getRainForm() == '소나기'}" class="circleImg" src="/images/weather/rain.png">
+                        <img th:if="${mountainWeather.getRainForm() == '비/눈'}" class="circleImg" src="/images/weather/rainAndSnow.png">
+                        <img th:if="${mountainWeather.getRainForm() == '눈'}" class="circleImg" src="/images/weather/snow.png">
+                        <h3 class="percentText" th:text="${mountainWeather.getRainPercentage()}+'%'"></h3>
+                        <div class="chart">
+                            <div class="chart-bar" th:style="'background: conic-gradient(#3874ff ' + ${mountainWeather.getRainPercentage()} + '%, white 0%);'" data-deg="50"></div>
+                        </div>
+                        <h4 class="currentWeatherText" th:if="${mountainWeather.getRainForm() == '비' or mountainWeather.getRainForm() == '소나기'}" th:text="${mountainWeather.getRainAmount()} + '의 비 내리는 중!'"></h4>
+                        <h4 class="currentWeatherText" th:if="${mountainWeather.getRainForm() == '비/눈'}" th:text="${mountainWeather.getRainAmount()} + '의 비/눈 내리는 중!'"></h4>
+                        <h4 class="currentWeatherText" th:if="${mountainWeather.getRainForm() == '눈'}" th:text="${mountainWeather.getSnowAmount()} + '의 눈 내리는 중!'"></h4>
+
+                        <h4 style="text-align: center; font-size: large; font-weight: bold;" th:text="${mountainWeather.getRainForm()} + ' 올 확률 ' + ${mountainWeather.getRainPercentage()}+'% 입니다'"></h4>
+                    </div>
+
+                    <div th:if="${mountainWeather.getRainForm() == 'X'}">
+                        <img class="notRainAndSnowImg" src="/images/weather/notRainAndSnow.png">
+                        <h4 style="position: absolute; margin-top: 210px; margin-left: 25px;">비/눈 예보가 없습니다</h4>
+                    </div>
                 </div>
+
 
                 <div class="humidity-content">
-                    <p>습도 정보 섹션</p>
-                </div>
-
-
-                <div class="snow-content">
-                    <p>적설 정보 섹션</p>
+                    <img class="circleImg" src="/images/weather/humidity.png"/>
+                    <h3 class="percentText" th:text="${mountainWeather.getHumidity()}+'%'"></h3>
+                    <div class="chart">
+                        <div class="chart-bar" th:style="'background: conic-gradient(#3874ff ' + ${mountainWeather.getHumidity()} + '%, white 0%);'" data-deg="50"></div>
+                    </div>
+                    <h4 style="text-align: center;">습도는 <span style="font-weight: bold;" th:text="${mountainWeather.getHumidity()}+'%'"></span> 입니다</h4>
                 </div>
 
 
                 <div class="wind-content">
-                    <p>바람 정보 섹션</p>
+                    <h4 style="text-align: center; padding-top: 20px;">오늘의 바람은 ?</h4>
+                    <img class="centerImg" src="/images/weather/wind.png">
+                    <h4 style="margin-top: 160px; text-align: center; font-weight: bold" th:text="${mountainWeather.getAverageWindSpeed()}"></h4>
                 </div>
 
-                <div class="ocean-content">
-                    <p>파도 정보 섹션</p>
-                    
+
+                <div class="dust-content">
+                    <p>미세먼지 정보 섹션</p>
                 </div>
+
+                <div class="any-content">
+                    <p>아무 정보 섹션</p>
+                </div>
+
             </div>
 
-        
+
         <div class="mountain-review">
             <hr>
             <p class="mountain-review-title">OOO산 후기</p>
-            <p class="mountain-review-subtitle">OOO산의 후기를 사람들에게 공유해주세요!</p>        
+            <p class="mountain-review-subtitle">OOO산의 후기를 사람들에게 공유해주세요!</p>
 
             <table class="table table-hover" id="review-table">
                 <thead>
@@ -105,10 +137,10 @@
                         <th>말머리</th>
                         <th style="padding-left: 550px;">제목</th>
                         <th>작성자</th>
-                        <th>시간</th>  
-                        <th style="padding-left: 1px;">추천</th>       
+                        <th>시간</th>
+                        <th style="padding-left: 1px;">추천</th>
                     </tr>
-                </thead>     
+                </thead>
                 <tbody>
                     <tr>
                         <td >1</td>
@@ -122,11 +154,11 @@
             </table>
          </div>
 
-            
 
-            
-            
-            
+
+
+
+
 
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/js/jquery.scrolly.min.js"></script>

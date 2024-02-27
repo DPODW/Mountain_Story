@@ -1,22 +1,30 @@
+.mountain-search{
+    border: solid #81adab 3px;
+    width: 600px;
+    height: 70px;
+    margin-bottom: 60px;
+    background: transparent;
+    color: black;
+}
 
 .mountain-content {
-    max-width: 900px; 
+    max-width: 900px;
     margin-left: 390px;
-    margin: 1 auto; 
+    margin: 1 auto;
     margin-top: 20px;
     height: 555px;
-    background-color: #f0f0f0; 
+    background-color: #f0f0f0;
 }
 
 .sky-content {
-    max-width: 350px; 
+    max-width: 350px;
     width: 295px;
     position: absolute;
     margin-top: -555px;
     margin-left: 1305px;
     height: 255px;
-    background-color: aqua; 
-   
+    background-color: aqua;
+
 }
 
 .temperature-content {
@@ -26,80 +34,84 @@
     margin-top: -555px;
     margin-left: 1610px;
     height: 255px;
-    background-color: lightpink; 
-   
-   
+    background-color: lightpink;
+
+
 }
 
 .rain-content {
-    max-width: 350px; 
+    max-width: 350px;
     width: 295px;
-    margin-top: -255px;
+    margin-top: -285px;
     margin-left: 1305px;
-    height: 255px;
-    background-color: coral; 
-  
+    height: 300px;
+    background-color: coral;
+
 }
 
 .humidity-content {
-    max-width: 350px; 
+    max-width: 350px;
     width: 295px;
-    margin-top: -255px;
+    margin-top: -300px;
     margin-left: 1610px;
-    height: 255px;
+    height: 300px;
     background-color: greenyellow;
 
 }
 
-.snow-content {
+.wind-content {
     max-width: 350px;
     width: 295px;
     margin-top: 25px;
     margin-left: 390px;
-    height: 255px;
-    background-color: yellowgreen; 
+    height: 300px;
+    background-color: yellowgreen;
 }
 
-.wind-content {
-    max-width: 350px; 
+
+.dust-content {
+    max-width: 350px;
     width: 295px;
-    margin-top: -255px;
-    margin-left: 995px;
-    height: 255px;
-    background-color: cornflowerblue; 
+    margin-top: -300px;
+    margin-left: 700px;
+    height: 300px;
+    background-color: cornflowerblue;
 }
 
-.ocean-content {
-    max-width: 350px; 
+.any-content {
+    max-width: 350px;
     width: 295px;
-    margin-top: -255px;
-    margin-left: 1610px;
-    height: 255px;
-    background-color: darkslategrey; 
+    margin-top: -300px;
+    margin-left: 1010px;
+    height: 300px;
+    background-color: aquamarine;
 }
+
 
 .mountain-layout{
     /* all: initial; */
     /* 위의 코드는 기존 css 를 무효화하고, 나만의 css 만을 적용시키게 해주는 역할을 함. 해제하여도 레이아웃 유지됌 */
- color: black;
- background-color: #e5e8ec;
+    color: black;
+    background-color: #e5e8ec;
 }
 
 /* 산 정보 CSS 끝 */
 
+
+/*산 후기 CSS*/
 .mountain-review{
-    
+
     height: 500px; /* 높이 지정 (적절한 값으로 조절) */
     padding: 10px; /* 내용 주변의 간격 지정 */
     background-color: aqua;
-    
+
 }
 
 .mountain-review-title{
- color: black;
- font-size:25px;
- margin-top: 40px;
- margin-left: 385px;
+    color: black;
+    font-size:25px;
+    margin-top: 40px;
+    margin-left: 385px;
 }
 
 .mountain-review-subtitle{
@@ -114,19 +126,10 @@
     width: 1490px;
     font-size: 20px;
 }
-
 /* 산 후기 CSS 끝 */
 
-.mountain-search{
-    border: solid #81adab 3px; 
-    width: 600px; 
-    height: 70px; 
-    margin-bottom: 60px; 
-    background: transparent; 
-    
-    color: black;
-}
 
+/* 로그인 버튼 CSS */
 #OAuthLogin{
     margin-right: 60px;
 }
@@ -139,7 +142,7 @@
     width: 190px;height: 50px;
 }
 
-.logoutButton {
+.button2 {
     margin-right: 120px;
     margin-top: 90px;
     padding: 5px;
@@ -158,4 +161,106 @@
     font-size: 15px;
     float: left;
 }
+/* 로그인 버튼 CSS 끝*/
 
+
+/* 원형 차트 ~ 차트 안 사진  */
+.chart {
+    margin-left: 45px;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    transition: 0.3s;
+    background:lightgray;
+    display:inline-block;
+}
+
+.chart:after{
+    content:'';
+    background: #fff;
+    position: absolute;
+    top:50%; left:50%;
+    width:185px; height:185px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+
+}
+.chart-bar{
+    width: inherit;
+    height: inherit;
+    border-radius: 50%;
+    color: #539dce;
+}
+
+.circleImg{
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    margin-left: 100px;
+    margin-top: 20px;
+    z-index: 2;
+}
+/* 원형 차트 ~ 차트 안 사진 끝*/
+
+
+/*날씨 TEXT 관련 css*/
+.percentText{
+    position: absolute;
+    margin-top: 100px;
+    margin-left: 115px;
+    z-index: 2;
+}
+
+.todayTempAndSkyText{
+    text-align: center;
+    margin-top: 20px
+}
+
+.temperatureText{
+    margin-left: 150px;
+    margin-top: 50px;
+    font-weight: bold;
+}
+
+.skyText{
+    text-align: center;
+    margin-top: 140px;
+    font-weight: bold;
+}
+
+.currentWeatherText{
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+/*날씨 TEXT 관련 css 끝 */
+
+
+/*날씨 이미지 관련 CSS */
+.temperatureImg{
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    margin-top: 80px;
+}
+
+
+.centerImg{
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    margin-top: 15px;
+    margin-left: 80px;
+}
+
+
+.notRainAndSnowImg{
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    margin-top: 65px;
+    margin-left: 80px;
+}
+/*날씨 이미지 관련 CSS 끝*/

@@ -1,12 +1,10 @@
-package com.mountainstory.project.service.mountainInfo.impl;
+package com.mountainstory.project.service.mountain.mountaininfo.impl;
 import com.mountainstory.project.dto.mountain.mountainimg.MountainImgDto;
 import com.mountainstory.project.dto.mountain.mountainimg.MountainImgXml;
 import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoDto;
 import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoXml;
-import com.mountainstory.project.dto.mountain.mountaininfo.MountainWeather;
-import com.mountainstory.project.service.mountainInfo.MountainInfoService;
+import com.mountainstory.project.service.mountain.mountaininfo.MountainInfoService;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,16 +18,13 @@ import java.util.*;
 @Service
 public class MountainInfoServiceImpl implements MountainInfoService {
 
-    private final MountainInfoServiceHelper mountainInfoServiceHelper;
-
-    private final MountainWeatherHelper mountainWeatherHelper;
+    private final MountainCoordinateInfo mountainCoordinateInfo;
 
     @Value("${openapi.serviceKey}")
     private String openApiServiceKey;
 
-    public MountainInfoServiceImpl(MountainInfoServiceHelper mountainInfoServiceHelper, MountainWeatherHelper mountainWeatherHelper) {
-        this.mountainInfoServiceHelper = mountainInfoServiceHelper;
-        this.mountainWeatherHelper = mountainWeatherHelper;
+    public MountainInfoServiceImpl(MountainCoordinateInfo mountainCoordinateInfo) {
+        this.mountainCoordinateInfo = mountainCoordinateInfo;
     }
 
 
@@ -37,8 +32,8 @@ public class MountainInfoServiceImpl implements MountainInfoService {
     public List<MountainInfoDto> getAllMountainInfo(String mountainName) throws UnsupportedEncodingException {
         List<MountainInfoDto> mountainInfoDtoList = searchMountainInfo(mountainName);
         setImgToDtoList(mountainInfoDtoList);
-        mountainInfoServiceHelper.getMountainCoordinate(mountainInfoDtoList);
-        mountainInfoServiceHelper.setCoordinateToDtoList(mountainInfoDtoList);
+        mountainCoordinateInfo.getMountainCoordinate(mountainInfoDtoList);
+        mountainCoordinateInfo.setCoordinateToDtoList(mountainInfoDtoList);
         return mountainInfoDtoList;
     }
 
@@ -75,27 +70,6 @@ public class MountainInfoServiceImpl implements MountainInfoService {
         List<MountainImgDto> mountainImgDto = mountainXml.getBody().getMountainImgDto();
         return mountainImgDto;
     }
-
-    @Override
-    public  MountainWeather searchMountainWeather(Integer nx , Integer ny) throws ParseException {
-        URI uri = UriComponentsBuilder
-                .fromUriString("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst")
-                .queryParam("serviceKey",openApiServiceKey)
-                .queryParam("numOfRows","12")
-                .queryParam("pageNo","1")
-                .queryParam("dataType","JSON")
-                .queryParam("base_date",mountainWeatherHelper.baseDate())
-                .queryParam("base_time",mountainWeatherHelper.bastTime())
-                .queryParam("nx",nx.toString())
-                .queryParam("ny",ny.toString())
-                .build(true)
-                .toUri();
-        RestTemplate restTemplate = new RestTemplate();
-        String jsonWeatherData = restTemplate.getForObject(uri, String.class);
-
-        return mountainWeatherHelper.getWeatherInfo(jsonWeatherData);
-    }
-
 
     private void setImgToDtoList(List<MountainInfoDto> mountainInfoDtoList) {
         //순환 참조 문제로 인하여 MountainInfoServiceHelper 에서 사용될수 없음.
