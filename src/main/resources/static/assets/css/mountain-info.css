@@ -1,20 +1,55 @@
+
 .mountain-search{
     border: solid #81adab 3px;
-    width: 600px;
-    height: 70px;
+    margin-left: 350px;
+    width: 700px;
+    height: 80px;
     margin-bottom: 60px;
     background: transparent;
     color: black;
 }
 
+
+
 .mountain-content {
     max-width: 900px;
     margin-left: 390px;
     margin: 1 auto;
-    margin-top: 20px;
+    margin-top: 1px;
     height: 555px;
-    background-color: #f0f0f0;
+    background-size: 550px 300px;
+    background-position:left bottom ;
+    background-repeat: no-repeat;
 }
+.mountain-content-name{
+    color: black;
+    position: absolute;
+    margin-top: 10px;
+}
+
+.mountain-content-high{
+    position: absolute;
+    font-size: 25px;
+    margin-top: 115px;
+}
+
+
+.mountain-content-location{
+    color: black;
+    font-size: 25px;
+    margin-top: 190px;
+    position: absolute;
+}
+
+.mountain-content-imgInfo{
+    position: absolute;
+    color: black;
+    margin-left: 560px;
+    margin-top: 537px;
+    font-size: 13px;
+    color: gray;
+}
+
 
 .sky-content {
     max-width: 350px;
@@ -23,20 +58,22 @@
     margin-top: -555px;
     margin-left: 1305px;
     height: 255px;
-    background-color: aqua;
+    background-color: white;
+    border: solid 2px gainsboro;
+    border-radius: 5%;
 
 }
 
 .temperature-content {
     max-width: 350px;
-    width: 295px;
+    width: 290px;
     position: absolute;
     margin-top: -555px;
     margin-left: 1610px;
     height: 255px;
-    background-color: lightpink;
-
-
+    background-color: white;
+    border: solid 2px gainsboro;
+    border-radius: 5%;
 }
 
 .rain-content {
@@ -44,47 +81,65 @@
     width: 295px;
     margin-top: -285px;
     margin-left: 1305px;
-    height: 300px;
-    background-color: coral;
-
+    height: 285px;
+    background-color: white;
+    border: solid 2px gainsboro;
+    border-radius: 5%;
 }
 
 .humidity-content {
     max-width: 350px;
-    width: 295px;
-    margin-top: -300px;
+    width: 290px;
+    margin-top: -285px;
     margin-left: 1610px;
-    height: 300px;
-    background-color: greenyellow;
-
+    height: 285px;
+    background-color: white;
+    border: solid 2px gainsboro;
+    border-radius: 5%;
 }
 
 .wind-content {
     max-width: 350px;
-    width: 295px;
+    width: 280px;
     margin-top: 25px;
     margin-left: 390px;
     height: 300px;
-    background-color: yellowgreen;
+    background-color: white;
+    border: solid 2px gainsboro;
+    border-radius: 5%;
 }
 
 
-.dust-content {
+.microDust-content {
     max-width: 350px;
-    width: 295px;
+    width: 280px;
     margin-top: -300px;
     margin-left: 700px;
     height: 300px;
-    background-color: cornflowerblue;
+    background-color: white;
+    border: solid 2px gainsboro;
+    border-radius: 5%;
 }
 
-.any-content {
+.ultrafDust-content {
     max-width: 350px;
-    width: 295px;
+    width: 280px;
     margin-top: -300px;
     margin-left: 1010px;
     height: 300px;
-    background-color: aquamarine;
+    background-color: white;
+    border: solid 2px gainsboro;
+    border-radius: 5%;
+}
+
+.weatherRating{
+    width: 590px;
+    height: 300px;
+    margin-left: 1310px;
+    margin-top: -300px;
+    background-color: white;
+    border: solid 2px gainsboro;
+    border-radius: 5%;
 }
 
 
@@ -92,7 +147,7 @@
     /* all: initial; */
     /* 위의 코드는 기존 css 를 무효화하고, 나만의 css 만을 적용시키게 해주는 역할을 함. 해제하여도 레이아웃 유지됌 */
     color: black;
-    background-color: #e5e8ec;
+    background-color:  #f5f7fa;
 }
 
 /* 산 정보 CSS 끝 */
@@ -100,7 +155,8 @@
 
 /*산 후기 CSS*/
 .mountain-review{
-
+    margin-top: 100px;
+    text-align: center;
     height: 500px; /* 높이 지정 (적절한 값으로 조절) */
     padding: 10px; /* 내용 주변의 간격 지정 */
     background-color: aqua;
@@ -122,8 +178,8 @@
 }
 
 #review-table{
-    margin-left: 385px;
-    width: 1490px;
+    margin-left: 540px;
+    width: 1190px;
     font-size: 20px;
 }
 /* 산 후기 CSS 끝 */
@@ -131,15 +187,20 @@
 
 /* 로그인 버튼 CSS */
 #OAuthLogin{
-    margin-right: 60px;
+    margin-right: 100px;
+    margin-bottom: 70px;
 }
 
 #naverButton{
-    width: 190px;height: 50px;
+    width: 190px;
+    height: 50px;
+    margin-bottom: 10px;
 }
 
 #kakaoButton{
-    width: 190px;height: 50px;
+    width: 190px;
+    height: 50px;
+
 }
 
 .button2 {
@@ -166,13 +227,13 @@
 
 /* 원형 차트 ~ 차트 안 사진  */
 .chart {
+    background:lightgray;
     margin-left: 45px;
     position: relative;
     width: 200px;
     height: 200px;
     border-radius: 50%;
     transition: 0.3s;
-    background:lightgray;
     display:inline-block;
 }
 
@@ -235,6 +296,17 @@
     font-weight: bold;
     margin-bottom: 15px;
 }
+
+.windAndDustStateText{
+    margin-top: 160px;
+    text-align: center;
+    font-weight: bold
+}
+
+.dustConcentrationText{
+    text-align: center;
+    font-size: 15px;
+}
 /*날씨 TEXT 관련 css 끝 */
 
 
@@ -263,4 +335,54 @@
     margin-top: 65px;
     margin-left: 80px;
 }
+
+.DustImg{
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    margin-top: 20px;
+    margin-left: 80px;
+}
 /*날씨 이미지 관련 CSS 끝*/
+
+/* 산 리스트 */
+.listPageSearch{
+    width: 500px ;
+    margin: auto;
+    margin-top: 34px ;
+    position: absolute ;
+    margin-left: 690px ;
+}
+
+.listPageSearchBtn{
+    margin-left: 1200px;
+    position: absolute;
+}
+
+.listResultText{
+    margin-top: 150px;
+    margin-left: 800px;
+}
+.searchMountainWeather{
+    position: absolute;
+    margin-top: -5px;
+    margin-left: 550px;
+}
+
+.listMountainImg{
+    width: 200px;
+    height: 150px;
+    margin-left: 110px;
+}
+
+.listResultCard{
+    max-width: 1000px;
+    margin-left: 550px;
+    margin-top: 50px;
+    font-size: 20px;
+}
+
+.listMountainHigh{
+    margin-top: -70px;
+    margin-left: 300px;
+}

@@ -10,9 +10,11 @@ import java.util.List;
 @Service
 public interface MountainInfoService {
 
-    List<MountainInfoDto> getAllMountainInfo(String mountainName) throws UnsupportedEncodingException;
+    List<MountainInfoDto> getAllMountainInfoList(String mountainName) throws UnsupportedEncodingException;
 
-    List<MountainInfoDto> searchMountainInfo(String mountainName) throws UnsupportedEncodingException;
+    MountainInfoDto setCoordinateInfo(MountainInfoDto mountainInfoDto) throws UnsupportedEncodingException;
+
+    List<MountainInfoDto> searchMountainInfo(String mountainName,String mountainInfoPage, String mountainInfoResultCount) throws UnsupportedEncodingException;
 
     List<MountainImgDto> searchMountainImg(String mountainNumber);
 

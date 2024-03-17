@@ -12,7 +12,6 @@ public class OAuthMemberSession implements Serializable {
     private String email;
     private String id;
     private String type;
-
     private String accessToken;
 
     public OAuthMemberSession(Member member,String accessToken) {

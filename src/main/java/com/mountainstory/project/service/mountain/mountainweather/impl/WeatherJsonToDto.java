@@ -107,16 +107,16 @@ public class WeatherJsonToDto {
         jsonItems.forEach(items -> {
             JSONObject pollutionInfo = (JSONObject) items;
             int microDustConcentration = Integer.parseInt(pollutionInfo.get("pm10Value").toString());
-            int ultrafDustConcentration = Integer.parseInt(pollutionInfo.get("pm25Value").toString());
+            int ultraDustConcentration = Integer.parseInt(pollutionInfo.get("pm25Value").toString());
 
             dustInfo.setMicroDustConcentration(microDustConcentration);
-            dustInfo.setUltrafDustConcentration(ultrafDustConcentration);
+            dustInfo.setUltrafDustConcentration(ultraDustConcentration);
 
-            String microDust = translateWeatherCode.convertDustState(microDustConcentration);
-            String ultrafineDust = translateWeatherCode.convertDustState(ultrafDustConcentration);
+            String microDust = translateWeatherCode.convertMicroDust(microDustConcentration);
+            String ultraMicroDust = translateWeatherCode.convertUltraMicroDust(ultraDustConcentration);
 
             dustInfo.setMicroDustState(microDust);
-            dustInfo.setUltrafineDustState(ultrafineDust);
+            dustInfo.setUltraMicroDustState(ultraMicroDust);
         });
         return dustInfo;
     }

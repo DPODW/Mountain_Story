@@ -27,39 +27,20 @@ public class MountainCoordinateInfo {
     }
 
 
-    protected List<MountainCoordinate> getMountainCoordinate(List<MountainInfoDto> mountainInfoDtoList){
-
-        List<MountainLocation> mountainLocationList = mountainInfoDtoList.stream().map(marketInfoDto -> {
-            MountainLocation mountainLocation = splitMountainLocation(marketInfoDto.getMountainLocation());
-            return mountainLocation;
-        }).collect(Collectors.toList());
-
-
-        List<MountainCoordinate> mountainCoordinateList = mountainLocationList.stream().map(
-                mountainLocation -> {
-                    MountainCoordinate locationToCoordinate = locationRepository.findCoordinateToLocation(mountainLocation.getLocationParent(),
+    protected MountainCoordinate getMountainCoordinate(String mountainLocationAll){
+        MountainLocation mountainLocation = splitMountainLocation(mountainLocationAll);
+        MountainCoordinate locationToCoordinate = locationRepository.findCoordinateToLocation(mountainLocation.getLocationParent(),
                             mountainLocation.getLocationChild(), mountainLocation.getLocationChildDetail());
 
-                    if(locationToCoordinate==null){
-                        mountainLocation.setLocationChildDetail("");
-                        MountainCoordinate notChildDetailCoordinate = locationRepository.findCoordinateToLocation
-                                (mountainLocation.getLocationParent(), mountainLocation.getLocationChild(), mountainLocation.getLocationChildDetail());
+        if(locationToCoordinate==null){
+            mountainLocation.setLocationChildDetail("");
+            MountainCoordinate notChildDetailCoordinate = locationRepository.findCoordinateToLocation(mountainLocation.getLocationParent(),
+                    mountainLocation.getLocationChild(), mountainLocation.getLocationChildDetail());
                         return notChildDetailCoordinate;
                     }
                     return locationToCoordinate;
-                }
-        ).collect(Collectors.toList());
+            }
 
-        return mountainCoordinateList;
-    }
-
-
-    protected void setCoordinateToDtoList(List<MountainInfoDto> mountainInfoDtoList){
-        List<MountainCoordinate> mountainCoordinate = getMountainCoordinate(mountainInfoDtoList);
-
-        IntStream.range(0, mountainInfoDtoList.size())
-                .forEach(i -> mountainInfoDtoList.get(i).setMountainCoordinate(mountainCoordinate.get(i)));
-    }
 
 
     protected MountainLocation splitMountainLocation(String mountainLocationAll){

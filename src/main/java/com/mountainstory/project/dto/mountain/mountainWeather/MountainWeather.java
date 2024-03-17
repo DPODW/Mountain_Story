@@ -50,8 +50,10 @@ public class MountainWeather {
     //미세먼지 (미세 , 초미세)
     private DustInfo dustInfo;
 
+    private HikingAdvice hikingAdvice;
+
     public MountainWeather(double currentTemperature, double eastAndWestWindSpeed, double southAndNorthWindSpeed, String averageWindSpeed, double windDirection, String skyState, String rainForm,
-                           Integer rainPercentage, String rainAmount, Integer humidity, double waveHeight, String snowAmount,DustInfo dustInfo) {
+                           Integer rainPercentage, String rainAmount, Integer humidity, double waveHeight, String snowAmount,DustInfo dustInfo,HikingAdvice hikingAdvice) {
         this.currentTemperature = currentTemperature;
         this.eastAndWestWindSpeed = eastAndWestWindSpeed;
         this.southAndNorthWindSpeed = southAndNorthWindSpeed;
@@ -65,5 +67,6 @@ public class MountainWeather {
         this.waveHeight = waveHeight;
         this.snowAmount = snowAmount;
         this.dustInfo=dustInfo;
+        this.hikingAdvice=hikingAdvice;
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -64,6 +65,14 @@ public class OAuthMemberService implements OAuth2UserService<OAuth2UserRequest, 
                 .map(entity -> entity.update(attributes.getName()))
                 .orElse(attributes.toEntity());
         return memberRepository.save(oAuthMember);
+    }
+
+    public void checkMemberLoginType(OAuthMemberSession oAuthMemberSession, Model model){
+        if(oAuthMemberSession != null && oAuthMemberSession.getType().equals("naver")){
+            model.addAttribute("naver","naver");
+        } else if(oAuthMemberSession != null && oAuthMemberSession.getType().equals("kakao")) {
+            model.addAttribute("kakao","kakao");
+        }
     }
 
 

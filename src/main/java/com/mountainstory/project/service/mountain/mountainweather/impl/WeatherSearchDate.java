@@ -14,8 +14,7 @@ public class WeatherSearchDate {
         return nowBaseDate.format(formatter);
     }
 
-    //TODO: 시간 완벽 해결 필요 (고장 남)
-    public String bastTime(){
+    protected String bastTime(){
         LocalDateTime time = LocalDateTime.now();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -23,25 +22,32 @@ public class WeatherSearchDate {
 
         int hour = formattedTime.getHour();
         int minute = formattedTime.getMinute();
-        String baseTime = null;
 
-        if ((hour >= 2 && minute >= 10) && (hour < 5 || (hour == 5 && minute <= 10))) {
-            baseTime = "0200";
-        } else if ((hour >= 5 && minute >= 10) && (hour < 8 || (hour == 8 && minute <= 10))) {
-            baseTime = "0500";
-        } else if ((hour >= 8 && minute >= 10) && (hour < 11 || (hour == 11 && minute <= 10))) {
-            baseTime = "0800";
-        } else if ((hour >= 11 && minute >= 10) && (hour < 14 || (hour == 14 && minute <= 10))) {
-            baseTime = "1100";
-        } else if ((hour >= 14 && minute >= 10) && (hour < 17 || (hour == 17 && minute <= 10))) {
-            baseTime = "1400";
-        } else if ((hour >= 17 && minute >= 10) && (hour < 20 || (hour == 20 && minute <= 10))) {
-            baseTime = "1700";
-        } else if ((hour >= 20 && minute >= 10) && (hour < 23 || (hour == 23 && minute <= 10))) {
-            baseTime = "2000";
-        } else {
-            baseTime = "2300";
+        if ((hour > 2 || (hour == 2 && minute >= 10)) && (hour < 5 || (hour == 5 && minute < 10))) {
+            return "0200";
         }
-        return baseTime;
+        if ((hour > 5 || (hour == 5 && minute >= 10)) && (hour < 8 || (hour == 8 && minute < 10))) {
+            return "0500";
+        }
+        if ((hour > 8 || (hour == 8 && minute >= 10)) && (hour < 11 || (hour == 11 && minute < 10))) {
+            return "0800";
+        }
+        if ((hour > 11 || (hour == 11 && minute >= 10)) && (hour < 14 || (hour == 14 && minute < 10))) {
+            return "1100";
+        }
+        if ((hour > 14 || (hour == 14 && minute >= 10)) && (hour < 17 || (hour == 17 && minute < 10))) {
+            return "1400";
+        }
+        if ((hour > 17 || (hour == 17 && minute >= 10)) && (hour < 20 || (hour == 20 && minute < 10))) {
+            return "1700";
+        }
+        if ((hour > 20 || (hour == 20 && minute >= 10)) && (hour < 23 || (hour == 23 && minute < 10))) {
+            return "2000";
+        }
+        if ((hour > 23 || (hour == 23 && minute >= 10)) && (hour < 2 || (hour == 2 && minute < 10))) {
+            return "2300";
+        } else {
+            return "Error: unknown time";
+        }
     }
 }

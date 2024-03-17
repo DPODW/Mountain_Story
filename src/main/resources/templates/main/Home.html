@@ -1,225 +1,123 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<title>산 스토리</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<link rel="stylesheet" href="assets/css/mountain-info.css" />
-	</head>
-	<body class="is-preload">
+<head>
+	<title>산 스토리</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<link rel="stylesheet" href="assets/css/mountain-info.css" />
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+	</style>
+</head>
 
-		<!-- Header -->
-			<div id="header">
+<body class="is-preload">
+<div id="header">
+	<div style="margin-top: 200px;">
+		<img src="/images/MountainStoryImg.png" class="mountainStoryImg">
+		<p class="logoText">오늘의 산 !</p>
 
-				<div class="top">
+		<div id="OAuthLogin" th:unless="${#authorization.expression('isAuthenticated()')}">
+			<a href="/oauth2/authorization/naver">
+				<img id="naverButton" src="/images/naverLoginLogo.png">
+			</a>
 
-						<div id="logo">
+			<a href="/oauth2/authorization/kakao">
+				<img id="kakaoButton" src="/images/kakaoLoginLogo.png">
+			</a>
+		</div>
 
-							<div id="OAuthLogin" th:unless="${#authorization.expression('isAuthenticated()')}">
-								<a href="/oauth2/authorization/naver">
-									<img id="naverButton" src="/images/naverLoginLogo.png">	
-								</a>
+		<div th:if="${#authorization.expression('isAuthenticated()')}">
+			 <hr style="height: 1px; border: 0; background-color: black;">
+            <img src="/images/userImg.png" class="userImg">
 
-								<a href="/oauth2/authorization/kakao">
-									<img id="kakaoButton" src="/images/kakaoLoginLogo.png">	
-								</a>
-							</div>
+            <h3 class="userNameText" th:text="${loginMember.name}"></h3>
+            <p class="userEmailText" th:text="${loginMember.email}"></p>
+                <nav>
+                    <ol class="breadcrumb userMenu">
+                    <li class="breadcrumb-item"><a href="#">마이 페이지</a></li>
+                    <li class="breadcrumb-item"><a href="#">게시 글</a></li>
+                    <li class="breadcrumb-item"th:if="${kakao}"><a href="https://kauth.kakao.com/oauth/logout?client_id=0d05cb8e8296ee92d3df6bb356bd1566&logout_redirect_uri=http://localhost:8080/logout">로그아웃</a></li>
+					<li class="breadcrumb-item"th:if="${naver}"><a href="/home/naverLogout">로그아웃</a></li>
+                    </ol>
+                </nav>
+		</div>
+	</div>
 
-							<div id="LoginSuccess" th:if="${#authorization.expression('isAuthenticated()')}">
-								<p th:text="*{loginMember.name + '님'}"></p><br>
-								<p th:text="*{loginMember.email}"></p><br>
-								<a class="logoutButton" th:if="${kakao}" href="https://kauth.kakao.com/oauth/logout?client_id=0d05cb8e8296ee92d3df6bb356bd1566&logout_redirect_uri=http://localhost:8080/logout">로그아웃</a>
-								<a class="logoutButton" th:if="${naver}" href="/home/naverLogout">로그아웃</a>
-							</div>
+	<!-- Nav -->
+	<nav id="nav" style="margin-top: -80px;">
+		<div style=" border: 1px solid red; width: 370px; height: 400px;"></div>
+	</nav>
 
-						</div>
+	<div class="bottom">
+		<ul class="icons">
+			<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
+			<li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+		</ul>
+	</div>
+</div>
 
-					<!-- Nav -->
-						<nav id="nav">
-							<ul>
-								<li><a href="/home/test" id="top-link"><span class="icon solid fa-home">Intro</span></a></li>
-								<li><a href="#portfolio" id="portfolio-link"><span class="icon solid fa-th">Portfolio</span></a></li>
-								<li><a href="#about" id="about-link"><span class="icon solid fa-user">About Me</span></a></li>
-								<li><a href="#contact" id="contact-link"><span class="icon solid fa-envelope">Contact</span></a></li>
-							</ul>
-						</nav>
+<!-- Main -->
+<div id="main">
 
-				</div>
+	<section class="homeImg" style="background-image: url('/images/homeImg.jpg')">
+		<div class="container">
+			<header>
+				<h2 class="alt">오늘은 어떤 산을 오를건가요?</h2>
+				<p>산 스토리는 여러분이 오를 산의 기후와 후기 등, 많은 정보를 한눈에 보여드립니다!<br/></p>
+			</header>
 
-				<div class="bottom">
+			<footer>
+				<form th:action="@{/mountain/info/search/list}" method="GET">
+					<input class="mountain-search" name="mountainName" id="mountainNameInput" type="text" placeholder="궁금하신 산을 입력해주세요"><br>
+					<button id="searchMountainBtn" class="button scrolly" style="margin-top: 80px;" type="submit">검색하기</button>
+					<div class="loadingImg" id="displayImage" >
+						<img class="loadingImgDetail" src="/images/world-6627_256.gif" alt="특정 이미지">
+						<p class="loadingText" id="displayText"></p>
+					</div>
+				</form>
+			</footer>
 
-					<!-- Social Icons -->
-						<ul class="icons">
-							<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-							<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-							<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
-							<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
-							<li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-						</ul>
+		</div>
+	</section>
 
-				</div>
+	<!-- Portfolio -->
+	<section id="portfolio" class="two">
 
-			</div>
+	</section>
 
-		<!-- Main -->
-			<div id="main">
+	<!-- About Me -->
+	<section id="about" class="three">
 
-				<!-- Intro -->
-					<section id="top" class="one dark cover">
-						<div class="container">
+	</section>
 
-							<header>
-								<h2 class="alt">오늘은 어떤 산을 오를건가요?</h2>
-								<p>산 스토리는 여러분이 오를 산의 기후와 후기 등, 많은 정보를 한눈에 보여드립니다!<br/></p>
-							</header>
+	<!-- Contact -->
+	<section id="contact" class="four">
 
-							<footer>
-								<form th:action="@{/mountain/info/search}" method="GET">
-								<input class="mountain-search" name="mountainName" type="text" placeholder="궁금하신 산을 입력해주세요"><br>
-								<button class="button scrolly" type="submit">검색하기</button>
-								</form>
-							</footer>
+	</section>
 
-						</div>
-					</section>
+</div>
 
-				<!-- Portfolio -->
-					<section id="portfolio" class="two">
-						<div class="container">
+<!-- Footer -->
+<div id="footer">
+	<ul class="copyright">
+		<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+	</ul>
+</div>
 
-							<header>
-								<h2>Portfolio</h2>
-							</header>
+<!-- Scripts -->
+<script src="assets/js/loadingFunction.js"></script>
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/jquery.scrolly.min.js"></script>
+<script src="assets/js/jquery.scrollex.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 
-							<p>Vitae natoque dictum etiam semper magnis enim feugiat convallis convallis
-							egestas rhoncus ridiculus in quis risus amet curabitur tempor orci penatibus.
-							Tellus erat mauris ipsum fermentum etiam vivamus eget. Nunc nibh morbi quis
-							fusce hendrerit lacus ridiculus.</p>
-
-							<div class="row">
-								<div class="col-4 col-12-mobile">
-									<article class="item">
-										<a href="#" class="image fit"><img src="images/pic02.jpg" alt="" /></a>
-										<header>
-											<h3>Ipsum Feugiat</h3>
-										</header>
-									</article>
-									<article class="item">
-										<a href="#" class="image fit"><img src="images/pic03.jpg" alt="" /></a>
-										<header>
-											<h3>Rhoncus Semper</h3>
-										</header>
-									</article>
-								</div>
-								<div class="col-4 col-12-mobile">
-									<article class="item">
-										<a href="#" class="image fit"><img src="images/pic04.jpg" alt="" /></a>
-										<header>
-											<h3>Magna Nullam</h3>
-										</header>
-									</article>
-									<article class="item">
-										<a href="#" class="image fit"><img src="images/pic05.jpg" alt="" /></a>
-										<header>
-											<h3>Natoque Vitae</h3>
-										</header>
-									</article>
-								</div>
-								<div class="col-4 col-12-mobile">
-									<article class="item">
-										<a href="#" class="image fit"><img src="images/pic06.jpg" alt="" /></a>
-										<header>
-											<h3>Dolor Penatibus</h3>
-										</header>
-									</article>
-									<article class="item">
-										<a href="#" class="image fit"><img src="images/pic07.jpg" alt="" /></a>
-										<header>
-											<h3>Orci Convallis</h3>
-										</header>
-									</article>
-								</div>
-							</div>
-
-						</div>
-					</section>
-
-				<!-- About Me -->
-					<section id="about" class="three">
-						<div class="container">
-
-							<header>
-								<h2>About Me</h2>
-							</header>
-
-							<a href="#" class="image featured"><img src="images/pic08.jpg" alt="" /></a>
-
-							<p>Tincidunt eu elit diam magnis pretium accumsan etiam id urna. Ridiculus
-							ultricies curae quis et rhoncus velit. Lobortis elementum aliquet nec vitae
-							laoreet eget cubilia quam non etiam odio tincidunt montes. Elementum sem
-							parturient nulla quam placerat viverra mauris non cum elit tempus ullamcorper
-							dolor. Libero rutrum ut lacinia donec curae mus vel quisque sociis nec
-							ornare iaculis.</p>
-
-						</div>
-					</section>
-
-				<!-- Contact -->
-					<section id="contact" class="four">
-						<div class="container">
-
-							<header>
-								<h2>Contact</h2>
-							</header>
-
-							<p>Elementum sem parturient nulla quam placerat viverra
-							mauris non cum elit tempus ullamcorper dolor. Libero rutrum ut lacinia
-							donec curae mus. Eleifend id porttitor ac ultricies lobortis sem nunc
-							orci ridiculus faucibus a consectetur. Porttitor curae mauris urna mi dolor.</p>
-
-							<form method="post" action="#">
-								<div class="row">
-									<div class="col-6 col-12-mobile"><input type="text" name="name" placeholder="Name" /></div>
-									<div class="col-6 col-12-mobile"><input type="text" name="email" placeholder="Email" /></div>
-									<div class="col-12">
-										<textarea name="message" placeholder="Message"></textarea>
-									</div>
-									<div class="col-12">
-										<input type="submit" value="Send Message" />
-									</div>
-								</div>
-							</form>
-
-						</div>
-					</section>
-
-			</div>
-
-		<!-- Footer -->
-			<div id="footer">
-
-				<!-- Copyright -->
-					<ul class="copyright">
-						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-
-			</div>
-
-		<!-- Scripts -->
-
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-			<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
-			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-
-
-	</body>
+</body>
 </html>

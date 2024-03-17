@@ -7,67 +7,58 @@ import org.springframework.stereotype.Service;
 @Service
 public class TranslateWeatherCode {
 
-    //TODO: 변수 재할당 -> 그냥 문자 그대로 return 방식으로 변경 (최종 return 은 null)
+    //TODO: 추후 커스텀 예외를 구현해서 -> return null 을 예외로 변경
     protected String skyCode(String skyState){
-        String translateSkyStateCode = null;
-
         switch (skyState){
             case "1":
-                translateSkyStateCode = "맑음";
-                break;
+                return "맑음";
             case "3":
-                translateSkyStateCode = "구름 많음";
-                break;
+                return "구름 많음";
             case "4":
-                translateSkyStateCode = "흐림";
-                break;
+                return "흐림";
         }
-        return translateSkyStateCode;
+        return null;
     }
 
     protected String rainFormCode(String rainForm){
-        String translateRainFormCode = null;
-
         switch (rainForm){
             case "0":
-                translateRainFormCode = "X";
-                break;
+                return "X";
+                
             case "1":
-                translateRainFormCode = "비";
-                break;
+                return "비";
+                
             case "2":
-                translateRainFormCode = "비/눈";
-                break;
+                return "비/눈";
+                
             case "3":
-                translateRainFormCode = "눈";
-                break;
+                return "눈";
+                
             case "4":
-                translateRainFormCode = "소나기";
-                break;
+                return "소나기";
         }
-        return translateRainFormCode;
+        return null;
     }
 
     protected String windSpeedCode(double windSpeedCode){
-        String translateSpeedCode = null;
 
        if(windSpeedCode<4){
-           translateSpeedCode = "약함";
+           return "약함";
        }
        if(windSpeedCode>=4 && windSpeedCode<9){
-           translateSpeedCode = "약간 강함";
+           return "약간 강함";
        }
        if(windSpeedCode>=9 && windSpeedCode<14){
-            translateSpeedCode = "강함";
+            return "강함";
        }
        if(windSpeedCode>14){
-           translateSpeedCode = "매우 강함";
+           return "매우 강함";
        }
-       return translateSpeedCode;
+       return null;
     }
 
 
-    protected String convertDustState(Integer dust){
+    protected String convertUltraMicroDust(Integer dust){
         if (dust <= 15){
             return "좋음";
         }
@@ -78,6 +69,22 @@ public class TranslateWeatherCode {
             return "나쁨";
         }
         if (dust >= 76){
+            return "매우 나쁨";
+        }
+        return null;
+    }
+
+    protected String convertMicroDust(Integer dust){
+        if (dust <= 30){
+            return "좋음";
+        }
+        if (dust >= 31 && dust <=80){
+            return "보통";
+        }
+        if (dust >= 81 && dust <=150){
+            return "나쁨";
+        }
+        if (dust >= 151){
             return "매우 나쁨";
         }
         return null;

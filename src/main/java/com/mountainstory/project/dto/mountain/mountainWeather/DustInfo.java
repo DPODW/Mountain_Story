@@ -11,13 +11,13 @@ import lombok.ToString;
 @NoArgsConstructor
 public class DustInfo {
     private String microDustState;
-    private String ultrafineDustState;
+    private String ultraMicroDustState;
     private Integer microDustConcentration;
     private Integer ultrafDustConcentration;
 
-    public DustInfo(String microDustState, String ultrafineDustState, Integer microDustConcentration, Integer ultrafDustConcentration) {
+    public DustInfo(String microDustState, String ultraMicroDustState, Integer microDustConcentration, Integer ultrafDustConcentration) {
         this.microDustState = microDustState;
-        this.ultrafineDustState = ultrafineDustState;
+        this.ultraMicroDustState = ultraMicroDustState;
         this.microDustConcentration = microDustConcentration;
         this.ultrafDustConcentration = ultrafDustConcentration;
     }

@@ -3,6 +3,7 @@ import com.mountainstory.project.dto.mountain.mountainimg.MountainImgDto;
 import com.mountainstory.project.dto.mountain.mountainimg.MountainImgXml;
 import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoDto;
 import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoXml;
+import com.mountainstory.project.dto.mountain.mountainregion.MountainCoordinate;
 import com.mountainstory.project.service.mountain.mountaininfo.MountainInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,33 +19,52 @@ import java.util.*;
 @Service
 public class MountainInfoServiceImpl implements MountainInfoService {
 
+    private static final String LIST_DEFAULT_PAGE_NUMBER = "1";
+    private static final String LIST_DEFAULT_RESULT_COUNT = "15";
+
     private final MountainCoordinateInfo mountainCoordinateInfo;
+    private final ConvertMountainName convertMountainName;
 
     @Value("${openapi.serviceKey}")
     private String openApiServiceKey;
 
-    public MountainInfoServiceImpl(MountainCoordinateInfo mountainCoordinateInfo) {
+    public MountainInfoServiceImpl(MountainCoordinateInfo mountainCoordinateInfo, ConvertMountainName convertMountainName) {
         this.mountainCoordinateInfo = mountainCoordinateInfo;
+        this.convertMountainName = convertMountainName;
     }
 
 
     @Override
-    public List<MountainInfoDto> getAllMountainInfo(String mountainName) throws UnsupportedEncodingException {
-        List<MountainInfoDto> mountainInfoDtoList = searchMountainInfo(mountainName);
+    public List<MountainInfoDto> getAllMountainInfoList(String mountainName) throws UnsupportedEncodingException {
+        long beforeTime = System.currentTimeMillis();
+
+        List<MountainInfoDto> mountainInfoDtoList = searchMountainInfo(mountainName,LIST_DEFAULT_PAGE_NUMBER,LIST_DEFAULT_RESULT_COUNT);
+        convertMountainName.removePartSameMountain(mountainName,mountainInfoDtoList);
         setImgToDtoList(mountainInfoDtoList);
-        mountainCoordinateInfo.getMountainCoordinate(mountainInfoDtoList);
-        mountainCoordinateInfo.setCoordinateToDtoList(mountainInfoDtoList);
+
+        long afterTime = System.currentTimeMillis();
+        long resultTime = (afterTime - beforeTime);
+        log.info("setImgToDtoList 메소드 실행시간=> {}",resultTime);
+
         return mountainInfoDtoList;
     }
 
+
     @Override
-    public List<MountainInfoDto> searchMountainInfo(String mountainName) throws UnsupportedEncodingException {
+    public MountainInfoDto setCoordinateInfo(MountainInfoDto mountainInfoDto) {
+        MountainCoordinate mountainCoordinate = mountainCoordinateInfo.getMountainCoordinate(mountainInfoDto.getMountainLocation());
+        mountainInfoDto.setMountainCoordinate(mountainCoordinate);
+        return mountainInfoDto;
+    }
+
+    @Override
+    public List<MountainInfoDto> searchMountainInfo(String mountainName,String mountainInfoPage,String mountainInfoResultCount) throws UnsupportedEncodingException {
         String encodeMountainName = URLEncoder.encode(mountainName, "UTF-8");
         URI uri = UriComponentsBuilder
                 .fromUriString("http://apis.data.go.kr/1400000/service/cultureInfoService2/mntInfoOpenAPI2")
                 .queryParam("searchWrd",encodeMountainName)
-                .queryParam("pageNo","1")
-                .queryParam("numOfRows","5")
+                .queryParam("pageNo",mountainInfoPage)
+                .queryParam("numOfRows",mountainInfoResultCount)
                 .queryParam("ServiceKey",openApiServiceKey)
                 .build(true)
                 .toUri();
@@ -57,6 +77,7 @@ public class MountainInfoServiceImpl implements MountainInfoService {
 
     @Override
     public List<MountainImgDto> searchMountainImg(String mountainNumber) {
+        //TODO: 이미지 반복 요청이 리스트 호출 시간 지연의 주범임. . .
         URI uri = UriComponentsBuilder
                 .fromUriString("http://apis.data.go.kr/1400000/service/cultureInfoService2/mntInfoImgOpenAPI2")
                 .queryParam("mntiListNo",mountainNumber)
@@ -71,15 +92,15 @@ public class MountainInfoServiceImpl implements MountainInfoService {
         return mountainImgDto;
     }
 
+
     private void setImgToDtoList(List<MountainInfoDto> mountainInfoDtoList) {
-        //순환 참조 문제로 인하여 MountainInfoServiceHelper 에서 사용될수 없음.
         mountainInfoDtoList.forEach(mountainInfoDto -> {
             List<MountainImgDto> imageList = searchMountainImg(mountainInfoDto.getMountainNo());
             if (!imageList.isEmpty()) {
                 MountainImgDto firstImageUrl = imageList.get(0);
                 mountainInfoDto.setMountainImgUrl(firstImageUrl.getMountainImgName());
             } else {
-                mountainInfoDto.setMountainImgUrl("이미지 제공 되지 않음");
+                mountainInfoDto.setMountainImgUrl(null);
             }
         });
     }

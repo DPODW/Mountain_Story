@@ -7,170 +7,211 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/assets/css/main.css" />
         <link rel="stylesheet" href="/assets/css/mountain-info.css" />
-
-
 	</head>
-	<body class="is-preload">
+<body class="is-preload">
+    <div id="header">
 
-        		<!-- Header -->
-	<div id="header" class="dasf">
+        <div style="margin-top: 200px;">
+            <img src="/images/MountainStoryImg.png" class="mountainStoryImg">
+            <p class="logoText">오늘의 산 !</p>
 
-				<div class="top">
+            <div id="OAuthLogin" th:unless="${#authorization.expression('isAuthenticated()')}">
+                <a href="/oauth2/authorization/naver">
+                    <img id="naverButton" src="/images/naverLoginLogo.png">
+                </a>
 
-					<!-- Logo -->
-						<div id="logo">
-							<span class="image avatar48"><img src="/images/avatar.jpg" alt="" /></span>
-							<h1 id="title">야스</h1>
-							<p>Hyperspace Engineer</p>
-						</div>
+                <a href="/oauth2/authorization/kakao">
+                    <img id="kakaoButton" src="/images/kakaoLoginLogo.png">
+                </a>
+            </div>
 
-					<!-- Nav -->
-						<nav id="nav">
-							<ul>
-								<li><a href="#top" id="top-link"><span class="icon solid fa-home">Intro</span></a></li>
-								<li><a href="#portfolio" id="portfolio-link"><span class="icon solid fa-th">Portfolio</span></a></li>
-								<li><a href="#about" id="about-link"><span class="icon solid fa-user">About Me</span></a></li>
-								<li><a href="#contact" id="contact-link"><span class="icon solid fa-envelope">Contact</span></a></li>
-							</ul>
-						</nav>
+            <div th:if="${#authorization.expression('isAuthenticated()')}">
+                <hr style="height: 1px; border: 0; background-color: black;">
+                <img src="/images/userImg.png" class="userImg">
 
-				</div>
+                <h3 class="userNameText" th:text="${loginMember.name}"></h3>
+                <p class="userEmailText" th:text="${loginMember.email}"></p>
+                <nav>
+                    <ol class="breadcrumb userMenu">
+                        <li class="breadcrumb-item"><a href="#">마이 페이지</a></li>
+                        <li class="breadcrumb-item"><a href="#">게시 글</a></li>
+                        <li class="breadcrumb-item"th:if="${kakao}"><a href="https://kauth.kakao.com/oauth/logout?client_id=0d05cb8e8296ee92d3df6bb356bd1566&logout_redirect_uri=http://localhost:8080/logout">로그아웃</a></li>
+                        <li class="breadcrumb-item"th:if="${naver}"><a href="/home/naverLogout">로그아웃</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
 
-				<div class="bottom">
+        <!-- Nav -->
+        <nav id="nav" style="margin-top: -80px;">
+            <div style=" border: 1px solid red; width: 370px; height: 400px;"></div>
+        </nav>
 
-					<!-- Social Icons -->
-						<ul class="icons">
-							<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-							<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-							<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
-							<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
-							<li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-						</ul>
 
-				</div>
-
-			</div>
+        <div class="bottom">
+            <ul class="icons">
+                <li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
+                <li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+            </ul>
+        </div>
+    </div>
 
              <!-- 옆에 사이드바 끝    -->
 
-             <div class="mountain-layout">
+    <div class="mountain-layout">
+        <div th:if="${mountainInfoOne.getMountainImgUrl()}" class="mountain-content" th:style="'background-image: url(\'http://www.forest.go.kr/images/data/down/mountain/' + ${mountainInfoOne.getMountainImgUrl()} + '\');'">
+            <h2 class="mountain-content-name" th:text="${mountainInfoOne.getMountainName()}"></h2>
+            <p class="mountain-content-high" th:text="'정상 높이: '+${mountainInfoOne.getMountainHigh()}+'m'"></p>
+            <h2 class="mountain-content-location" th:text="${mountainInfoOne.getMountainLocation()}"></h2>
+            <p class="mountain-content-imgInfo" th:text="'(산림청에서 제공하는 '+${mountainInfoOne.getMountainName()}+' 이미지 입니다.)'"></p>
+        </div>
 
-                <div class="mountain-content">
-                    <p>산 정보 섹션</p>
+        <div th:unless="${mountainInfoOne.getMountainImgUrl()}" class="mountain-content" style="background-image: url('/images/noImg.png')">
+            <h2 class="mountain-content-name" th:text="${mountainInfoOne.getMountainName()}"></h2>
+            <p class="mountain-content-high" th:text="'정상 높이: '+${mountainInfoOne.getMountainHigh()}+'m'"></p>
+            <h2 class="mountain-content-location" th:text="${mountainInfoOne.getMountainLocation()}"></h2>
+            <p class="mountain-content-imgInfo" th:text="'(산림청에서 해당 위치의 '+${mountainInfoOne.getMountainName()}+' 이미지를 제공하지 않습니다.)'"></p>
+        </div>
+
+
+        <div class="sky-content">
+            <h4 class="todayTempAndSkyText">오늘의 하늘은 ?</h4>
+            <img th:if="${mountainWeather.getSkyState() == '맑음'}" class="centerImg" src="/images/weather/sun.png">
+            <img th:if="${mountainWeather.getSkyState() == '구름 많음'}" class="centerImg" src="/images/weather/cloud.png">
+            <img th:if="${mountainWeather.getSkyState() == '흐림'}" class="centerImg" src="/images/weather/badCloud.png">
+            <h4 class="skyText" th:text="${mountainWeather.getSkyState()}"></h4>
+        </div>
+
+        <div class="temperature-content">
+            <img class="temperatureImg" src="/images/weather/temp.png">
+            <h4 class="todayTempAndSkyText">오늘의 온도는 ?</h4>
+            <h3 class="temperatureText" th:text="${mountainWeather.getCurrentTemperature()}+'°C'"></h3>
+        </div>
+
+        <div class="rain-content">
+            <div th:unless="${mountainWeather.getRainForm() == 'X'}">
+                <img th:if="${mountainWeather.getRainForm() == '비' or mountainWeather.getRainForm() == '소나기'}" class="circleImg" src="/images/weather/rain.png">
+                <img th:if="${mountainWeather.getRainForm() == '비/눈'}" class="circleImg" src="/images/weather/rainAndSnow.png">
+                <img th:if="${mountainWeather.getRainForm() == '눈'}" class="circleImg" src="/images/weather/snow.png">
+                <h3 class="percentText" th:text="${mountainWeather.getRainPercentage()}+'%'"></h3>
+                <div class="chart">
+                    <div class="chart-bar" th:style="'background: conic-gradient(#3874ff ' + ${mountainWeather.getRainPercentage()} + '%, lightgray 0%);'" data-deg="50"></div>
                 </div>
+                <h4 class="currentWeatherText" th:if="${mountainWeather.getRainForm() == '비' or mountainWeather.getRainForm() == '소나기'}" th:text="${mountainWeather.getRainAmount()} + '의 비 내리는 중!'"></h4>
+                <h4 class="currentWeatherText" th:if="${mountainWeather.getRainForm() == '비/눈'}" th:text="${mountainWeather.getRainAmount()} + '의 비/눈 내리는 중!'"></h4>
+                <h4 class="currentWeatherText" th:if="${mountainWeather.getRainForm() == '눈'}" th:text="${mountainWeather.getSnowAmount()} + '의 눈 내리는 중!'"></h4>
 
-
-                 <div class="sky-content">
-                     <h4 class="todayTempAndSkyText">오늘의 하늘은 ?</h4>
-                     <img th:if="${mountainWeather.getSkyState() == '맑음'}" class="centerImg" src="/images/weather/sun.png">
-                     <img th:if="${mountainWeather.getSkyState() == '구름 많음'}" class="centerImg" src="/images/weather/cloud.png">
-                     <img th:if="${mountainWeather.getSkyState() == '흐림'}" class="centerImg" src="/images/weather/badCloud.png">
-                     <h4 class="skyText" th:text="${mountainWeather.getSkyState()}"></h4>
-                 </div>
-
-                 <div class="temperature-content">
-                     <img class="temperatureImg" src="/images/weather/temp.png">
-                     <h4 class="todayTempAndSkyText">오늘의 온도는 ?</h4>
-                     <h3 class="temperatureText" th:text="${mountainWeather.getCurrentTemperature()}+'°C'"></h3>
-                 </div>
-
-                <div class="rain-content">
-                    <div th:unless="${mountainWeather.getRainForm() == 'X'}">
-                        <img th:if="${mountainWeather.getRainForm() == '비' or mountainWeather.getRainForm() == '소나기'}" class="circleImg" src="/images/weather/rain.png">
-                        <img th:if="${mountainWeather.getRainForm() == '비/눈'}" class="circleImg" src="/images/weather/rainAndSnow.png">
-                        <img th:if="${mountainWeather.getRainForm() == '눈'}" class="circleImg" src="/images/weather/snow.png">
-                        <h3 class="percentText" th:text="${mountainWeather.getRainPercentage()}+'%'"></h3>
-                        <div class="chart">
-                            <div class="chart-bar" th:style="'background: conic-gradient(#3874ff ' + ${mountainWeather.getRainPercentage()} + '%, white 0%);'" data-deg="50"></div>
-                        </div>
-                        <h4 class="currentWeatherText" th:if="${mountainWeather.getRainForm() == '비' or mountainWeather.getRainForm() == '소나기'}" th:text="${mountainWeather.getRainAmount()} + '의 비 내리는 중!'"></h4>
-                        <h4 class="currentWeatherText" th:if="${mountainWeather.getRainForm() == '비/눈'}" th:text="${mountainWeather.getRainAmount()} + '의 비/눈 내리는 중!'"></h4>
-                        <h4 class="currentWeatherText" th:if="${mountainWeather.getRainForm() == '눈'}" th:text="${mountainWeather.getSnowAmount()} + '의 눈 내리는 중!'"></h4>
-
-                        <h4 style="text-align: center; font-size: large; font-weight: bold;" th:text="${mountainWeather.getRainForm()} + ' 올 확률 ' + ${mountainWeather.getRainPercentage()}+'% 입니다'"></h4>
-                    </div>
-
-                    <div th:if="${mountainWeather.getRainForm() == 'X'}">
-                        <img class="notRainAndSnowImg" src="/images/weather/notRainAndSnow.png">
-                        <h4 style="position: absolute; margin-top: 210px; margin-left: 25px;">비/눈 예보가 없습니다</h4>
-                    </div>
-                </div>
-
-
-                <div class="humidity-content">
-                    <img class="circleImg" src="/images/weather/humidity.png"/>
-                    <h3 class="percentText" th:text="${mountainWeather.getHumidity()}+'%'"></h3>
-                    <div class="chart">
-                        <div class="chart-bar" th:style="'background: conic-gradient(#3874ff ' + ${mountainWeather.getHumidity()} + '%, white 0%);'" data-deg="50"></div>
-                    </div>
-                    <h4 style="text-align: center;">습도는 <span style="font-weight: bold;" th:text="${mountainWeather.getHumidity()}+'%'"></span> 입니다</h4>
-                </div>
-
-
-                <div class="wind-content">
-                    <h4 style="text-align: center; padding-top: 20px;">오늘의 바람은 ?</h4>
-                    <img class="centerImg" src="/images/weather/wind.png">
-                    <h4 style="margin-top: 160px; text-align: center; font-weight: bold" th:text="${mountainWeather.getAverageWindSpeed()}"></h4>
-                </div>
-
-
-                <div class="dust-content">
-                    <p>미세먼지 정보 섹션</p>
-                </div>
-
-                <div class="any-content">
-                    <p>아무 정보 섹션</p>
-                </div>
-
+                <h4 style="text-align: center; font-size: large; font-weight: bold;" th:text="${mountainWeather.getRainForm()} + ' 올 확률 ' + ${mountainWeather.getRainPercentage()}+'% 입니다'"></h4>
             </div>
 
-
-        <div class="mountain-review">
-            <hr>
-            <p class="mountain-review-title">OOO산 후기</p>
-            <p class="mountain-review-subtitle">OOO산의 후기를 사람들에게 공유해주세요!</p>
-
-            <table class="table table-hover" id="review-table">
-                <thead>
-                    <tr>
-                        <th style="padding-left: 3px;">번호</th>
-                        <th>말머리</th>
-                        <th style="padding-left: 550px;">제목</th>
-                        <th>작성자</th>
-                        <th>시간</th>
-                        <th style="padding-left: 1px;">추천</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td >1</td>
-                        <td>등산 후기</td>
-                        <td  style="padding-left: 100px;">산이 좋네요</td>
-                        <td>tj**12</td>
-                        <td>2024-01-11</td>
-                        <td>1</td>
-                    </tr>
-                </tbody>
-            </table>
-         </div>
+            <div th:if="${mountainWeather.getRainForm() == 'X'}">
+                <img class="notRainAndSnowImg" src="/images/weather/notRainAndSnow.png">
+                <h4 style="position: absolute; margin-top: 210px; margin-left: 25px;">비/눈 예보가 없습니다</h4>
+            </div>
+        </div>
 
 
+        <div class="humidity-content">
+            <img class="circleImg" src="/images/weather/humidity.png"/>
+            <h3 class="percentText" th:text="${mountainWeather.getHumidity()}+'%'"></h3>
+            <div class="chart">
+                <div class="chart-bar" th:style="'background: conic-gradient(#3874ff ' + ${mountainWeather.getHumidity()} + '%, lightgray 0%);'" data-deg="50"></div>
+            </div>
+            <h4 style="text-align: center;">습도는 <span style="font-weight: bold;" th:text="${mountainWeather.getHumidity()}+'%'"></span> 입니다</h4>
+        </div>
 
 
+        <div class="wind-content">
+            <h4 style="text-align: center; padding-top: 20px;">오늘의 바람은 ?</h4>
+            <img class="centerImg" src="/images/weather/wind.png">
+            <h4 class="windAndDustStateText" th:text="${mountainWeather.getAverageWindSpeed()}"></h4>
+        </div>
 
 
+        <div class="microDust-content">
+            <h4 style="text-align: center; padding-top: 20px;">오늘의 미세먼지 ?</h4>
+            <img class="DustImg" src="/images/weather/microDust.png">
+            <h4 class="windAndDustStateText" th:text="${mountainWeather.getDustInfo().getMicroDustState()}"></h4>
+            <p class="dustConcentrationText" th:text="${'농도 ('+mountainWeather.getDustInfo().getMicroDustConcentration()+'㎍/㎥ )'}"></p>
+        </div>
 
-        <script src="assets/js/jquery.min.js"></script>
-        <script src="assets/js/jquery.scrolly.min.js"></script>
-        <script src="assets/js/jquery.scrollex.min.js"></script>
-        <script src="assets/js/browser.min.js"></script>
-        <script src="assets/js/breakpoints.min.js"></script>
-        <script src="assets/js/util.js"></script>
-        <script src="assets/js/main.js"></script>
-        <script src="assets/js/main.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+        <div class="ultrafDust-content">
+            <h4 style="text-align: center; padding-top: 20px;">오늘의 초미세먼지 ?</h4>
+            <img class="DustImg" src="/images/weather/UltraMicroDust.png">
+            <h4 class="windAndDustStateText" th:text="${mountainWeather.getDustInfo().getUltraMicroDustState()}"></h4>
+            <p class="dustConcentrationText" th:text="${'농도 ('+mountainWeather.getDustInfo().getUltrafDustConcentration()+'㎍/㎥ )'}"></p>
+        </div>
 
+        <div class="weatherRating">
+            <h1 style="text-align: center; color: black">오늘 등산 팁!</h1>
+
+            <div style="margin-top: 10px">
+                <div style="font-size: 17px; display: inline;" >
+                    <a th:text="${mountainInfoOne.getMountainName()+' 이 위치한 '+ mountainInfoOne.getMountainLocation()}"></a>
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodaySky()=='sunnyView'}" th:text="#{sunnyView}"></a>
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodaySky()=='cloudView'}" th:text="#{cloudView}"></a>
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodaySky()=='blurView'}"  th:text="#{blurView}"></a>
+
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodayCloths()=='springAndFallClothes'}" th:text="#{springAndFallClothes}"></a>
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodayCloths()=='summerClothes'}" th:text="#{summerClothes}"></a>
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodayCloths()=='winterClothes'}" th:text="#{winterClothes}"></a>
+
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodayRainOrSnow()=='rainDay'}" th:text="#{rainDay}"></a>
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodayRainOrSnow()=='snowDay'}" th:text="#{snowDay}"></a>
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodayRainOrSnow()=='rainAndSnowDay'}" th:text="#{rainAndSnowDay}"></a>
+
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodayWindSpeed()=='weakWind'}" th:text="#{weakWind}"></a>
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodayWindSpeed()=='littleStrongWind'}" th:text="#{littleStrongWind}"></a>
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodayWindSpeed()=='strongWind'}" th:text="#{strongWind}"></a>
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodayWindSpeed()=='veryStrongWind'}"th:text="#{veryStrongWind}"></a>
+
+                    <a th:if="${mountainWeather.getHikingAdvice().getTodayDustInfo()!=null}" th:text="#{DustHigh}"></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="mountain-review">
+        <hr>
+        <p class="mountain-review-title">OOO산 후기</p>
+        <p class="mountain-review-subtitle">OOO산의 후기를 사람들에게 공유해주세요!</p>
+
+        <table class="table table-hover" id="review-table">
+            <thead>
+            <tr>
+                <th style="padding-left: 3px;">번호</th>
+                <th>말머리</th>
+                <th style="padding-left: 550px;">제목</th>
+                <th>작성자</th>
+                <th>시간</th>
+                <th style="padding-left: 1px;">추천</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td >1</td>
+                <td>등산 후기</td>
+                <td  style="padding-left: 100px;">산이 좋네요</td>
+                <td>tj**12</td>
+                <td>2024-01-11</td>
+                <td>1</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     </body>
 </html>
