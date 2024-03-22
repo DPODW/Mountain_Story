@@ -36,15 +36,9 @@ public class MountainInfoServiceImpl implements MountainInfoService {
 
     @Override
     public List<MountainInfoDto> getAllMountainInfoList(String mountainName) throws UnsupportedEncodingException {
-        long beforeTime = System.currentTimeMillis();
-
         List<MountainInfoDto> mountainInfoDtoList = searchMountainInfo(mountainName,LIST_DEFAULT_PAGE_NUMBER,LIST_DEFAULT_RESULT_COUNT);
         convertMountainName.removePartSameMountain(mountainName,mountainInfoDtoList);
-        setImgToDtoList(mountainInfoDtoList);
-
-        long afterTime = System.currentTimeMillis();
-        long resultTime = (afterTime - beforeTime);
-        log.info("setImgToDtoList 메소드 실행시간=> {}",resultTime);
+//        setImgToDtoList(mountainInfoDtoList);
 
         return mountainInfoDtoList;
     }

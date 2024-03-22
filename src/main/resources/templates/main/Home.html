@@ -71,11 +71,13 @@
 			<footer>
 				<form th:action="@{/mountain/info/search/list}" method="GET">
 					<input class="mountain-search" name="mountainName" id="mountainNameInput" type="text" placeholder="궁금하신 산을 입력해주세요"><br>
-					<button id="searchMountainBtn" class="button scrolly" style="margin-top: 80px;" type="submit">검색하기</button>
+					<button id="searchMountainBtn" class="button scrolly" type="submit">검색하기</button>
+
 					<div class="loadingImg" id="displayImage" >
 						<img class="loadingImgDetail" src="/images/world-6627_256.gif" alt="특정 이미지">
 						<p class="loadingText" id="displayText"></p>
 					</div>
+
 				</form>
 			</footer>
 

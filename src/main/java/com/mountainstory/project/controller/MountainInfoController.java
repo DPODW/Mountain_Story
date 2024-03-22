@@ -5,20 +5,23 @@ import com.mountainstory.project.config.auth.OAuthMemberService;
 import com.mountainstory.project.config.auth.session.LoginMember;
 import com.mountainstory.project.config.auth.session.OAuthMemberSession;
 import com.mountainstory.project.dto.mountain.mountainWeather.MountainWeather;
+import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoDto;
+import com.mountainstory.project.dto.review.ReviewInfo;
+import com.mountainstory.project.entity.user.Review;
 import com.mountainstory.project.service.mountain.mountaininfo.MountainInfoService;
 import com.mountainstory.project.service.mountain.mountainweather.MountainWeatherService;
+import com.mountainstory.project.service.review.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoDto;
+
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -33,10 +36,13 @@ public class MountainInfoController {
 
     private final OAuthMemberService oAuthMemberService;
 
-    public MountainInfoController(MountainInfoService mountainInfoService, MountainWeatherService mountainWeatherService, OAuthMemberService oAuthMemberService) {
+    private final ReviewService reviewService;
+
+    public MountainInfoController(MountainInfoService mountainInfoService, MountainWeatherService mountainWeatherService, OAuthMemberService oAuthMemberService, ReviewService reviewService) {
         this.mountainInfoService = mountainInfoService;
         this.mountainWeatherService = mountainWeatherService;
         this.oAuthMemberService = oAuthMemberService;
+        this.reviewService = reviewService;
     }
 
     //TODO:get~ 메소드가 존재하니까 api 들은 범위를 제한해도될듯
@@ -48,17 +54,19 @@ public class MountainInfoController {
         HttpSession session = request.getSession(false);
 
         List<MountainInfoDto> allMountainInfoList = (List<MountainInfoDto>) session.getAttribute("allMountainInfoList");
+        //TODO: 세션 무효화를 하지 않아야, 새로고침이 이루어짐. (무효화는 필수이기 때문에, 추후 무효화 로직을 해당 메소드에 영향을 받지 않는 곳에 구현해야함
 
         MountainInfoDto mountainInfoOne = mountainInfoService.setCoordinateInfo(allMountainInfoList.get(mountainIndex));
         MountainWeather mountainWeather = mountainWeatherService.getMountainWeather(mountainInfoOne.getMountainCoordinate(), mountainInfoOne.getMountainLocation());
-        session.removeAttribute("allMountainInfoList");
+        List<ReviewInfo> reviewList = reviewService.findReviewList(mountainInfoOne.getMountainNo());
 
-        //TODO: 새로고침시 NULL 에러 해결 OR 예외 처리 필요 (list 화면으로 리다이렉트)
 
-        log.info("검색된 최종 산 >> {}",mountainInfoOne);
         model.addAttribute("loginMember",oAuthMemberSession);
         model.addAttribute("mountainInfoOne",mountainInfoOne);
         model.addAttribute("mountainWeather",mountainWeather);
+        model.addAttribute("mountainIndex",mountainIndex);
+
+        model.addAttribute("reviewList",reviewList);
         return "main/SearchResult";
     }
 

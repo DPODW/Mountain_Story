@@ -168,40 +168,82 @@
                     <a th:if="${mountainWeather.getHikingAdvice().getTodayDustInfo()!=null}" th:text="#{DustHigh}"></a>
                 </div>
             </div>
-
         </div>
     </div>
 
 
-    <div class="mountain-review">
-        <hr>
-        <p class="mountain-review-title">OOO산 후기</p>
-        <p class="mountain-review-subtitle">OOO산의 후기를 사람들에게 공유해주세요!</p>
+    <p class="mountain-review-title" th:text="${mountainInfoOne.getMountainName()+' 후기'}"></p>
+    <p class="mountain-review-subtitle" th:text="${mountainInfoOne.getMountainName()+' 의 후기를 사람들에게 공유해주세요!'}"></p>
+    <button type="button" class="btn btn-success review-form-button" id="showReviewFormBtn">후기 작성하기</button>
 
-        <table class="table table-hover" id="review-table">
-            <thead>
-            <tr>
-                <th style="padding-left: 3px;">번호</th>
-                <th>말머리</th>
-                <th style="padding-left: 550px;">제목</th>
-                <th>작성자</th>
-                <th>시간</th>
-                <th style="padding-left: 1px;">추천</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td >1</td>
-                <td>등산 후기</td>
-                <td  style="padding-left: 100px;">산이 좋네요</td>
-                <td>tj**12</td>
-                <td>2024-01-11</td>
-                <td>1</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <form th:action="@{/mountain/info/review}" method="POST">
+        <div class="review-form" id="showReviewForm">
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">제목</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1" name="reviewTitle" placeholder="후기 제목을 입력해주세요">
+                    <input type="hidden" name="reviewMountainName" th:value="${mountainInfoOne.getMountainName()}">
+                    <input type="hidden" name="mountainUniqueNo" th:value="${mountainInfoOne.getMountainNo()}">
+                    <input type="hidden" name="mountainIndex" th:value="${mountainIndex}">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">내용</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="reviewContent" placeholder="후기를 입력해주세요" style="height: 200px; resize: none;"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">후기 등록하기</button>
+            <button type="button" class="btn btn-secondary" id="closeReviewFormBtn" style="float: right;">닫기</button>
+        </div>
+    </form>
 
+    <table class="table mountain-table">
+        <thead>
+        <tr>
+            <th scope="col">산 이름</th>
+            <th scope="col">제목</th>
+            <th scope="col">작성자</th>
+            <th scope="col">작성 시간</th>
+
+        </tr>
+        </thead>
+        <tbody class="mountain-table-content">
+        <tr th:each="reviewInfo,reviewInfoIndex: ${reviewList}">
+            <th scope="row" th:text="${reviewInfo.getReviewMountainName()}"></th>
+            <td data-bs-toggle="modal" th:attr="data-bs-target='#'+${reviewInfoIndex.count}" style="cursor:pointer;" th:text="${reviewInfo.getReviewTitle()}"></td>
+            <td th:text="${reviewInfo.getReviewWriter()}"></td>
+            <td th:text="${reviewInfo.getCreateTime()}"></td>
+
+            <div class="modal fade" th:id="${reviewInfoIndex.count}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5 reviewTitle" id="exampleModalLabel" th:text="${reviewInfo.getReviewTitle()}"><br></h1>
+                            <div class="reviewContentWriter">
+                                <a th:text="'작성자: '+${reviewInfo.getReviewWriter()}"></a>
+                                <a class="reviewContentCreateTime" th:text="'작성: '+${reviewInfo.getCreateTime()}"></a>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <a class="reviewContent" th:text="${reviewInfo.getReviewContent()}"></a>
+                        </div>
+
+                        <div class="modal-footer reviewRateLayout">
+                            <a class="reviewRateTitle">후기가 도움이 되셨나요?</a>
+                            <img src="/images/reviewGood.png" class="reviewRateGoodImg">
+                            <a class="reviewRateGoodCount">1</a>
+                            <img src="/images/reviewBad.png"  class="reviewRateBadImg">
+                            <a class="reviewRateBadCount">1</a>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </tr>
+        </tbody>
+    </table>
+
+    <script src="/assets/js/showReviewFunction.js"></script>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/jquery.scrolly.min.js"></script>
     <script src="assets/js/jquery.scrollex.min.js"></script>

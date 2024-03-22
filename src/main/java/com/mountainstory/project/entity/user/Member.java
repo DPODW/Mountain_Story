@@ -2,6 +2,7 @@ package com.mountainstory.project.entity.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 
 
 @Getter
+@ToString
 @Entity
 public class Member {
     @Id
@@ -32,8 +34,8 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Review> reviewList = new ArrayList<Review>();
 
-    @OneToMany(mappedBy = "member")
-    private List<Comment> commentList = new ArrayList<Comment>();
+//    @OneToMany(mappedBy = "member")
+//    private List<Comment> commentList = new ArrayList<Comment>();
 
 
     public Member createMemberInfo(String email,String name,String id,String type,LocalDateTime createTime){

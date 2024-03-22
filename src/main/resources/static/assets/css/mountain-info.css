@@ -44,7 +44,7 @@
 .mountain-content-imgInfo{
     position: absolute;
     color: black;
-    margin-left: 560px;
+    margin-left: 510px;
     margin-top: 537px;
     font-size: 13px;
     color: gray;
@@ -154,34 +154,52 @@
 
 
 /*산 후기 CSS*/
-.mountain-review{
-    margin-top: 100px;
-    text-align: center;
-    height: 500px; /* 높이 지정 (적절한 값으로 조절) */
-    padding: 10px; /* 내용 주변의 간격 지정 */
-    background-color: aqua;
-
-}
-
 .mountain-review-title{
     color: black;
     font-size:25px;
-    margin-top: 40px;
-    margin-left: 385px;
+    margin-top: 120px;
+    margin-left: 1000px;
+    position: absolute;
 }
 
 .mountain-review-subtitle{
     color: black;
     font-size:18px;
-    margin-top: -40px;
-    margin-left: 385px;
+    margin-top: 180px;
+    margin-left: 900px;
+    position: absolute;
+}
+.mountain-table{
+    margin-left: 600px;
+    width: 1200px;
+    font-size: 17px;
+    margin-top: 250px
 }
 
-#review-table{
-    margin-left: 540px;
-    width: 1190px;
-    font-size: 20px;
+.mountain-table-content{
+    font-size: 15px;
+    font-weight: normal;
 }
+
+.review-form{
+    width: 600px;
+    margin-left: 800px;
+    margin-top: 250px;
+    margin-bottom: -200px;
+    font-size: 20px;
+    color: black;
+    display: none;
+
+}
+
+.review-form-button{
+    position: absolute;
+    margin-left: 1670px;
+    margin-top: 180px;
+}
+
+
+
 /* 산 후기 CSS 끝 */
 
 
@@ -348,6 +366,7 @@
 /* 산 리스트 */
 .listPageSearch{
     width: 500px ;
+    height: 70px;
     margin: auto;
     margin-top: 34px ;
     position: absolute ;
@@ -355,6 +374,7 @@
 }
 
 .listPageSearchBtn{
+
     margin-left: 1200px;
     position: absolute;
 }
@@ -385,4 +405,81 @@
 .listMountainHigh{
     margin-top: -70px;
     margin-left: 300px;
+}
+
+.pagination {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    margin: auto;
+}
+
+.pagination li {
+    margin-right: 5px;
+    padding: 5px 10px;
+    font-size: 13px;
+    font-weight: bold;
+    color: black;
+}
+
+.reviewTitle{
+    color: black;
+    margin-bottom: 25px;
+}
+
+.reviewContent{
+    color: black;
+    font-size: 15px;
+    font-weight: normal;
+}
+
+.reviewContentWriter{
+    position: absolute;
+    margin-top: 55px;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.reviewContentCreateTime{
+    margin-left: 20px;
+}
+
+
+.reviewRateLayout{
+    margin-bottom: 150px;
+}
+
+.reviewRateTitle{
+    margin-right: 100px;
+}
+
+.reviewRateGoodImg{
+    position: absolute;
+    margin-right: 280px;
+    width: 100px;
+    margin-top: 170px;
+}
+.reviewRateGoodCount{
+    position: absolute;
+    margin-right: 235px;
+    width: 100px;
+    margin-top: 300px;
+    font-weight: normal;
+    color: black;
+}
+.reviewRateBadImg{
+    position: absolute;
+    width: 100px;
+    margin-right: 90px;
+    margin-top: 170px;
+}
+
+.reviewRateBadCount{
+    position: absolute;
+    margin-right: 50px;
+    width: 100px;
+    margin-top: 300px;
+    font-weight: normal;
+    color: black;
 }
