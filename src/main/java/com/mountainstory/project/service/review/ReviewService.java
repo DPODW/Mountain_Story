@@ -14,5 +14,9 @@ public interface ReviewService {
 
     List<ReviewInfo> findReviewList(String mountainUniqueNo);
 
+    void plusGoodCount(Long mountainReviewNumber);
+
+    void plusBadCount(Long mountainReviewNumber);
+
 
 }

@@ -12,16 +12,13 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
-@RequestMapping("/mountain/info")
+@RequestMapping("/mountain/info/review")
 @Controller
 public class ReviewController {
 
@@ -32,7 +29,7 @@ public class ReviewController {
     }
 
 
-    @PostMapping("/review")
+    @PostMapping("")
     public String saveReview(@ModelAttribute ReviewInfo reviewInfo, @RequestParam Integer mountainIndex, @LoginMember OAuthMemberSession oAuthMemberSession){
         Member member = new Member();
         Member memberInfo = member.createMemberInfo(oAuthMemberSession.getEmail(), oAuthMemberSession.getName(),
@@ -42,4 +39,14 @@ public class ReviewController {
 
         return "redirect:/mountain/info/search/one/"+mountainIndex;
     }
+
+    @PostMapping("/good/{reviewNumber}")
+    public ResponseEntity<String> reviewGood(@PathVariable Long reviewNumber){
+        log.info("프론트에서 가져온 리뷰 넘버 >>{}",reviewNumber);
+        //카운트 수 (+1) 도 프론트 쪽에서 가져와도 되기는 하나, 보안을 위해 백엔드 로직에서 +1 해줄 예정 (서비스 단)
+        reviewService.plusGoodCount(reviewNumber);
+        return null;
+    }
+
+    //한개의 컨트롤러로 good bad 를 모두 받을지 아니면 두개의 컨트롤러로 분할해서 받을지. . .
 }

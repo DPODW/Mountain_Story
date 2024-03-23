@@ -7,6 +7,8 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/assets/css/main.css" />
         <link rel="stylesheet" href="/assets/css/mountain-info.css" />
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="/assets/js/ajax/reviewStatFunction.js"></script>
 	</head>
 <body class="is-preload">
     <div id="header">
@@ -223,13 +225,20 @@
                         </div>
                         <div class="modal-body">
                             <a class="reviewContent" th:text="${reviewInfo.getReviewContent()}"></a>
+                            <input type="hidden" id="reviewNumber" th:value="${reviewInfo.getReviewNumber()}">
                         </div>
 
                         <div class="modal-footer reviewRateLayout">
                             <a class="reviewRateTitle">후기가 도움이 되셨나요?</a>
-                            <img src="/images/reviewGood.png" class="reviewRateGoodImg">
+
+                            <button type="button">
+                                <img src="/images/reviewGood.png" class="reviewRateGoodImg">
+                            </button>
+
                             <a class="reviewRateGoodCount">1</a>
-                            <img src="/images/reviewBad.png"  class="reviewRateBadImg">
+                            <button type="button" id="reviewGoodBtn">
+                                <img src="/images/reviewBad.png"  class="reviewRateBadImg">
+                            </button>
                             <a class="reviewRateBadCount">1</a>
                         </div>
 
@@ -242,6 +251,7 @@
          </tr>
         </tbody>
     </table>
+
 
     <script src="/assets/js/showReviewFunction.js"></script>
     <script src="assets/js/jquery.min.js"></script>

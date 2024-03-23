@@ -14,10 +14,9 @@ public class ReviewInfo {
     private String reviewMountainName;
     private String reviewContent;
     private String mountainUniqueNo;
-
     private String createTime;
-
     private String reviewWriter;
+    private Long reviewNumber;
 
     public ReviewInfo(String reviewTitle, String reviewMountainName, String reviewContent,String mountainUniqueNo) {
         this.reviewTitle = reviewTitle;

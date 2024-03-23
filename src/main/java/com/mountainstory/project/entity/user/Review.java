@@ -1,5 +1,6 @@
 package com.mountainstory.project.entity.user;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +40,14 @@ public class Review {
 
     @Column(name = "MOUNTAIN_REVIEW_WRITE_DATE")
     private LocalDateTime createTime;
+
+    @Setter
+    @Column(name = "REVIEW_GOOD_COUNT")
+    private int reviewGoodCount;
+//
+//
+//    @Column(name = "REVIEW_BAD_COUNT")
+//    private int reviewBadCount;
 
 
     public Review createReviewInfo(Member member, String mountainName,String mountainUniqueNo, String reviewContent, String reviewTitle, LocalDateTime createTime) {

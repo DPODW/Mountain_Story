@@ -47,11 +47,32 @@ public class ReviewServiceImpl implements ReviewService {
                     reviewInfo.setCreateTime(mountainReview.getCreateTime().toString()
                             .substring(0,mountainReview.getCreateTime().toString().indexOf("T")));
                     reviewInfo.setReviewWriter(mountainReview.getMember().getName());
+                    reviewInfo.setReviewNumber(mountainReview.getReviewNumber());
                     return reviewInfo;
                 })
                 .collect(Collectors.toList());
 
         return reviewInfoList;
+    }
+
+    @Override
+    public void plusGoodCount(Long mountainReviewNumber) {
+        Review referenceById = reviewRepository.getReferenceById(mountainReviewNumber);
+
+        referenceById.setReviewGoodCount(referenceById.getReviewGoodCount()+1);
+        reviewRepository.save(referenceById);
+        log.info("추천 기능을 통해 얻은 good review 정보 {}",referenceById);
+
+        //TODO: 추천수를 수정하는 로직 필요 (DAO OR 여기서 처리해야함)
+
+    }
+
+    @Override
+    public void plusBadCount(Long mountainReviewNumber) {
+        Review referenceById = reviewRepository.getReferenceById(mountainReviewNumber);
+        log.info("추천 기능을 통해 얻은 bad review 정보 {}",referenceById);
+
+        //TODO: 추천수를 수정하는 로직 필요 (DAO OR 여기서 처리해야함)
     }
 
 
