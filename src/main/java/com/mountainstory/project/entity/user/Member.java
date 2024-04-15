@@ -10,7 +10,6 @@ import java.util.List;
 
 
 @Getter
-
 @Entity
 public class Member {
     @Id
@@ -29,13 +28,10 @@ public class Member {
     @Column(name = "MEMBER_JOIN_DATE")
     private LocalDateTime createTime;
 
-    //TODO: 추후에 반환 타입을 DTO 로 하는게 좋다. (리팩토링 필요)
+
     //양방향 관계를 위한 정의
     @OneToMany(mappedBy = "member")
     private List<Review> reviewList = new ArrayList<Review>();
-
-//    @OneToMany(mappedBy = "member")
-//    private List<Comment> commentList = new ArrayList<Comment>();
 
 
     public Member createMemberInfo(String email,String name,String id,String type,LocalDateTime createTime){
@@ -45,7 +41,16 @@ public class Member {
         this.createTime=createTime;
         this.id=id;
         return this;
-        //회원 정보를 만들때 사용되는 생성자
+        //회원 정보를 만들때(회원가입) 사용되는 생성자
+    }
+
+    public Member getMemberInfo(String email,String name,String id,String type){
+        this.email=email;
+        this.type=type;
+        this.name=name;
+        this.id=id;
+        return this;
+        //회원 정보를 받아올때 (기존회원) 사용되는 생성자
     }
 
     public Member update(String name){

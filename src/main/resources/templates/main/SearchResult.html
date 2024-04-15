@@ -17,6 +17,7 @@
             <img src="/images/MountainStoryImg.png" class="mountainStoryImg">
             <p class="logoText">오늘의 산 !</p>
 
+
             <div id="OAuthLogin" th:unless="${#authorization.expression('isAuthenticated()')}">
                 <a href="/oauth2/authorization/naver">
                     <img id="naverButton" src="/images/naverLoginLogo.png">
@@ -36,7 +37,7 @@
                 <nav>
                     <ol class="breadcrumb userMenu">
                         <li class="breadcrumb-item"><a href="#">마이 페이지</a></li>
-                        <li class="breadcrumb-item"><a href="#">게시 글</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/member/review/history}">게시 글</a></li>
                         <li class="breadcrumb-item"th:if="${kakao}"><a href="https://kauth.kakao.com/oauth/logout?client_id=0d05cb8e8296ee92d3df6bb356bd1566&logout_redirect_uri=http://localhost:8080/logout">로그아웃</a></li>
                         <li class="breadcrumb-item"th:if="${naver}"><a href="/home/naverLogout">로그아웃</a></li>
                     </ol>
@@ -185,7 +186,7 @@
                     <input type="text" class="form-control" id="exampleFormControlInput1" name="reviewTitle" placeholder="후기 제목을 입력해주세요">
                     <input type="hidden" name="reviewMountainName" th:value="${mountainInfoOne.getMountainName()}">
                     <input type="hidden" name="mountainUniqueNo" th:value="${mountainInfoOne.getMountainNo()}">
-                    <input type="hidden" name="mountainIndex" th:value="${mountainIndex}">
+                    <input type="hidden" name="mountainIndex" id="mountainIndex" th:value="${mountainIndex}">
                 </div>
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">내용</label>
@@ -213,7 +214,9 @@
             <td th:text="${reviewInfo.getReviewWriter()}"></td>
             <td th:text="${reviewInfo.getCreateTime()}"></td>
 
+
             <div class="modal fade" th:id="${reviewInfoIndex.count}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <input type="hidden" name="mountainUniqueNo1" th:value="${mountainInfoOne.getMountainNo()}">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -225,21 +228,19 @@
                         </div>
                         <div class="modal-body">
                             <a class="reviewContent" th:text="${reviewInfo.getReviewContent()}"></a>
-                            <input type="hidden" id="reviewNumber" th:value="${reviewInfo.getReviewNumber()}">
                         </div>
-
                         <div class="modal-footer reviewRateLayout">
                             <a class="reviewRateTitle">후기가 도움이 되셨나요?</a>
-
-                            <button type="button">
-                                <img src="/images/reviewGood.png" class="reviewRateGoodImg">
+                            <input type="hidden" class="OnlyjQueryReviewNumber" th:value="${reviewInfo.getReviewNumber()}">
+                            <button type="button"  class="reviewGoodBtn" style="all: unset;cursor:pointer;">
+                                <img src="/images/reviewGood.png" style="width: 100px; margin-right: 100px;">
                             </button>
+                            <a class="reviewRateGoodCount" th:text="${reviewInfo.getReviewRatingGoodCount()}"></a>
 
-                            <a class="reviewRateGoodCount">1</a>
-                            <button type="button" id="reviewGoodBtn">
-                                <img src="/images/reviewBad.png"  class="reviewRateBadImg">
+                            <button type="button"  class="reviewBadBtn" style="all: unset;cursor:pointer;">
+                                <img src="/images/reviewBad.png"  style="width: 100px;  margin-right: 90px;">
                             </button>
-                            <a class="reviewRateBadCount">1</a>
+                            <a class="reviewRateBadCount" th:text="${reviewInfo.getReviewRatingBadCount()}"></a>
                         </div>
 
                         <div class="modal-footer">
@@ -252,6 +253,15 @@
         </tbody>
     </table>
 
+    <div style="margin-left: 1100px;">
+        <span th:each="page:${#numbers.sequence(startPage,endPage)}" style="display: inline-block; margin-right: 10px;">
+<!--            number.sequence: 주어진 값 (startPage,endPage) 를 기준으로 숫자를 순서대로 출력해줌(시작부터 끝까지). -->
+            <a th:if="${page != nowPage && page != 0}" th:href="@{/mountain/info/search/one/{mountainIndex}(mountainIndex=${mountainIndex},page=${page - 1})}" th:text ="${page}"></a>
+<!--            현재 페이지가 아니여야 하며, 페이지는 0이 아니라면 => a 태그로 페이징 이동을 가능하게 함. -1 을 하는 이유는 numbers.sequence 로 생성되는 값은 1 부터 시작하는데
+                페이징은 0부터 시작하기 때문. 고로 - 1 한 값을 넘겨야 페이징이 정상적으로 작동한다. (URL 을 통해 확인 가능함. 페이징 URL 은 -1 값이 넘어간다)-->
+            <strong th:if="${page==nowPage}" th:text ="${page}" style="color:red;"></strong>
+        </span>
+    </div>
 
     <script src="/assets/js/showReviewFunction.js"></script>
     <script src="assets/js/jquery.min.js"></script>

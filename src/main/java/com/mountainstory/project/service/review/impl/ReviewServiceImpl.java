@@ -1,17 +1,20 @@
 package com.mountainstory.project.service.review.impl;
 
+import com.mountainstory.project.config.auth.session.OAuthMemberSession;
 import com.mountainstory.project.dto.review.ReviewInfo;
 import com.mountainstory.project.entity.user.Member;
 import com.mountainstory.project.entity.user.Review;
+import com.mountainstory.project.entity.user.ReviewRatingHistory;
+import com.mountainstory.project.repository.review.ReviewRatingHistoryRepository;
 import com.mountainstory.project.repository.review.ReviewRepository;
 import com.mountainstory.project.service.review.ReviewService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -20,60 +23,99 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    public ReviewServiceImpl(ReviewRepository reviewRepository) {
+    private final ReviewRatingHistoryRepository reviewRatingHistoryRepository;
+
+    private final static String REVIEW_RATING_GOOD = "good";
+
+    private final static String REVIEW_RATING_BAD = "bad";
+
+
+    public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewRatingHistoryRepository reviewRatingHistoryRepository) {
         this.reviewRepository = reviewRepository;
+        this.reviewRatingHistoryRepository = reviewRatingHistoryRepository;
     }
 
     @Override
-    public void createReviewInfo(ReviewInfo reviewInfo, Member memberInfo) {
+    public void createReviewInfo(ReviewInfo reviewInfo, OAuthMemberSession oAuthMemberSession) {
         Review review = new Review();
-        Review reviewInfoResult = review.createReviewInfo(memberInfo, reviewInfo.getReviewMountainName(),
+        Member member = new Member();
+        member.getMemberInfo(oAuthMemberSession.getEmail(), oAuthMemberSession.getName(), oAuthMemberSession.getId(), oAuthMemberSession.getType());
+
+        Review reviewInfoResult = review.createReviewInfo(member, reviewInfo.getReviewMountainName(),
                 reviewInfo.getMountainUniqueNo(),reviewInfo.getReviewContent(), reviewInfo.getReviewTitle(), LocalDateTime.now());
 
         reviewRepository.save(reviewInfoResult);
     }
 
     @Override
-    public List<ReviewInfo> findReviewList(String mountainUniqueNo) {
-        List<Review> mountainReviewList = reviewRepository.findAllByMountainUniqueNo(mountainUniqueNo, Sort.by(Sort.Direction.DESC,"reviewNumber"));
+    public Page<ReviewInfo> findReviewList(String mountainUniqueNo, Pageable pageable) {
+        Page<Review> mountainReviewList = reviewRepository.findAllByMountainUniqueNo(mountainUniqueNo,pageable);
 
         List<ReviewInfo> reviewInfoList = mountainReviewList.stream()
                 .map(mountainReview -> {
-                    ReviewInfo reviewInfo = new ReviewInfo();
-                    reviewInfo.setReviewTitle(mountainReview.getReviewTitle());
-                    reviewInfo.setReviewMountainName(mountainReview.getMountainName());
-                    reviewInfo.setReviewContent(mountainReview.getReviewContent());
-                    reviewInfo.setMountainUniqueNo(mountainReview.getMountainUniqueNo());
-                    reviewInfo.setCreateTime(mountainReview.getCreateTime().toString()
-                            .substring(0,mountainReview.getCreateTime().toString().indexOf("T")));
-                    reviewInfo.setReviewWriter(mountainReview.getMember().getName());
-                    reviewInfo.setReviewNumber(mountainReview.getReviewNumber());
+                    ReviewInfo reviewInfo = reviewEntityToDto(mountainReview);
                     return reviewInfo;
                 })
                 .collect(Collectors.toList());
+        return new PageImpl<>(reviewInfoList,pageable, mountainReviewList.getTotalElements());
+    }
 
-        return reviewInfoList;
+
+    @Override
+    public void reviewRatingPlus(Long mountainReviewNumber,String reviewRatingStat,OAuthMemberSession oAuthMemberSession) {
+        Member member = new Member();
+        member.getMemberInfo(oAuthMemberSession.getEmail(), oAuthMemberSession.getName(), oAuthMemberSession.getId(), oAuthMemberSession.getType());
+
+        if(reviewRatingHistoryRepository.findByMemberIdAndReviewNumber(member,mountainReviewNumber)!=null){
+          throw new DuplicateKeyException("이미 "+ mountainReviewNumber + " 번 게시글에 평가를 완료한 회원입니다.");
+        }
+
+        Review reviewInfo = reviewRepository.getReferenceById(mountainReviewNumber);
+        ReviewRatingHistory reviewRatingHistory = new ReviewRatingHistory();
+
+        if(reviewRatingStat.equals(REVIEW_RATING_GOOD)){
+            reviewRatingHistory.createReviewRatingHistory(mountainReviewNumber,member,true);
+            reviewRatingHistoryRepository.save(reviewRatingHistory);
+
+            reviewInfo.setReviewGoodCount(reviewInfo.getReviewGoodCount()+1);
+            reviewRepository.save(reviewInfo);
+        }else if(reviewRatingStat.equals(REVIEW_RATING_BAD)){
+            reviewRatingHistory.createReviewRatingHistory(mountainReviewNumber,member,false);
+            reviewRatingHistoryRepository.save(reviewRatingHistory);
+
+            reviewInfo.setReviewBadCount(reviewInfo.getReviewBadCount()+1);
+            reviewRepository.save(reviewInfo);
+        }
+
     }
 
     @Override
-    public void plusGoodCount(Long mountainReviewNumber) {
-        Review referenceById = reviewRepository.getReferenceById(mountainReviewNumber);
+    public Page<ReviewInfo> findMemberReviewHistory(OAuthMemberSession oAuthMemberSession, Pageable pageable) {
+        Member member = new Member().getMemberInfo(oAuthMemberSession.getEmail(), oAuthMemberSession.getName(),oAuthMemberSession.getId(), oAuthMemberSession.getType());
+        Page<Review> findReviewHistory = reviewRepository.findByMember(member,pageable);
 
-        referenceById.setReviewGoodCount(referenceById.getReviewGoodCount()+1);
-        reviewRepository.save(referenceById);
-        log.info("추천 기능을 통해 얻은 good review 정보 {}",referenceById);
+        List<ReviewInfo> reviewDto = findReviewHistory.stream()
+                .map(reviewHistory -> {
+                    ReviewInfo reviewInfo = reviewEntityToDto(reviewHistory);
+                    return reviewInfo;
+                }).collect(Collectors.toList());
 
-        //TODO: 추천수를 수정하는 로직 필요 (DAO OR 여기서 처리해야함)
-
+        return new PageImpl<>(reviewDto,pageable,findReviewHistory.getTotalElements());
     }
 
-    @Override
-    public void plusBadCount(Long mountainReviewNumber) {
-        Review referenceById = reviewRepository.getReferenceById(mountainReviewNumber);
-        log.info("추천 기능을 통해 얻은 bad review 정보 {}",referenceById);
+    private static ReviewInfo reviewEntityToDto(Review review) {
+        ReviewInfo reviewInfo = new ReviewInfo();
+        reviewInfo.setReviewTitle(review.getReviewTitle());
+        reviewInfo.setReviewMountainName(review.getMountainName());
+        reviewInfo.setReviewContent(review.getReviewContent());
+        reviewInfo.setMountainUniqueNo(review.getMountainUniqueNo());
+        reviewInfo.setCreateTime(review.getCreateTime().toString()
+                .substring(0, review.getCreateTime().toString().indexOf("T")));
 
-        //TODO: 추천수를 수정하는 로직 필요 (DAO OR 여기서 처리해야함)
+        reviewInfo.setReviewWriter(review.getMember().getName());
+        reviewInfo.setReviewNumber(review.getReviewNumber());
+        reviewInfo.setReviewRatingGoodCount(review.getReviewGoodCount());
+        reviewInfo.setReviewRatingBadCount(review.getReviewBadCount());
+        return reviewInfo;
     }
-
-
 }

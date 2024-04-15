@@ -1,27 +1,34 @@
 package com.mountainstory.project.service.mountain.mountainweather.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Slf4j
 @Service
 public class WeatherSearchDate {
 
     protected String baseDate(){
         LocalDateTime nowBaseDate = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+        LocalDateTime localDateTime = getLocalDateTime();
+
+        if(localDateTime.getHour()==0 && (localDateTime.getHour()<=2 || localDateTime.getMinute()<10)){
+            LocalDateTime midNight = LocalDateTime.now().minusDays(1);
+            return midNight.format(formatter);
+        }
+
         return nowBaseDate.format(formatter);
     }
 
     protected String bastTime(){
-        LocalDateTime time = LocalDateTime.now();
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime formattedTime = LocalDateTime.parse(time.format(formatter), formatter);
+        LocalDateTime formattedTime = getLocalDateTime();
 
         int hour = formattedTime.getHour();
         int minute = formattedTime.getMinute();
+
 
         if ((hour > 2 || (hour == 2 && minute >= 10)) && (hour < 5 || (hour == 5 && minute < 10))) {
             return "0200";
@@ -44,10 +51,19 @@ public class WeatherSearchDate {
         if ((hour > 20 || (hour == 20 && minute >= 10)) && (hour < 23 || (hour == 23 && minute < 10))) {
             return "2000";
         }
-        if ((hour > 23 || (hour == 23 && minute >= 10)) && (hour < 2 || (hour == 2 && minute < 10))) {
+        if ((hour > 23 || (hour == 23 && minute >= 10)) || (hour < 2 || (hour == 2 && minute < 10))) {
             return "2300";
         } else {
             return "Error: unknown time";
         }
+    }
+
+
+    private static LocalDateTime getLocalDateTime() {
+        LocalDateTime time = LocalDateTime.now();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime formattedTime = LocalDateTime.parse(time.format(formatter), formatter);
+        return formattedTime;
     }
 }

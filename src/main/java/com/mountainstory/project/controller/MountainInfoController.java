@@ -4,10 +4,10 @@ package com.mountainstory.project.controller;
 import com.mountainstory.project.config.auth.OAuthMemberService;
 import com.mountainstory.project.config.auth.session.LoginMember;
 import com.mountainstory.project.config.auth.session.OAuthMemberSession;
+import com.mountainstory.project.controller.paging.PagingFunction;
 import com.mountainstory.project.dto.mountain.mountainWeather.MountainWeather;
 import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoDto;
 import com.mountainstory.project.dto.review.ReviewInfo;
-import com.mountainstory.project.entity.user.Review;
 import com.mountainstory.project.service.mountain.mountaininfo.MountainInfoService;
 import com.mountainstory.project.service.mountain.mountainweather.MountainWeatherService;
 import com.mountainstory.project.service.review.ReviewService;
@@ -15,6 +15,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,18 +42,22 @@ public class MountainInfoController {
 
     private final ReviewService reviewService;
 
-    public MountainInfoController(MountainInfoService mountainInfoService, MountainWeatherService mountainWeatherService, OAuthMemberService oAuthMemberService, ReviewService reviewService) {
+    private final PagingFunction pagingFunction;
+
+    public MountainInfoController(MountainInfoService mountainInfoService, MountainWeatherService mountainWeatherService, OAuthMemberService oAuthMemberService, ReviewService reviewService, PagingFunction pagingFunction) {
         this.mountainInfoService = mountainInfoService;
         this.mountainWeatherService = mountainWeatherService;
         this.oAuthMemberService = oAuthMemberService;
         this.reviewService = reviewService;
+        this.pagingFunction = pagingFunction;
     }
 
     //TODO:get~ 메소드가 존재하니까 api 들은 범위를 제한해도될듯
 
 
     @GetMapping("/one/{mountainIndex}")
-    public String mountainInfoOne(@LoginMember OAuthMemberSession oAuthMemberSession,@PathVariable(name = "mountainIndex") Integer mountainIndex,HttpServletRequest request,Model model) throws UnsupportedEncodingException, ParseException {
+    public String mountainInfoOne(@PageableDefault(page=0, size=3, sort="reviewNumber", direction=Sort.Direction.DESC) Pageable pageable, @LoginMember OAuthMemberSession oAuthMemberSession, @PathVariable(name = "mountainIndex") Integer mountainIndex,
+                                  HttpServletRequest request, Model model) throws UnsupportedEncodingException, ParseException {
         oAuthMemberService.checkMemberLoginType(oAuthMemberSession,model);
         HttpSession session = request.getSession(false);
 
@@ -58,15 +66,15 @@ public class MountainInfoController {
 
         MountainInfoDto mountainInfoOne = mountainInfoService.setCoordinateInfo(allMountainInfoList.get(mountainIndex));
         MountainWeather mountainWeather = mountainWeatherService.getMountainWeather(mountainInfoOne.getMountainCoordinate(), mountainInfoOne.getMountainLocation());
-        List<ReviewInfo> reviewList = reviewService.findReviewList(mountainInfoOne.getMountainNo());
-
+        Page<ReviewInfo> reviewList = reviewService.findReviewList(mountainInfoOne.getMountainNo(),pageable);
 
         model.addAttribute("loginMember",oAuthMemberSession);
         model.addAttribute("mountainInfoOne",mountainInfoOne);
         model.addAttribute("mountainWeather",mountainWeather);
         model.addAttribute("mountainIndex",mountainIndex);
 
-        model.addAttribute("reviewList",reviewList);
+        pagingFunction.getPagingDataAndModel(reviewList,model);
+        model.addAttribute("reviewList", reviewList);
         return "main/SearchResult";
     }
 
@@ -82,7 +90,6 @@ public class MountainInfoController {
             HttpSession session = request.getSession(false);
             session.setAttribute("allMountainInfoList",allMountainInfoList);
         }
-
 
         model.addAttribute("loginMember",oAuthMemberSession);
         model.addAttribute("mountainInfoList",allMountainInfoList);

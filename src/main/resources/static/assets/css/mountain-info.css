@@ -447,39 +447,28 @@
 
 
 .reviewRateLayout{
-    margin-bottom: 150px;
+    margin-bottom: 50px;
 }
 
 .reviewRateTitle{
     margin-right: 100px;
 }
 
-.reviewRateGoodImg{
-    position: absolute;
-    margin-right: 280px;
-    width: 100px;
-    margin-top: 170px;
-}
+
 .reviewRateGoodCount{
     position: absolute;
-    margin-right: 235px;
+    margin-right: 233px;
     width: 100px;
-    margin-top: 300px;
+    margin-top: 200px;
     font-weight: normal;
     color: black;
-}
-.reviewRateBadImg{
-    position: absolute;
-    width: 100px;
-    margin-right: 90px;
-    margin-top: 170px;
 }
 
 .reviewRateBadCount{
     position: absolute;
     margin-right: 50px;
     width: 100px;
-    margin-top: 300px;
+    margin-top: 200px;
     font-weight: normal;
     color: black;
 }

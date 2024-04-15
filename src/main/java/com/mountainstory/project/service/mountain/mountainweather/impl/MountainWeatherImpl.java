@@ -41,7 +41,6 @@ public class MountainWeatherImpl implements MountainWeatherService {
         DustInfo dustInfo = searchMicroDust(mountainLocation);
         mountainWeather.setDustInfo(dustInfo);
         mountainWeather.setHikingAdvice(createHikingAdvice(mountainWeather));
-        log.info("{}",mountainWeather);
         return mountainWeather;
     }
 

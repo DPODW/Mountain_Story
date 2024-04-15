@@ -44,10 +44,10 @@ public class Review {
     @Setter
     @Column(name = "REVIEW_GOOD_COUNT")
     private int reviewGoodCount;
-//
-//
-//    @Column(name = "REVIEW_BAD_COUNT")
-//    private int reviewBadCount;
+
+    @Setter
+    @Column(name = "REVIEW_BAD_COUNT")
+    private int reviewBadCount;
 
 
     public Review createReviewInfo(Member member, String mountainName,String mountainUniqueNo, String reviewContent, String reviewTitle, LocalDateTime createTime) {

@@ -31,22 +31,15 @@ public class ReviewController {
 
     @PostMapping("")
     public String saveReview(@ModelAttribute ReviewInfo reviewInfo, @RequestParam Integer mountainIndex, @LoginMember OAuthMemberSession oAuthMemberSession){
-        Member member = new Member();
-        Member memberInfo = member.createMemberInfo(oAuthMemberSession.getEmail(), oAuthMemberSession.getName(),
-                oAuthMemberSession.getId(), oAuthMemberSession.getType(), LocalDateTime.now());
-
-        reviewService.createReviewInfo(reviewInfo,memberInfo);
-
+        reviewService.createReviewInfo(reviewInfo, oAuthMemberSession);
         return "redirect:/mountain/info/search/one/"+mountainIndex;
     }
 
-    @PostMapping("/good/{reviewNumber}")
-    public ResponseEntity<String> reviewGood(@PathVariable Long reviewNumber){
-        log.info("프론트에서 가져온 리뷰 넘버 >>{}",reviewNumber);
-        //카운트 수 (+1) 도 프론트 쪽에서 가져와도 되기는 하나, 보안을 위해 백엔드 로직에서 +1 해줄 예정 (서비스 단)
-        reviewService.plusGoodCount(reviewNumber);
-        return null;
+
+    @PostMapping("/rating/{reviewNumber}/{reviewRatingStat}")
+    public ResponseEntity<String> reviewRating(@PathVariable Long reviewNumber,@PathVariable String reviewRatingStat,@LoginMember OAuthMemberSession oAuthMemberSession){
+        reviewService.reviewRatingPlus(reviewNumber,reviewRatingStat,oAuthMemberSession);
+        return ResponseEntity.ok("review done");
     }
 
-    //한개의 컨트롤러로 good bad 를 모두 받을지 아니면 두개의 컨트롤러로 분할해서 받을지. . .
 }

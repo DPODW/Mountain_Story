@@ -27,12 +27,6 @@ public class HomeController {
         return "main/Home";
     }
 
-    @GetMapping("/result")
-    public String resultPage(){
-        return "main/SearchResult";
-    }
-
-
     @GetMapping("/naverLogout")
     public String naverLogout(@LoginMember OAuthMemberSession oAuthMemberSession){
         oAuthMemberService.naverMemberLogout(oAuthMemberSession.getAccessToken());

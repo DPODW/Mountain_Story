@@ -39,7 +39,6 @@ public class MountainInfoServiceImpl implements MountainInfoService {
         List<MountainInfoDto> mountainInfoDtoList = searchMountainInfo(mountainName,LIST_DEFAULT_PAGE_NUMBER,LIST_DEFAULT_RESULT_COUNT);
         convertMountainName.removePartSameMountain(mountainName,mountainInfoDtoList);
 //        setImgToDtoList(mountainInfoDtoList);
-
         return mountainInfoDtoList;
     }
 
