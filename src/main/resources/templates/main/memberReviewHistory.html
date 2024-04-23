@@ -60,8 +60,8 @@
 	</div>
 </div>
 
-<button>좋아요 누른 게시글</button>
-<button>싫어요 누른 게시글</button>
+<a style="margin-right: 200px" th:href="@{/mountain/info/review/rating/stat/list/{ratingStat}(ratingStat=${true})}">좋아요 누른 게시글</a>
+<a style="margin-right: 400px" th:href="@{/mountain/info/review/rating/stat/list/{ratingStat}(ratingStat=${false})}">싫어요 누른 게시글</a>
 <table class="table mountain-table">
 	<thead>
 	<tr>

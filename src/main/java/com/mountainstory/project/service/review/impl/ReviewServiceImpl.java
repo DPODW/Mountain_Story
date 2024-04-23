@@ -61,6 +61,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
 
+
+
     @Override
     public void reviewRatingPlus(Long mountainReviewNumber,String reviewRatingStat,OAuthMemberSession oAuthMemberSession) {
         Member member = new Member();
@@ -101,6 +103,14 @@ public class ReviewServiceImpl implements ReviewService {
                 }).collect(Collectors.toList());
 
         return new PageImpl<>(reviewDto,pageable,findReviewHistory.getTotalElements());
+    }
+
+    @Override
+    public Page<ReviewRatingHistory> findReviewGoodOrBadHistory(OAuthMemberSession oAuthMemberSession, boolean ratingStat) {
+        Member member = new Member().getMemberInfo(oAuthMemberSession.getEmail(), oAuthMemberSession.getName(),oAuthMemberSession.getId(), oAuthMemberSession.getType());
+        Page<ReviewRatingHistory> reviewRatingGoodOrNot = reviewRatingHistoryRepository.findReviewRatingGoodOrNot(member, ratingStat);
+        log.info("{}",reviewRatingGoodOrNot);
+        return null;
     }
 
     private static ReviewInfo reviewEntityToDto(Review review) {

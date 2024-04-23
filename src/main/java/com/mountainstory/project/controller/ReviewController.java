@@ -42,4 +42,10 @@ public class ReviewController {
         return ResponseEntity.ok("review done");
     }
 
+    @GetMapping("/rating/stat/list/{ratingStat}")
+    public String reviewGoodList(@PathVariable boolean ratingStat, @LoginMember OAuthMemberSession oAuthMemberSession){
+        reviewService.findReviewGoodOrBadHistory(oAuthMemberSession,ratingStat);
+        return "redirect:/home";
+    }
+
 }

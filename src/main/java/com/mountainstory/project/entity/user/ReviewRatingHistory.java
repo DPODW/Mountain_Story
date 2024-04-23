@@ -2,9 +2,11 @@ package com.mountainstory.project.entity.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
-@Entity
+@Entity(name = "review_rating_history")
+@ToString
 public class ReviewRatingHistory {
 
     @Id

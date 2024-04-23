@@ -32,9 +32,4 @@ public class HomeController {
         oAuthMemberService.naverMemberLogout(oAuthMemberSession.getAccessToken());
         return "redirect:/logout";
     }
-
-
-
-
-
 }

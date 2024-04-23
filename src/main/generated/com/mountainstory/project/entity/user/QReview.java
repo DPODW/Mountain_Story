@@ -22,15 +22,19 @@ public class QReview extends EntityPathBase<Review> {
 
     public static final QReview review = new QReview("review");
 
-    public final ListPath<Comment, QComment> commentList = this.<Comment, QComment>createList("commentList", Comment.class, QComment.class, PathInits.DIRECT2);
-
     public final DateTimePath<java.time.LocalDateTime> createTime = createDateTime("createTime", java.time.LocalDateTime.class);
 
     public final QMember member;
 
     public final StringPath mountainName = createString("mountainName");
 
+    public final StringPath mountainUniqueNo = createString("mountainUniqueNo");
+
+    public final NumberPath<Integer> reviewBadCount = createNumber("reviewBadCount", Integer.class);
+
     public final StringPath reviewContent = createString("reviewContent");
+
+    public final NumberPath<Integer> reviewGoodCount = createNumber("reviewGoodCount", Integer.class);
 
     public final NumberPath<Long> reviewNumber = createNumber("reviewNumber", Long.class);
 
