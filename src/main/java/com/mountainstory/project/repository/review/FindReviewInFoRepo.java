@@ -2,13 +2,14 @@ package com.mountainstory.project.repository.review;
 
 import com.mountainstory.project.entity.user.Member;
 import com.mountainstory.project.entity.user.Review;
-import com.mountainstory.project.entity.user.ReviewRatingHistory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface FindReviewRatingRepo {
+public interface FindReviewInFoRepo {
 
-    Page<Review> findReviewRatingGoodOrBad(Member memberId, boolean ratingStat, Pageable pageable);
+    Page<Review> findReviewRatingStat(Member memberId, boolean ratingStat, Pageable pageable);
+
+    List<Review> findTop3GoodReview();
 }

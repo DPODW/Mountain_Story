@@ -5,7 +5,7 @@ import com.mountainstory.project.dto.review.ReviewInfo;
 import com.mountainstory.project.entity.user.Member;
 import com.mountainstory.project.entity.user.Review;
 import com.mountainstory.project.entity.user.ReviewRatingHistory;
-import com.mountainstory.project.repository.review.ReviewRatingHistoryRepository;
+import com.mountainstory.project.repository.review.ReviewInFoHistoryRepository;
 import com.mountainstory.project.repository.review.ReviewRepository;
 import com.mountainstory.project.service.review.ReviewService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,12 +23,12 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    private final ReviewRatingHistoryRepository reviewRatingHistoryRepository;
+    private final ReviewInFoHistoryRepository reviewInFoHistoryRepository;
 
 
-    public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewRatingHistoryRepository reviewRatingHistoryRepository) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewInFoHistoryRepository reviewRatingHistoryRepository) {
         this.reviewRepository = reviewRepository;
-        this.reviewRatingHistoryRepository = reviewRatingHistoryRepository;
+        this.reviewInFoHistoryRepository = reviewRatingHistoryRepository;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ReviewServiceImpl implements ReviewService {
         Member member = new Member();
         member.getMemberInfo(oAuthMemberSession.getEmail(), oAuthMemberSession.getName(), oAuthMemberSession.getId(), oAuthMemberSession.getType());
 
-        if(reviewRatingHistoryRepository.findByMemberIdAndReviewNumber(member,mountainReviewNumber)!=null){
+        if(reviewInFoHistoryRepository.findByMemberIdAndReviewNumber(member,mountainReviewNumber)!=null){
           throw new DuplicateKeyException("이미 "+ mountainReviewNumber + " 번 게시글에 평가를 완료한 회원입니다.");
         }
 
@@ -73,13 +73,13 @@ public class ReviewServiceImpl implements ReviewService {
 
         if(reviewRatingStat==true){
             reviewRatingHistory.createReviewRatingHistory(mountainReviewNumber,member,true);
-            reviewRatingHistoryRepository.save(reviewRatingHistory);
+            reviewInFoHistoryRepository.save(reviewRatingHistory);
 
             reviewInfo.setReviewGoodCount(reviewInfo.getReviewGoodCount()+1);
             reviewRepository.save(reviewInfo);
         }else{
             reviewRatingHistory.createReviewRatingHistory(mountainReviewNumber,member,false);
-            reviewRatingHistoryRepository.save(reviewRatingHistory);
+            reviewInFoHistoryRepository.save(reviewRatingHistory);
 
             reviewInfo.setReviewBadCount(reviewInfo.getReviewBadCount()+1);
             reviewRepository.save(reviewInfo);
@@ -102,18 +102,31 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewInfo> findReviewGoodOrBadHistory(OAuthMemberSession oAuthMemberSession, boolean ratingStat,Pageable pageable) {
+    public Page<ReviewInfo> findReviewStatHistory(OAuthMemberSession oAuthMemberSession, boolean ratingStat,Pageable pageable) {
         Member member = new Member().getMemberInfo(oAuthMemberSession.getEmail(), oAuthMemberSession.getName(),oAuthMemberSession.getId(), oAuthMemberSession.getType());
-        Page<Review> reviewRatingGoodOrBad = reviewRatingHistoryRepository.findReviewRatingGoodOrBad(member, ratingStat,pageable);
+        Page<Review> reviewRatingStatList = reviewInFoHistoryRepository.findReviewRatingStat(member, ratingStat,pageable);
 
-        List<ReviewInfo> reviewDto = reviewRatingGoodOrBad.stream()
+        List<ReviewInfo> reviewDto = reviewRatingStatList.stream()
                 .map(reviewRating -> {
                     ReviewInfo reviewInfo = reviewEntityToDto(reviewRating);
                     return reviewInfo;
                 }).collect(Collectors.toList());
 
-        return new PageImpl<>(reviewDto,pageable, reviewRatingGoodOrBad.getTotalElements());
+        return new PageImpl<>(reviewDto,pageable, reviewRatingStatList.getTotalElements());
     }
+
+    @Override
+    public List<ReviewInfo> findTop3GoodReview() {
+        List<Review> top3GoodReviewList = reviewInFoHistoryRepository.findTop3GoodReview();
+
+        List<ReviewInfo> reviewDto = top3GoodReviewList.stream()
+                .map(top3Review -> {
+                    ReviewInfo reviewInfo = reviewEntityToDto(top3Review);
+                    return reviewInfo;
+                }).collect(Collectors.toList());
+        return reviewDto;
+    }
+
 
     private static ReviewInfo reviewEntityToDto(Review review) {
         ReviewInfo reviewInfo = new ReviewInfo();

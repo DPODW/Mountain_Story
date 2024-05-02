@@ -1,7 +1,7 @@
 package com.mountainstory.project.repository.review.impl;
 
 import com.mountainstory.project.entity.user.*;
-import com.mountainstory.project.repository.review.FindReviewRatingRepo;
+import com.mountainstory.project.repository.review.FindReviewInFoRepo;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -11,16 +11,16 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Slf4j
-public class FindReviewRatingRepoImpl implements FindReviewRatingRepo {
+public class FindReviewInFoRepoImpl implements FindReviewInFoRepo {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public FindReviewRatingRepoImpl(JPAQueryFactory jpaQueryFactory) {
+    public FindReviewInFoRepoImpl(JPAQueryFactory jpaQueryFactory) {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
     @Override
-    public Page<Review> findReviewRatingGoodOrBad(Member memberId, boolean ratingStat, Pageable pageable) {
+    public Page<Review> findReviewRatingStat(Member memberId, boolean ratingStat, Pageable pageable) {
         QReviewRatingHistory qReviewRatingHistory = QReviewRatingHistory.reviewRatingHistory;
         QReview qReview = QReview.review;
 
@@ -46,5 +46,19 @@ public class FindReviewRatingRepoImpl implements FindReviewRatingRepo {
                 .fetchOne();
 
         return new PageImpl<>(reviewRatingList,pageable,count);
+    }
+
+    @Override
+    public List<Review> findTop3GoodReview() {
+        QReview qReview = QReview.review;
+
+        List<Review> reviewTop3GoodList = jpaQueryFactory
+                .select(qReview)
+                .from(qReview)
+                .orderBy(qReview.reviewGoodCount.desc())
+                .limit(3)
+                .fetch();
+
+        return reviewTop3GoodList;
     }
 }

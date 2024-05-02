@@ -48,14 +48,15 @@ public class MemberController {
     @GetMapping("/review/rating/stat/list/{ratingStat}")
     public String memberReviewGoodOrBadList(@PageableDefault(page=0, size=2) Pageable pageable, @PathVariable boolean ratingStat,
                                             @LoginMember OAuthMemberSession oAuthMemberSession, Model model){
-        //리뷰 상태별 리스트의 정렬은 쿼리 DSL 부분에서 ORDER 절로 처리함
-        Page<ReviewInfo> reviewGoodOrBadList = reviewService.findReviewGoodOrBadHistory(oAuthMemberSession, ratingStat, pageable);
+        //리뷰 상태별 리스트의 정렬은 쿼리 DSL 부분에서 ORDER 절로 처리함.
+        Page<ReviewInfo> reviewStatList = reviewService.findReviewStatHistory(oAuthMemberSession, ratingStat, pageable);
 
         model.addAttribute("ratingStat",ratingStat);
         model.addAttribute("loginMember",oAuthMemberSession);
-        model.addAttribute("reviewGoodOrBadList",reviewGoodOrBadList);
+        model.addAttribute("reviewGoodOrBadList",reviewStatList);
 
-        pagingFunction.getPagingDataAndModel(reviewGoodOrBadList,model);
+        pagingFunction.getPagingDataAndModel(reviewStatList,model);
         return "main/memberReviewRatingHistory";
+
     }
 }
