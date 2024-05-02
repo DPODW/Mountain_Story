@@ -25,10 +25,6 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRatingHistoryRepository reviewRatingHistoryRepository;
 
-    private final static String REVIEW_RATING_GOOD = "good";
-
-    private final static String REVIEW_RATING_BAD = "bad";
-
 
     public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewRatingHistoryRepository reviewRatingHistoryRepository) {
         this.reviewRepository = reviewRepository;
@@ -64,7 +60,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     @Override
-    public void reviewRatingPlus(Long mountainReviewNumber,String reviewRatingStat,OAuthMemberSession oAuthMemberSession) {
+    public void reviewRatingPlus(Long mountainReviewNumber,boolean reviewRatingStat,OAuthMemberSession oAuthMemberSession) {
         Member member = new Member();
         member.getMemberInfo(oAuthMemberSession.getEmail(), oAuthMemberSession.getName(), oAuthMemberSession.getId(), oAuthMemberSession.getType());
 
@@ -75,13 +71,13 @@ public class ReviewServiceImpl implements ReviewService {
         Review reviewInfo = reviewRepository.getReferenceById(mountainReviewNumber);
         ReviewRatingHistory reviewRatingHistory = new ReviewRatingHistory();
 
-        if(reviewRatingStat.equals(REVIEW_RATING_GOOD)){
+        if(reviewRatingStat==true){
             reviewRatingHistory.createReviewRatingHistory(mountainReviewNumber,member,true);
             reviewRatingHistoryRepository.save(reviewRatingHistory);
 
             reviewInfo.setReviewGoodCount(reviewInfo.getReviewGoodCount()+1);
             reviewRepository.save(reviewInfo);
-        }else if(reviewRatingStat.equals(REVIEW_RATING_BAD)){
+        }else{
             reviewRatingHistory.createReviewRatingHistory(mountainReviewNumber,member,false);
             reviewRatingHistoryRepository.save(reviewRatingHistory);
 
@@ -106,11 +102,17 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewRatingHistory> findReviewGoodOrBadHistory(OAuthMemberSession oAuthMemberSession, boolean ratingStat) {
+    public Page<ReviewInfo> findReviewGoodOrBadHistory(OAuthMemberSession oAuthMemberSession, boolean ratingStat,Pageable pageable) {
         Member member = new Member().getMemberInfo(oAuthMemberSession.getEmail(), oAuthMemberSession.getName(),oAuthMemberSession.getId(), oAuthMemberSession.getType());
-        Page<ReviewRatingHistory> reviewRatingGoodOrNot = reviewRatingHistoryRepository.findReviewRatingGoodOrNot(member, ratingStat);
-        log.info("{}",reviewRatingGoodOrNot);
-        return null;
+        Page<Review> reviewRatingGoodOrBad = reviewRatingHistoryRepository.findReviewRatingGoodOrBad(member, ratingStat,pageable);
+
+        List<ReviewInfo> reviewDto = reviewRatingGoodOrBad.stream()
+                .map(reviewRating -> {
+                    ReviewInfo reviewInfo = reviewEntityToDto(reviewRating);
+                    return reviewInfo;
+                }).collect(Collectors.toList());
+
+        return new PageImpl<>(reviewDto,pageable, reviewRatingGoodOrBad.getTotalElements());
     }
 
     private static ReviewInfo reviewEntityToDto(Review review) {

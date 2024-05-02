@@ -1,14 +1,16 @@
 package com.mountainstory.project.repository.review.impl;
 
-import com.mountainstory.project.entity.user.Member;
-import com.mountainstory.project.entity.user.QReviewRatingHistory;
-import com.mountainstory.project.entity.user.ReviewRatingHistory;
+import com.mountainstory.project.entity.user.*;
 import com.mountainstory.project.repository.review.FindReviewRatingRepo;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
+@Slf4j
 public class FindReviewRatingRepoImpl implements FindReviewRatingRepo {
 
     private final JPAQueryFactory jpaQueryFactory;
@@ -18,22 +20,31 @@ public class FindReviewRatingRepoImpl implements FindReviewRatingRepo {
     }
 
     @Override
-    public Page<ReviewRatingHistory> findReviewRatingGoodOrNot(Member memberId, boolean ratingStat) {
+    public Page<Review> findReviewRatingGoodOrBad(Member memberId, boolean ratingStat, Pageable pageable) {
         QReviewRatingHistory qReviewRatingHistory = QReviewRatingHistory.reviewRatingHistory;
+        QReview qReview = QReview.review;
 
-        List<ReviewRatingHistory> reviewRatingHistoryList =  jpaQueryFactory
-                .select(qReviewRatingHistory)
+        List<Long> reviewRatingHistoryList =  jpaQueryFactory
+                .select(qReviewRatingHistory.reviewNumber)
                 .from(qReviewRatingHistory)
                 .where(qReviewRatingHistory.isReviewed.eq(ratingStat).and(qReviewRatingHistory.memberId.eq(memberId)))
                 .fetch();
 
-        /*TODO: 여기서부터 Pageing 객체로 반환해야 하는데, new PageImpl 을 사용해야 함.
-        * count 개수를 구하는게 문제인데,  reviewRatingHistoryList 의 카운트만 반환하는 dsl 로직을
-        * 추가하는 방법이 있음
-        * ++ service 계층에서 안 될것 같음. -> service 계층에서도 마찬가지로 count 가 필요한데, count 속성을
-        * Paging 객체여야만 사용할 수 있음. (dsl 로 반환한 객체는 list 임)
-        * */
+        List<Review> reviewRatingList = jpaQueryFactory
+                .select(qReview)
+                .from(qReview)
+                .where(qReview.reviewNumber.in(reviewRatingHistoryList))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(qReview.reviewNumber.desc())
+                .fetch();
 
-        return reviewRatingHistoryList;
+        Long count = jpaQueryFactory
+                .select(qReview.count())
+                .from(qReview)
+                .where(qReview.reviewNumber.in(reviewRatingHistoryList))
+                .fetchOne();
+
+        return new PageImpl<>(reviewRatingList,pageable,count);
     }
 }

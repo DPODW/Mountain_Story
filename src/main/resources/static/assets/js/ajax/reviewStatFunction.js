@@ -2,10 +2,10 @@ $(document).ready(function() {
     $(".reviewGoodBtn").click(function(event) {
         const reviewNumber = $(this).siblings(".OnlyjQueryReviewNumber").val();
         const mountainIndex = $("#mountainIndex").val();
-        console.log(reviewNumber)
+
         event.preventDefault();
         $.ajax({
-            url: "/mountain/info/review/rating/"+reviewNumber+"/good",
+            url: "/mountain/info/review/rating/"+reviewNumber+"/true",
             type: "POST",
             async: true,
             success: function(response) {
@@ -29,18 +29,17 @@ $(document).ready(function() {
     $(".reviewBadBtn").click(function(event) {
         const reviewNumber = $(this).siblings(".OnlyjQueryReviewNumber").val();
         const mountainIndex = $("#mountainIndex").val();
-        console.log(reviewNumber);
         event.preventDefault();
         $.ajax({
-            url: "/mountain/info/review/rating/"+reviewNumber+"/bad",
+            url: "/mountain/info/review/rating/"+reviewNumber+"/false",
             type: "POST",
             async: true,
             success: function(response) {
                 if(mountainIndex !=null){
-                    alert("해당 리뷰를 추천하였습니다. 새로고침이 이루어집니다.");
+                    alert("해당 리뷰를 비추천하였습니다. 새로고침이 이루어집니다.");
                     window.location.href = "/mountain/info/search/one/"+mountainIndex
                 }else if(mountainIndex==null){
-                    alert("해당 리뷰를 추천하였습니다. 새로고침이 이루어집니다.");
+                    alert("해당 리뷰를 비추천하였습니다. 새로고침이 이루어집니다.");
                     window.location.href = "/member/review/history"
                 }
             },

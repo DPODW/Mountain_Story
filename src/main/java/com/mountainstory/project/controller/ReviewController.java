@@ -3,19 +3,18 @@ package com.mountainstory.project.controller;
 
 import com.mountainstory.project.config.auth.session.LoginMember;
 import com.mountainstory.project.config.auth.session.OAuthMemberSession;
-import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoDto;
+import com.mountainstory.project.controller.paging.PagingFunction;
 import com.mountainstory.project.dto.review.ReviewInfo;
-import com.mountainstory.project.entity.user.Member;
 import com.mountainstory.project.service.review.ReviewService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @RequestMapping("/mountain/info/review")
@@ -24,8 +23,11 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    public ReviewController(ReviewService reviewService) {
+    private final PagingFunction pagingFunction;
+
+    public ReviewController(ReviewService reviewService, PagingFunction pagingFunction) {
         this.reviewService = reviewService;
+        this.pagingFunction = pagingFunction;
     }
 
 
@@ -37,15 +39,11 @@ public class ReviewController {
 
 
     @PostMapping("/rating/{reviewNumber}/{reviewRatingStat}")
-    public ResponseEntity<String> reviewRating(@PathVariable Long reviewNumber,@PathVariable String reviewRatingStat,@LoginMember OAuthMemberSession oAuthMemberSession){
+    public ResponseEntity<String> reviewRating(@PathVariable Long reviewNumber,@PathVariable boolean reviewRatingStat,@LoginMember OAuthMemberSession oAuthMemberSession){
         reviewService.reviewRatingPlus(reviewNumber,reviewRatingStat,oAuthMemberSession);
         return ResponseEntity.ok("review done");
     }
 
-    @GetMapping("/rating/stat/list/{ratingStat}")
-    public String reviewGoodList(@PathVariable boolean ratingStat, @LoginMember OAuthMemberSession oAuthMemberSession){
-        reviewService.findReviewGoodOrBadHistory(oAuthMemberSession,ratingStat);
-        return "redirect:/home";
-    }
+
 
 }

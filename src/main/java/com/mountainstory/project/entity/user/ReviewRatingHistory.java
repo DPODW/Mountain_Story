@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@Entity(name = "review_rating_history")
+@Entity
 @ToString
 public class ReviewRatingHistory {
 

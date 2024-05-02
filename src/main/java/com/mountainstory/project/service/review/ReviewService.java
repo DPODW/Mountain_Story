@@ -18,9 +18,9 @@ public interface ReviewService {
 
     Page<ReviewInfo> findReviewList(String mountainUniqueNo, Pageable pageable);
 
-    void reviewRatingPlus(Long mountainReviewNumber,String reviewRatingStat,OAuthMemberSession oAuthMemberSession);
+    void reviewRatingPlus(Long mountainReviewNumber,boolean reviewRatingStat,OAuthMemberSession oAuthMemberSession);
 
     Page<ReviewInfo> findMemberReviewHistory(OAuthMemberSession oAuthMemberSession, Pageable pageable);
 
-    Page<ReviewRatingHistory> findReviewGoodOrBadHistory(OAuthMemberSession oAuthMemberSession, boolean ratingStat);
+    Page<ReviewInfo> findReviewGoodOrBadHistory(OAuthMemberSession oAuthMemberSession, boolean ratingStat,Pageable pageable);
 }
