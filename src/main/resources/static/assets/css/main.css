@@ -2617,13 +2617,13 @@ button:active,
 	width: 140px;
 }
 
-.userLine{
-	height: 1px;
-	border: 0;
-	background-color: black;
+.userProfileLine{
+	border: 1px solid gainsboro;
+	border-radius: 10px;
 }
 
 .userImg{
+	margin-top: 25px;
 	width: 80px;
 	position: absolute;
 	margin-left: -350px;
@@ -2633,13 +2633,13 @@ button:active,
 	margin-left: 125px;
 	position: absolute;
 	font-size: 25px;
-	margin-top: 8px;
+	margin-top: 20px;
 }
 
 .userEmailText{
 	position: absolute;
 	color: black;
-	margin-top: 60px;
+	margin-top: 75px;
 	margin-left: 125px;
 	font-size: 18px;
 }
@@ -2673,4 +2673,41 @@ button:active,
 .loadingText{
 	margin-top: 25px;
 	color: black;
+}
+
+.rankingBorder{
+	border: 1px solid gainsboro;
+	width: 370px;
+	height: 370px;
+	margin-top: 50px;
+	border-radius: 10px;
+}
+
+.rankingTitle{
+	text-align: center;
+}
+
+.rankingList{
+	color: black;
+	font-size: 15px;
+	font-weight: bolder;
+	margin-top: 25px;
+}
+
+.rankingElement{
+	margin-bottom: 25px;
+}
+
+.rankingListTitle{
+	margin-right: 60px;
+}
+
+.rankingGoodCount{
+	margin-left: 30px;
+}
+
+.rankingGoodCountImg{
+	width: 18px;
+	height: 18px;
+	margin-right: 7px;
 }

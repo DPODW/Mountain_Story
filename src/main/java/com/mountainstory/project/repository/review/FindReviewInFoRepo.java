@@ -11,5 +11,5 @@ public interface FindReviewInFoRepo {
 
     Page<Review> findReviewRatingStat(Member memberId, boolean ratingStat, Pageable pageable);
 
-    List<Review> findTop3GoodReview();
+    List<Review> findTop7GoodReview();
 }

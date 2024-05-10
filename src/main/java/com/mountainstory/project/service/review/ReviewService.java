@@ -24,5 +24,5 @@ public interface ReviewService {
 
     Page<ReviewInfo> findReviewStatHistory(OAuthMemberSession oAuthMemberSession, boolean ratingStat,Pageable pageable);
 
-    List<ReviewInfo> findTop3GoodReview();
+    List<ReviewInfo> findTop7GoodReview();
 }

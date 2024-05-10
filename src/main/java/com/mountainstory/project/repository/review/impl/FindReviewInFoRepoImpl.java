@@ -49,16 +49,16 @@ public class FindReviewInFoRepoImpl implements FindReviewInFoRepo {
     }
 
     @Override
-    public List<Review> findTop3GoodReview() {
+    public List<Review> findTop7GoodReview() {
         QReview qReview = QReview.review;
 
-        List<Review> reviewTop3GoodList = jpaQueryFactory
+        List<Review> reviewTop7GoodList = jpaQueryFactory
                 .select(qReview)
                 .from(qReview)
                 .orderBy(qReview.reviewGoodCount.desc())
-                .limit(3)
+                .limit(7)
                 .fetch();
 
-        return reviewTop3GoodList;
+        return reviewTop7GoodList;
     }
 }

@@ -1,23 +1,38 @@
 package com.mountainstory.project.dto.review;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 
 @ToString
 @NoArgsConstructor
 @Setter
 @Getter
 public class ReviewInfo {
+
+    @NotBlank
+    @Length(min = 6, max = 20)
     private String reviewTitle;
+
     private String reviewMountainName;
+
+    @NotBlank
+    @Length(min = 20, max = 100)
     private String reviewContent;
+
     private String mountainUniqueNo;
+
     private String createTime;
+
     private String reviewWriter;
+
     private Long reviewNumber;
+
     private int reviewRatingGoodCount;
+
     private int reviewRatingBadCount;
 
 

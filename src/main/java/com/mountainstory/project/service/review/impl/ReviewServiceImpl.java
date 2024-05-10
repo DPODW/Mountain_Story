@@ -116,12 +116,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewInfo> findTop3GoodReview() {
-        List<Review> top3GoodReviewList = reviewInFoHistoryRepository.findTop3GoodReview();
+    public List<ReviewInfo> findTop7GoodReview() {
+        List<Review> top7GoodReviewList = reviewInFoHistoryRepository.findTop7GoodReview();
 
-        List<ReviewInfo> reviewDto = top3GoodReviewList.stream()
-                .map(top3Review -> {
-                    ReviewInfo reviewInfo = reviewEntityToDto(top3Review);
+        List<ReviewInfo> reviewDto = top7GoodReviewList.stream()
+                .map(top7Review -> {
+                    ReviewInfo reviewInfo = reviewEntityToDto(top7Review);
                     return reviewInfo;
                 }).collect(Collectors.toList());
         return reviewDto;
