@@ -47,12 +47,17 @@
 	</div>
 
 	<!-- Nav -->
-	<nav id="nav" style="z-index: 1">
+	<nav id="nav">
 		<div class="rankingBorder">
 			<h1 class="rankingTitle">추천 많이 받은 리뷰 TOP7</h1>
 			<ol class="rankingList">
 
-				<li data-bs-toggle="modal" th:each="rankingTop7,rankingTop7ElementIndex : ${top7GoodReviewList}" th:attr="data-bs-target='#'+${rankingTop7ElementIndex.count}" class="rankingElement"><a class="rankingListTitle" th:text="${rankingTop7.getReviewTitle()}" ></a><img class="rankingGoodCountImg" src="/images/rankingGoodCount.png"><span class="rankingGoodCount" th:text="${rankingTop7.getReviewRatingGoodCount()}"></span></li>
+				<li data-bs-toggle="modal" th:each="rankingTop7,rankingTop7ElementIndex : ${top7GoodReviewList}" th:attr="data-bs-target='#'+${rankingTop7ElementIndex.count}" class="rankingElement">
+					<a class="rankingListTitle" th:text="${rankingTop7.getReviewTitle()}" ></a>
+					<img class="rankingGoodCountImg" src="/images/rankingGoodCount.png">
+					<span class="rankingGoodCount" th:text="${rankingTop7.getReviewRatingGoodCount()}"><img class="rankingGoodCountImg" src="/images/rankingGoodCount.png"></span>
+				</li>
+
 			</ol>
 		</div>
 	</nav>

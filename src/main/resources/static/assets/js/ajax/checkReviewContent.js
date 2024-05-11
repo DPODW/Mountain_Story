@@ -2,9 +2,7 @@ $(document).ready(function() {
     $("#reviewSuccessBtn").click(function (event) {
         const reviewTitle = $("#exampleFormControlInput1").val();
         const reviewContent = $("#exampleFormControlTextarea1").val();
-
         event.preventDefault();
-
         $.ajax({
             url: "/mountain/info/review/check/content",
             data:{
@@ -14,7 +12,7 @@ $(document).ready(function() {
             type: "POST",
             async: true,
             success: function (response) {
-                alert("성공")
+                $("#reviewSave").submit();
             },
             error: function (error) {
                 alert("작성 규칙 준수 요망");

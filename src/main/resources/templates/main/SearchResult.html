@@ -180,7 +180,7 @@
     <p class="mountain-review-subtitle" th:text="${mountainInfoOne.getMountainName()+' 의 후기를 사람들에게 공유해주세요!'}"></p>
     <button type="button" class="btn btn-success review-form-button" id="showReviewFormBtn">후기 작성하기</button>
 
-    <form th:action="@{/mountain/info/review}" method="POST">
+    <form id="reviewSave" th:action="@{/mountain/info/review}" method="POST">
         <div class="review-form" id="showReviewForm">
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">제목</label>

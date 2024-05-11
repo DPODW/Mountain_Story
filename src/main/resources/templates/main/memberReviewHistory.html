@@ -60,8 +60,16 @@
 	</div>
 </div>
 
-<a style="margin-left:400px; position: absolute;" th:href="@{/member/review/rating/stat/list/{ratingStat}(ratingStat=${true})}">좋아요 누른 게시글</a>
-<a style="margin-left: 200px; position: absolute;" th:href="@{/member/review/rating/stat/list/{ratingStat}(ratingStat=${false})}">싫어요 누른 게시글</a>
+
+<a type="button" class="btn btn-outline-success reviewGoodBtnList"  th:href="@{/member/review/rating/stat/list/{ratingStat}(ratingStat=${true})}">좋아요 누른 게시글</a>
+<a type="button" class="btn btn-outline-danger reviewBadBtnList"  th:href="@{/member/review/rating/stat/list/{ratingStat}(ratingStat=${false})}">싫어요 누른 게시글</a>
+
+<div class="d-flex titleLine">
+	<div class="vr titleLineDetail"></div>
+</div>
+
+<h3 class="titleText">작성한 게시글</h3>
+<p class="titleTextDetail">내가 작성한 산 후기들을 확인할수 있습니다</p>
 <table class="table mountain-table">
 	<thead>
 	<tr>
@@ -69,7 +77,6 @@
 		<th scope="col">제목</th>
 		<th scope="col">작성자</th>
 		<th scope="col">작성 시간</th>
-
 	</tr>
 	</thead>
 	<tbody class="mountain-table-content">
