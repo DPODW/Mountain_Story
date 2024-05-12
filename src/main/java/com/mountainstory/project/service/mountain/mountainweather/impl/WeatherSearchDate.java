@@ -20,6 +20,7 @@ public class WeatherSearchDate {
             return midNight.format(formatter);
         }
 
+        log.info("현재 시간>>{}",nowBaseDate.format(formatter));
         return nowBaseDate.format(formatter);
     }
 

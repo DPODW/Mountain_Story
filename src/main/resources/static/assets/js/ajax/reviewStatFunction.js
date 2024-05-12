@@ -1,3 +1,5 @@
+//추천 비추천 후 -> 리다이렉트가 해당 화면이도록 변경해야함. (일일히 구현 x)
+
 $(document).ready(function() {
     $(".reviewGoodBtn").click(function(event) {
         const reviewNumber = $(this).siblings(".OnlyjQueryReviewNumber").val();
@@ -9,6 +11,7 @@ $(document).ready(function() {
             type: "POST",
             async: true,
             success: function(response) {
+                //상황별 조건문 구현 비효율. . .
                  if(mountainIndex !=null){
                      alert("해당 리뷰를 추천하였습니다. 새로고침이 이루어집니다.");
                      window.location.href = "/mountain/info/search/one/"+mountainIndex

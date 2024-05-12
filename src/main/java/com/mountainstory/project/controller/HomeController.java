@@ -33,8 +33,6 @@ public class HomeController {
 
         List<ReviewInfo> top7GoodReview = reviewService.findTop7GoodReview();
         model.addAttribute("top7GoodReviewList",top7GoodReview);
-
-        log.info("추천수 많은 상위 7개 리뷰  >>{}",top7GoodReview);
         return "main/Home";
     }
 

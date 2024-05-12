@@ -24,7 +24,7 @@ public class SecurityConfig {
 
     private final OAuthMemberService OAuthMemberService;
 
-    String[] publicForm = {"/home","/home/result","/mountain/info/search",
+    String[] publicForm = {"/home","/mountain/info/search/one/{mountainIndex}","/mountain/info/search/list","/member/access/check",
 
             "/assets/css/**", "/assets/js/**", "/images/**"};
 

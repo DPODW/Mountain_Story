@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 public class TranslateWeatherCode {
 
     //TODO: 추후 커스텀 예외를 구현해서 -> return null 을 예외로 변경
+    //5xx 통합 예외로 걍 처리
     protected String skyCode(String skyState){
         switch (skyState){
             case "1":
@@ -17,7 +18,7 @@ public class TranslateWeatherCode {
             case "4":
                 return "흐림";
         }
-        return null;
+        throw new RuntimeException("정의되지 않은 sky code ");
     }
 
     protected String rainFormCode(String rainForm){
@@ -37,7 +38,7 @@ public class TranslateWeatherCode {
             case "4":
                 return "소나기";
         }
-        return null;
+        throw new RuntimeException("정의되지 않은 rainForm Code ");
     }
 
     protected String windSpeedCode(double windSpeedCode){
@@ -54,7 +55,7 @@ public class TranslateWeatherCode {
        if(windSpeedCode>14){
            return "매우 강함";
        }
-       return null;
+        throw new RuntimeException("정의되지 않은 windSpeedCode");
     }
 
 
@@ -71,7 +72,7 @@ public class TranslateWeatherCode {
         if (dust >= 76){
             return "매우 나쁨";
         }
-        return null;
+        throw new RuntimeException("convertUltraMicroDust 예외발생");
     }
 
     protected String convertMicroDust(Integer dust){
@@ -87,7 +88,7 @@ public class TranslateWeatherCode {
         if (dust >= 151){
             return "매우 나쁨";
         }
-        return null;
+        throw new RuntimeException("convertMicroDust 예외");
     }
 
 }

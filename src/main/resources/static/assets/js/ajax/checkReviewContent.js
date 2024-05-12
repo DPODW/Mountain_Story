@@ -1,13 +1,11 @@
-$(document).ready(function() {
-    $("#reviewSuccessBtn").click(function (event) {
+    function reviewContentCheck() {
         const reviewTitle = $("#exampleFormControlInput1").val();
         const reviewContent = $("#exampleFormControlTextarea1").val();
-        event.preventDefault();
         $.ajax({
             url: "/mountain/info/review/check/content",
-            data:{
-                reviewTitle:reviewTitle,
-                reviewContent:reviewContent
+            data: {
+                reviewTitle: reviewTitle,
+                reviewContent: reviewContent
             },
             type: "POST",
             async: true,
@@ -18,5 +16,4 @@ $(document).ready(function() {
                 alert("작성 규칙 준수 요망");
             }
         });
-    });
-});
+    }

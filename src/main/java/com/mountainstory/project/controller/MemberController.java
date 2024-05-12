@@ -2,6 +2,7 @@ package com.mountainstory.project.controller;
 
 import com.mountainstory.project.config.auth.session.LoginMember;
 import com.mountainstory.project.config.auth.session.OAuthMemberSession;
+import com.mountainstory.project.config.exception.AjaxException;
 import com.mountainstory.project.controller.paging.PagingFunction;
 import com.mountainstory.project.dto.review.ReviewInfo;
 import com.mountainstory.project.service.member.MemberService;
@@ -11,10 +12,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
@@ -57,6 +60,14 @@ public class MemberController {
 
         pagingFunction.getPagingDataAndModel(reviewStatList,model);
         return "main/memberReviewRatingHistory";
+    }
 
+    @PostMapping("/access/check")
+    public ResponseEntity<String> memberAccessCheck(@LoginMember OAuthMemberSession oAuthMemberSession){
+        log.info("회원 체크 접근");
+       if (oAuthMemberSession==null){
+           throw new AjaxException("회원 아님");
+       }else
+           return ResponseEntity.ok("ok");
     }
 }

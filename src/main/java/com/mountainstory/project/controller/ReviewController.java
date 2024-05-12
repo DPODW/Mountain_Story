@@ -3,18 +3,13 @@ package com.mountainstory.project.controller;
 
 import com.mountainstory.project.config.auth.session.LoginMember;
 import com.mountainstory.project.config.auth.session.OAuthMemberSession;
-import com.mountainstory.project.config.exception.ReviewException;
+import com.mountainstory.project.config.exception.AjaxException;
 import com.mountainstory.project.controller.paging.PagingFunction;
 import com.mountainstory.project.dto.review.ReviewInfo;
 import com.mountainstory.project.service.review.ReviewService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,21 +23,15 @@ public class ReviewController {
 
     private final PagingFunction pagingFunction;
 
+
     public ReviewController(ReviewService reviewService, PagingFunction pagingFunction) {
         this.reviewService = reviewService;
         this.pagingFunction = pagingFunction;
     }
 
-
     @PostMapping("")
-    public String saveReview(@Validated @ModelAttribute ReviewInfo reviewInfo, BindingResult bindingResult, @RequestParam Integer mountainIndex,
+    public String saveReview(@ModelAttribute ReviewInfo reviewInfo, @RequestParam Integer mountainIndex,
                              @LoginMember OAuthMemberSession oAuthMemberSession){
-
-        if(bindingResult.hasErrors()){
-            throw new ReviewException("문자열 틀림");
-            //TODO:예외 던지는건 서서비스단에서 하면 좋음.
-        }
-
         reviewService.createReviewInfo(reviewInfo, oAuthMemberSession);
         return "redirect:/mountain/info/search/one/"+mountainIndex;
     }
@@ -61,14 +50,8 @@ public class ReviewController {
 
     @PostMapping("/check/content")
     public ResponseEntity<String> reviewContentCheck(@RequestParam String reviewTitle,@RequestParam String reviewContent){
-        log.info("넘어온 리뷰 제목>{}",reviewTitle);
-        log.info("넘어온 리뷰 내용>{}",reviewContent);
-
-        log.info("넘어온 리뷰 제목r>{}",reviewTitle.length());
-        log.info("넘어온 리뷰 내용r>{}",reviewContent.length());
         if((reviewTitle.length()<4 || reviewTitle.length()>12) || (reviewContent.length()<15 || reviewContent.length()>100)){
-            log.info("땡");
-           throw new ReviewException("d");
+           throw new AjaxException("리뷰 작성 규칙 틀림");
         }
         return ResponseEntity.ok("ok");
     }
