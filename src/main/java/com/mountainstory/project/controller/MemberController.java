@@ -6,6 +6,8 @@ import com.mountainstory.project.config.auth.session.OAuthMemberSession;
 import com.mountainstory.project.config.exception.AjaxException;
 import com.mountainstory.project.controller.paging.PagingFunction;
 import com.mountainstory.project.dto.review.ReviewInfo;
+import com.mountainstory.project.dto.user.MemberInfo;
+import com.mountainstory.project.service.member.MemberService;
 import com.mountainstory.project.service.review.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,11 +32,13 @@ public class MemberController {
     private final OAuthMemberService oAuthMemberService;
     private final ReviewService reviewService;
 
+    private final MemberService memberService;
     private final PagingFunction pagingFunction;
 
-    public MemberController(OAuthMemberService oAuthMemberService, ReviewService reviewService, PagingFunction pagingFunction) {
+    public MemberController(OAuthMemberService oAuthMemberService, ReviewService reviewService, MemberService memberService, PagingFunction pagingFunction) {
         this.oAuthMemberService = oAuthMemberService;
         this.reviewService = reviewService;
+        this.memberService = memberService;
         this.pagingFunction = pagingFunction;
     }
 
@@ -68,6 +72,19 @@ public class MemberController {
 
         pagingFunction.getPagingDataAndModel(reviewStatList,model);
         return "main/memberReviewRatingHistory";
+    }
+
+    @GetMapping("/myInfo")
+    public String memberMyInfo(@LoginMember OAuthMemberSession oAuthMemberSession){
+        MemberInfo memberInfoById = memberService.findMemberInfoById(oAuthMemberSession.getId());
+        log.info("현재 회원 정보>>{}",memberInfoById);
+        return "redirect:/home";
+    }
+
+    @PostMapping("/delete")
+    public String memberInfoDelete(@LoginMember OAuthMemberSession oAuthMemberSession){
+        memberService.deleteMemberById(oAuthMemberSession.getId());
+        return "redirect:/home";
     }
 
     @PostMapping("/access/check")
