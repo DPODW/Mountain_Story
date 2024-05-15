@@ -26,7 +26,7 @@ public class SecurityConfig {
 
     String[] publicForm = {"/home","/mountain/info/search/one/{mountainIndex}","/mountain/info/search/list","/member/access/check",
 
-            "/assets/css/**", "/assets/js/**", "/images/**"};
+            "/assets/css/**", "/assets/js/**", "/images/**","/assets/ajax/**"};
 
 
     @Bean

@@ -21,12 +21,9 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    private final PagingFunction pagingFunction;
 
-
-    public ReviewController(ReviewService reviewService, PagingFunction pagingFunction) {
+    public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
-        this.pagingFunction = pagingFunction;
     }
 
     @PostMapping("")

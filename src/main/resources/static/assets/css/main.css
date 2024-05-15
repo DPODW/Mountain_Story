@@ -1920,17 +1920,14 @@ button,
 input[type="button"]:hover,
 input[type="submit"]:hover,
 input[type="reset"]:hover,
-button:hover,
-.button:hover {
-	background-color: #9ececc;
-}
+button:hover
 
 input[type="button"]:active,
 input[type="submit"]:active,
 input[type="reset"]:active,
 button:active,
 .button:active {
-	background-color: #7eaeac;
+
 }
 
 /* Item */
@@ -2691,6 +2688,7 @@ button:active,
 
 .rankingElement{
 	margin-bottom: 25px;
+	cursor:pointer;
 }
 
 .rankingListTitle{
@@ -2713,4 +2711,43 @@ button:active,
 	height: 18px;
 	margin-top: -17px;
 	margin-left: -80px;
+}
+
+.rateBtnPointer{
+	all: unset;
+	cursor:pointer;
+}
+
+.rateGoodBtn{
+	width: 100px; margin-right: 100px;
+}
+
+.rateBadBtn{
+	width: 100px; margin-right: 90px;
+}
+
+.headerMarginValue{
+	margin-top: 200px;
+}
+
+.pagingTextColor{
+	color: red;
+}
+
+.pagingNumber{
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.pagingArea{
+	margin-left: 1100px;
+}
+
+.reviewTextArea{
+	height: 200px;
+	resize: none;
+}
+
+.reviewCloseBtn{
+	float: right;
 }

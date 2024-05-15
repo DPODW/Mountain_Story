@@ -9,14 +9,13 @@
 	<link rel="stylesheet" href="/assets/css/mountain-info.css" />
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="/assets/js/loadingFunction.js"></script>
-	<script src="/assets/js/ajax/reviewStatFunction.js"></script>
-
+	<script src="/assets/ajax/checkAccessMember.js"></script>
+	<script src="/assets/ajax/reviewStatFunction.js"></script>
 </head>
 
 <body class="is-preload">
-
 <div id="header">
-	<div style="margin-top: 200px;">
+	<div class="headerMarginValue">
 		<img src="/images/MountainStoryImg.png" class="mountainStoryImg">
 		<p class="logoText">오늘의 산 !</p>
 
@@ -30,8 +29,7 @@
 			</a>
 		</div>
 
-		<div th:if="${#authorization.expression('isAuthenticated()')}">
-			<hr style="height: 1px; border: 0; background-color: black;">
+		<div th:if="${#authorization.expression('isAuthenticated()')}"  class="userProfileLine">
 			<img src="/images/userImg.png" class="userImg">
 
 			<h3 class="userNameText" th:text="${loginMember.name}"></h3>
@@ -48,15 +46,23 @@
 	</div>
 
 	<!-- Nav -->
-	<nav id="nav" style="margin-top: -80px;">
-		<div style=" border: 1px solid red; width: 370px; height: 400px;"></div>
+	<nav id="nav">
+		<div class="rankingBorder">
+			<h1 class="rankingTitle">추천 많이 받은 리뷰 TOP7</h1>
+			<ol class="rankingList">
+
+				<li data-bs-toggle="modal" th:each="rankingTop7,rankingTop7ElementIndex : ${top7GoodReviewList}" th:attr="data-bs-target='#A'+${rankingTop7ElementIndex.count}" class="rankingElement">
+					<a class="rankingListTitle" th:text="${rankingTop7.getReviewTitle()}" ></a>
+					<img class="rankingGoodCountImg" src="/images/rankingGoodCount.png">
+					<span class="rankingGoodCount" th:text="${rankingTop7.getReviewRatingGoodCount()}"><img class="rankingGoodCountImg" src="/images/rankingGoodCount.png"></span>
+				</li>
+
+			</ol>
+		</div>
 	</nav>
 
 	<div class="bottom">
-		<ul class="icons">
-			<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
-			<li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-		</ul>
+
 	</div>
 </div>
 
@@ -106,13 +112,13 @@
 
 						<input type="hidden" class="OnlyjQueryReviewNumber" th:value="${reviewInfo.getReviewNumber()}">
 
-						<button type="button"  class="reviewGoodBtn" style="all: unset;cursor:pointer;">
-							<img src="/images/reviewGood.png" style="width: 100px; margin-right: 100px;">
+						<button type="button"  class="rateGoodAccessCheck rateBtnPointer">
+							<img src="/images/reviewGood.png" class="rateGoodBtn">
 						</button>
 						<a class="reviewRateGoodCount" th:text="${reviewInfo.getReviewRatingGoodCount()}"></a>
 
-						<button type="button"  class="reviewBadBtn" style="all: unset;cursor:pointer;">
-							<img src="/images/reviewBad.png"  style="width: 100px;  margin-right: 90px;">
+						<button type="button"  class="rateGoodAccessCheck rateBtnPointer">
+							<img src="/images/reviewBad.png"  class="rateBadBtn">
 						</button>
 						<a class="reviewRateBadCount" th:text="${reviewInfo.getReviewRatingBadCount()}"></a>
 					</div>
@@ -124,20 +130,58 @@
 			</div>
 		</div>
 	</tr>
-	</tbody>
+  </tbody>
 </table>
 
-<div style="margin-left: 1100px;">
-        <span th:each="page:${#numbers.sequence(startPage,endPage)}" style="display: inline-block; margin-right: 10px;">
+<div class="pagingArea">
+        <span th:each="page:${#numbers.sequence(startPage,endPage)}" class="pagingNumber">
 <!--            number.sequence: 주어진 값 (startPage,endPage) 를 기준으로 숫자를 순서대로 출력해줌(시작부터 끝까지). -->
             <a th:if="${page != nowPage && page != 0}" th:href="@{/member/review/history(page=${page - 1})}" th:text ="${page}"></a>
 			<!--            현재 페이지가 아니여야 하며, 페이지는 0이 아니라면 => a 태그로 페이징 이동을 가능하게 함. -1 을 하는 이유는 numbers.sequence 로 생성되는 값은 1 부터 시작하는데
                             페이징은 0부터 시작하기 때문. 고로 - 1 한 값을 넘겨야 페이징이 정상적으로 작동한다. (URL 을 통해 확인 가능함. 페이징 URL 은 -1 값이 넘어간다)-->
-            <strong th:if="${page==nowPage}" th:text ="${page}" style="color:red;"></strong>
+            <strong th:if="${page==nowPage}" th:text ="${page}" class="pagingTextColor"></strong>
         </span>
 </div>
 
-<script src="/assets/js/ajax/checkAccessMember.js"></script>
+<div th:each="rankingTop7,rankingTop7ElementIndex : ${top7GoodReviewList}">
+	<div class="modal fade" th:id="'A'+${rankingTop7ElementIndex.count}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5 reviewTitle" th:text="${rankingTop7.getReviewTitle()}"><br></h1>
+					<div class="reviewContentWriter">
+						<a th:text="'작성자: '+${rankingTop7.getReviewWriter()}"></a>
+						<a class="reviewContentCreateTime" th:text="'작성: '+${rankingTop7.getCreateTime()}"></a>
+					</div>
+				</div>
+				<div class="modal-body">
+					<a class="reviewContent" th:text="${rankingTop7.getReviewContent()}"></a>
+				</div>
+
+				<div class="modal-footer reviewRateLayout">
+					<a class="reviewRateTitle">후기가 도움이 되셨나요?</a>
+
+					<input type="hidden" class="OnlyjQueryReviewNumber" th:value="${rankingTop7.getReviewNumber()}">
+
+					<button type="button" class="rateGoodAccessCheck rateBtnPointer">
+						<img src="/images/reviewGood.png" class="rateBadBtn">
+					</button>
+					<a class="reviewRateGoodCount" th:text="${rankingTop7.getReviewRatingGoodCount()}"></a>
+
+					<button type="button"  class="rateBadAccessCheck rateBtnPointer">
+						<img src="/images/reviewBad.png"  class="rateBadBtn">
+					</button>
+					<a class="reviewRateBadCount" th:text="${rankingTop7.getReviewRatingBadCount()}"></a>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="/assets/ajax/checkAccessMember.js"></script>
 <script src="/assets/js/showReviewFunction.js"></script>
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/jquery.scrolly.min.js"></script>

@@ -56,7 +56,7 @@ public class MountainInfoController {
 
 
     @GetMapping("/one/{mountainIndex}")
-    public String mountainInfoOne(@PageableDefault(page=0, size=3, sort="reviewNumber", direction=Sort.Direction.DESC) Pageable pageable, @LoginMember OAuthMemberSession oAuthMemberSession, @PathVariable(name = "mountainIndex") Integer mountainIndex,
+    public String mountainInfoOne(@PageableDefault(page=0, size=10, sort="reviewNumber", direction=Sort.Direction.DESC) Pageable pageable, @LoginMember OAuthMemberSession oAuthMemberSession, @PathVariable(name = "mountainIndex") Integer mountainIndex,
                                   HttpServletRequest request, Model model) throws UnsupportedEncodingException, ParseException {
         oAuthMemberService.checkMemberLoginType(oAuthMemberSession,model);
         HttpSession session = request.getSession(false);
@@ -67,11 +67,15 @@ public class MountainInfoController {
         MountainInfoDto mountainInfoOne = mountainInfoService.setCoordinateInfo(allMountainInfoList.get(mountainIndex));
         MountainWeather mountainWeather = mountainWeatherService.getMountainWeather(mountainInfoOne.getMountainCoordinate(), mountainInfoOne.getMountainLocation());
         Page<ReviewInfo> reviewList = reviewService.findReviewList(mountainInfoOne.getMountainNo(),pageable);
+        List<ReviewInfo> top7GoodReview = reviewService.findTop7GoodReview();
 
         model.addAttribute("loginMember",oAuthMemberSession);
+
         model.addAttribute("mountainInfoOne",mountainInfoOne);
         model.addAttribute("mountainWeather",mountainWeather);
         model.addAttribute("mountainIndex",mountainIndex);
+
+        model.addAttribute("top7GoodReviewList",top7GoodReview);
 
         pagingFunction.getPagingDataAndModel(reviewList,model);
         model.addAttribute("reviewList", reviewList);
@@ -85,6 +89,7 @@ public class MountainInfoController {
         List<MountainInfoDto> allMountainInfoList = mountainInfoService.getAllMountainInfoList(mountainName);
 
         oAuthMemberService.checkMemberLoginType(oAuthMemberSession,model);
+        List<ReviewInfo> top7GoodReview = reviewService.findTop7GoodReview();
 
         if(allMountainInfoList.size()!=0){
             HttpSession session = request.getSession(false);
@@ -93,6 +98,8 @@ public class MountainInfoController {
 
         model.addAttribute("loginMember",oAuthMemberSession);
         model.addAttribute("mountainInfoList",allMountainInfoList);
+        model.addAttribute("top7GoodReviewList",top7GoodReview);
+
         return "main/SearchResultList";
     }
 

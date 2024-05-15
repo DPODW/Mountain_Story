@@ -8,13 +8,12 @@
 	<link rel="stylesheet" href="/assets/css/main.css" />
 	<link rel="stylesheet" href="/assets/css/mountain-info.css" />
 	<script src="assets/js/loadingFunction.js"></script>
-
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="is-preload">
 <div id="header">
-
-	<div style="margin-top: 200px;">
+	<div class="headerMarginValue">
 		<img src="/images/MountainStoryImg.png" class="mountainStoryImg">
 		<p class="logoText">오늘의 산 !</p>
 
@@ -28,8 +27,7 @@
 			</a>
 		</div>
 
-		<div th:if="${#authorization.expression('isAuthenticated()')}">
-			<hr style="height: 1px; border: 0; background-color: black;">
+		<div th:if="${#authorization.expression('isAuthenticated()')}"  class="userProfileLine">
 			<img src="/images/userImg.png" class="userImg">
 
 			<h3 class="userNameText" th:text="${loginMember.name}"></h3>
@@ -46,15 +44,23 @@
 	</div>
 
 	<!-- Nav -->
-	<nav id="nav" style="margin-top: -80px;">
-		<div style=" border: 1px solid red; width: 370px; height: 400px;"></div>
+	<nav id="nav">
+		<div class="rankingBorder">
+			<h1 class="rankingTitle">추천 많이 받은 리뷰 TOP7</h1>
+			<ol class="rankingList">
+
+				<li data-bs-toggle="modal" th:each="rankingTop7,rankingTop7ElementIndex : ${top7GoodReviewList}" th:attr="data-bs-target='#'+${rankingTop7ElementIndex.count}" class="rankingElement">
+					<a class="rankingListTitle" th:text="${rankingTop7.getReviewTitle()}" ></a>
+					<img class="rankingGoodCountImg" src="/images/rankingGoodCount.png">
+					<span class="rankingGoodCount" th:text="${rankingTop7.getReviewRatingGoodCount()}"><img class="rankingGoodCountImg" src="/images/rankingGoodCount.png"></span>
+				</li>
+
+			</ol>
+		</div>
 	</nav>
 
 	<div class="bottom">
-		<ul class="icons">
-			<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
-			<li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-		</ul>
+
 	</div>
 </div>
 
@@ -88,11 +94,51 @@
 		<div class="col-md-4" th:unless="${mountainInfo.getMountainImgUrl()}">
 			<img class="listMountainImg"  src="/images/noImg.png">
 		</div>
-
 	</div>
 </div>
 
-<script src="/assets/js/loadingFunction.js"></script>
+<div th:each="rankingTop7,rankingTop7ElementIndex : ${top7GoodReviewList}">
+	<div class="modal fade" th:id="${rankingTop7ElementIndex.count}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5 reviewTitle" id="exampleModalLabel" th:text="${rankingTop7.getReviewTitle()}"><br></h1>
+					<div class="reviewContentWriter">
+						<a th:text="'작성자: '+${rankingTop7.getReviewWriter()}"></a>
+						<a class="reviewContentCreateTime" th:text="'작성: '+${rankingTop7.getCreateTime()}"></a>
+					</div>
+				</div>
+				<div class="modal-body">
+					<a class="reviewContent" th:text="${rankingTop7.getReviewContent()}"></a>
+					<input type="hidden" id="reviewNumber" th:value="${rankingTop7.getReviewNumber()}">
+				</div>
+
+				<div class="modal-footer reviewRateLayout">
+					<a class="reviewRateTitle">후기가 도움이 되셨나요?</a>
+
+					<input type="hidden" class="OnlyjQueryReviewNumber" th:value="${rankingTop7.getReviewNumber()}">
+
+					<button type="button" class="rateGoodAccessCheck rateBtnPointer">
+						<img src="/images/reviewGood.png" class="rateGoodBtn">
+					</button>
+					<a class="reviewRateGoodCount" th:text="${rankingTop7.getReviewRatingGoodCount()}"></a>
+
+					<button type="button"  class="rateGoodAccessCheck rateBtnPointer">
+						<img src="/images/reviewBad.png"  class="rateBadBtn">
+					</button>
+					<a class="reviewRateBadCount" th:text="${rankingTop7.getReviewRatingBadCount()}"></a>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="/assets/ajax/reviewStatFunction.js"></script>
+<script src="/assets/ajax/checkAccessMember.js"></script>
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/jquery.scrolly.min.js"></script>
 <script src="/assets/js/jquery.scrollex.min.js"></script>
