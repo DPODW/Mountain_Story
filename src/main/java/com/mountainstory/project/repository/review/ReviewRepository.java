@@ -17,6 +17,8 @@ public interface ReviewRepository extends JpaRepository<Review,Long> {
 
     Page<Review> findByMember(Member memberId,Pageable pageable);
 
+    Optional<Review> deleteReviewByReviewNumber(Long reviewNumber);
+
 
 
 }

@@ -8,6 +8,7 @@ import com.mountainstory.project.entity.user.ReviewRatingHistory;
 import com.mountainstory.project.repository.review.ReviewInFoHistoryRepository;
 import com.mountainstory.project.repository.review.ReviewRepository;
 import com.mountainstory.project.service.review.ReviewService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.*;
@@ -41,6 +42,12 @@ public class ReviewServiceImpl implements ReviewService {
                 reviewInfo.getMountainUniqueNo(),reviewInfo.getReviewContent(), reviewInfo.getReviewTitle(), LocalDateTime.now());
 
         reviewRepository.save(reviewInfoResult);
+    }
+
+
+    @Override
+    public void deleteReviewById(Long reviewNumber) {
+        reviewRepository.deleteReviewByReviewNumber(reviewNumber);
     }
 
     @Override

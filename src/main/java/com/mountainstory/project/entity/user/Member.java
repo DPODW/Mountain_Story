@@ -29,9 +29,13 @@ public class Member {
     private LocalDateTime createTime;
 
 
-    //양방향 관계를 위한 정의
-    @OneToMany(mappedBy = "member")
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Review> reviewList = new ArrayList<Review>();
+
+
+    @OneToMany(mappedBy = "memberId", cascade = CascadeType.REMOVE)
+    private List<ReviewRatingHistory> reviewRatingHistory = new ArrayList<ReviewRatingHistory>();
 
 
     public Member createMemberInfo(String email,String name,String id,String type,LocalDateTime createTime){

@@ -1,23 +1,16 @@
 package com.mountainstory.project.service.member.impl;
 
 import com.mountainstory.project.config.auth.session.OAuthMemberSession;
-import com.mountainstory.project.dto.review.ReviewInfo;
 import com.mountainstory.project.dto.user.MemberInfo;
 import com.mountainstory.project.entity.user.Member;
-import com.mountainstory.project.entity.user.Review;
 import com.mountainstory.project.repository.member.MemberRepository;
-import com.mountainstory.project.repository.review.ReviewRepository;
 import com.mountainstory.project.service.member.MemberService;
+import com.mountainstory.project.service.review.ReviewService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,12 +22,13 @@ public class MemberServiceImpl implements MemberService {
         this.memberRepository = memberRepository;
     }
 
-
+    @Transactional
     @Override
-    public void deleteMemberById(String id) {
-        memberRepository.deleteMemberById(id);
-        log.info(id," 회원 삭제됌");
+    public void deleteMemberById(String memberId) {
+        memberRepository.deleteMemberById(memberId);
+
     }
+
 
     @Override
     public MemberInfo findMemberInfoById(String id) {

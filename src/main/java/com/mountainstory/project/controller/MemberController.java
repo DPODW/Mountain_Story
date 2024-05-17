@@ -75,10 +75,16 @@ public class MemberController {
     }
 
     @GetMapping("/myInfo")
-    public String memberMyInfo(@LoginMember OAuthMemberSession oAuthMemberSession){
+    public String memberMyInfo(@LoginMember OAuthMemberSession oAuthMemberSession,Model model){
         MemberInfo memberInfoById = memberService.findMemberInfoById(oAuthMemberSession.getId());
+        List<ReviewInfo> top7GoodReview = reviewService.findTop7GoodReview();
+        oAuthMemberService.checkMemberLoginType(oAuthMemberSession,model);
+
+        model.addAttribute("loginMember",oAuthMemberSession);
+        model.addAttribute("top7GoodReviewList",top7GoodReview);
+
         log.info("현재 회원 정보>>{}",memberInfoById);
-        return "redirect:/home";
+        return "main/memberInfo";
     }
 
     @PostMapping("/delete")
@@ -86,6 +92,8 @@ public class MemberController {
         memberService.deleteMemberById(oAuthMemberSession.getId());
         return "redirect:/home";
     }
+
+
 
     @PostMapping("/access/check")
     public ResponseEntity<String> memberAccessCheck(@LoginMember OAuthMemberSession oAuthMemberSession){

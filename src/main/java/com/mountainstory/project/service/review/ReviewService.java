@@ -16,6 +16,8 @@ public interface ReviewService {
 
     void createReviewInfo(ReviewInfo reviewInfo, OAuthMemberSession oAuthMemberSession);
 
+    void deleteReviewById (Long reviewNumber);
+
     Page<ReviewInfo> findReviewList(String mountainUniqueNo, Pageable pageable);
 
     void reviewRatingPlus(Long mountainReviewNumber,boolean reviewRatingStat,OAuthMemberSession oAuthMemberSession);

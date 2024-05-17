@@ -14,9 +14,12 @@ import java.util.List;
 @Service
 public interface MemberService {
 
-    void deleteMemberById (String id);
+    void deleteMemberById (String memberId);
+
 
     MemberInfo findMemberInfoById (String id);
+
+
 
 
 }
