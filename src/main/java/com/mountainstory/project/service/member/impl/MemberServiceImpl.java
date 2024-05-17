@@ -39,7 +39,8 @@ public class MemberServiceImpl implements MemberService {
         memberInfo.setMemberName(uniqueMember.getName());
         memberInfo.setMemberEmail(uniqueMember.getEmail());
         memberInfo.setMemberType(uniqueMember.getType());
-        memberInfo.setMemberJoinDate(uniqueMember.getCreateTime().toString());
+        memberInfo.setMemberJoinDate(uniqueMember.getCreateTime().toString().substring
+                (0,uniqueMember.getCreateTime().toString().indexOf("T")));
         //TODO: 가입시간 보기 좋게 수정 필요
 
         return memberInfo;

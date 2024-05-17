@@ -35,7 +35,6 @@ $(".rateGoodAccessCheck").click(function (event) {
 });
 
 $(".rateBadAccessCheck").click(function (event) {
-    console.log("ㅇㅇ");
     const reviewNumber = $(this).siblings(".OnlyjQueryReviewNumber").val();
     event.preventDefault();
     $.ajax({

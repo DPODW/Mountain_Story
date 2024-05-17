@@ -75,6 +75,19 @@ public class OAuthMemberService implements OAuth2UserService<OAuth2UserRequest, 
         }
     }
 
+    public String kakaoMemberDelete(String accessToken,String userId){
+        URI uri = UriComponentsBuilder
+                .fromUriString("https://kapi.kakao.com/v1/user/unlink")
+                .queryParam("Authorization","Bearer"+accessToken)
+                .build()
+                .toUri();
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<String> forEntity = restTemplate.getForEntity(uri, String.class);
+        log.info("카카오 탈퇴>{}",forEntity.getBody());
+        return forEntity.getBody();
+    }
+
 
     public String naverMemberLogout(String accessToken){
         URI uri = UriComponentsBuilder

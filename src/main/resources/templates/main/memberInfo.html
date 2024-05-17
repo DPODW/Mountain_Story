@@ -37,7 +37,7 @@
             <p class="userEmailText" th:text="${loginMember.email}"></p>
                 <nav>
                     <ol class="breadcrumb userMenu">
-                    <li class="breadcrumb-item"><a href="#">마이 페이지</a></li>
+                   <li class="breadcrumb-item"><a th:href="@{/member/myInfo}">마이 페이지</a></li>
                     <li class="breadcrumb-item"><a th:href="@{/member/review/history}">게시 글</a></li>
                     <li class="breadcrumb-item"th:if="${kakao}"><a href="https://kauth.kakao.com/oauth/logout?client_id=0d05cb8e8296ee92d3df6bb356bd1566&logout_redirect_uri=http://localhost:8080/logout">로그아웃</a></li>
 					<li class="breadcrumb-item"th:if="${naver}"><a href="/home/naverLogout">로그아웃</a></li>
@@ -82,34 +82,31 @@
 	<div class="row">
 		<div class="col-md-6 mb-3">
 			<label style="font-size: 20px;">이름</label>
-			<input type="text" class="form-control">
+			<input type="text" class="form-control" th:value="${memberInfoById.getMemberName()}" readonly>
 		</div>
 
 		<div class="col-md-6 mb-3">
-			<label style="font-size: 20px;">아이디</label>
-			<input type="text" class="form-control">
+			<label style="font-size: 20px;">이메일</label>
+			<input type="text" class="form-control" th:value="${memberInfoById.getMemberEmail()}" readonly>
 		</div>
 	</div>
 
 	<div class="mb-3">
-		<label style="font-size: 20px;">비밀번호</label>
-		<input type="password" class="form-control">
+		<label style="font-size: 20px;">가입 날짜</label>
+		<input type="text" class="form-control" th:value="${memberInfoById.getMemberJoinDate()}" readonly>
 	</div>
 
 	<div class="mb-3">
-		<label  style="font-size: 20px;">이메일</label>
-		<input type="text" class="form-control">
-	</div>
-
-	<div class="mb-3">
-		<label style="font-size: 20px;">가입 목적</label>
-		<input type="text" class="form-control" name="sellerRole">
+		<label  style="font-size: 20px;">가입 유형</label>
+		<input type="text" class="form-control" th:value="${memberInfoById.getMemberType()}" readonly>
 	</div>
 	<hr>
-
 	<div style="text-align: center;">
-		<button type="button" class="btn btn-success">홈으로 이동</button>
-		<button type="button" class="btn btn-danger" style="margin-left: 200px;">회원 탈퇴</button>
+		<a th:href="@{/home}"><button type="button" class="btn btn-success">홈으로 이동</button></a>
+
+		<form>
+			<button type="button" id="memberDeleteWarn" class="btn btn-danger" style="margin-left: 200px;">회원 탈퇴</button>
+		</form>
 	</div>
 </div>
 
@@ -154,6 +151,7 @@
 	</div>
 </div>
 <!-- Scripts -->
+<script src="/assets/ajax/memberDeleteWarn.js"></script>
 <script src="/assets/js/loadingFunction.js"></script>
 <script src="/assets/ajax/reviewStatFunction.js"></script>
 <script src="/assets/ajax/checkAccessMember.js"></script>

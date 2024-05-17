@@ -17,22 +17,22 @@ import java.util.List;
 @Controller
 public class HomeController {
     private final OAuthMemberService oAuthMemberService;
-
     private final ReviewService reviewService;
+    private final ReviewRankingHelper reviewRankingHelper;
 
-    public HomeController(OAuthMemberService oAuthMemberService, ReviewService reviewService) {
+    public HomeController(OAuthMemberService oAuthMemberService, ReviewService reviewService, ReviewRankingHelper reviewRankingHelper) {
         this.oAuthMemberService = oAuthMemberService;
         this.reviewService = reviewService;
+        this.reviewRankingHelper = reviewRankingHelper;
     }
 
 
     @GetMapping("")
     public String homePage(@LoginMember OAuthMemberSession oAuthMemberSession, Model model){
         oAuthMemberService.checkMemberLoginType(oAuthMemberSession,model);
-        model.addAttribute("loginMember",oAuthMemberSession);
+        reviewRankingHelper.findTop7GoodReview(model);
 
-        List<ReviewInfo> top7GoodReview = reviewService.findTop7GoodReview();
-        model.addAttribute("top7GoodReviewList",top7GoodReview);
+        model.addAttribute("loginMember",oAuthMemberSession);
         return "main/Home";
     }
 

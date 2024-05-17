@@ -8,6 +8,7 @@ import com.mountainstory.project.controller.paging.PagingFunction;
 import com.mountainstory.project.dto.mountain.mountainWeather.MountainWeather;
 import com.mountainstory.project.dto.mountain.mountaininfo.MountainInfoDto;
 import com.mountainstory.project.dto.review.ReviewInfo;
+import com.mountainstory.project.dto.user.MemberInfo;
 import com.mountainstory.project.service.mountain.mountaininfo.MountainInfoService;
 import com.mountainstory.project.service.mountain.mountainweather.MountainWeatherService;
 import com.mountainstory.project.service.review.ReviewService;
@@ -43,13 +44,15 @@ public class MountainInfoController {
     private final ReviewService reviewService;
 
     private final PagingFunction pagingFunction;
+    private final ReviewRankingHelper reviewRankingHelper;
 
-    public MountainInfoController(MountainInfoService mountainInfoService, MountainWeatherService mountainWeatherService, OAuthMemberService oAuthMemberService, ReviewService reviewService, PagingFunction pagingFunction) {
+    public MountainInfoController(MountainInfoService mountainInfoService, MountainWeatherService mountainWeatherService, OAuthMemberService oAuthMemberService, ReviewService reviewService, PagingFunction pagingFunction, ReviewRankingHelper reviewRankingHelper) {
         this.mountainInfoService = mountainInfoService;
         this.mountainWeatherService = mountainWeatherService;
         this.oAuthMemberService = oAuthMemberService;
         this.reviewService = reviewService;
         this.pagingFunction = pagingFunction;
+        this.reviewRankingHelper = reviewRankingHelper;
     }
 
     //TODO:get~ 메소드가 존재하니까 api 들은 범위를 제한해도될듯
@@ -59,6 +62,7 @@ public class MountainInfoController {
     public String mountainInfoOne(@PageableDefault(page=0, size=10, sort="reviewNumber", direction=Sort.Direction.DESC) Pageable pageable, @LoginMember OAuthMemberSession oAuthMemberSession, @PathVariable(name = "mountainIndex") Integer mountainIndex,
                                   HttpServletRequest request, Model model) throws UnsupportedEncodingException, ParseException {
         oAuthMemberService.checkMemberLoginType(oAuthMemberSession,model);
+        reviewRankingHelper.findTop7GoodReview(model);
         HttpSession session = request.getSession(false);
 
         List<MountainInfoDto> allMountainInfoList = (List<MountainInfoDto>) session.getAttribute("allMountainInfoList");
@@ -67,15 +71,12 @@ public class MountainInfoController {
         MountainInfoDto mountainInfoOne = mountainInfoService.setCoordinateInfo(allMountainInfoList.get(mountainIndex));
         MountainWeather mountainWeather = mountainWeatherService.getMountainWeather(mountainInfoOne.getMountainCoordinate(), mountainInfoOne.getMountainLocation());
         Page<ReviewInfo> reviewList = reviewService.findReviewList(mountainInfoOne.getMountainNo(),pageable);
-        List<ReviewInfo> top7GoodReview = reviewService.findTop7GoodReview();
 
         model.addAttribute("loginMember",oAuthMemberSession);
 
         model.addAttribute("mountainInfoOne",mountainInfoOne);
         model.addAttribute("mountainWeather",mountainWeather);
         model.addAttribute("mountainIndex",mountainIndex);
-
-        model.addAttribute("top7GoodReviewList",top7GoodReview);
 
         pagingFunction.getPagingDataAndModel(reviewList,model);
         model.addAttribute("reviewList", reviewList);
@@ -86,10 +87,11 @@ public class MountainInfoController {
     @GetMapping("/list")
     public String mountainInfoList(@LoginMember OAuthMemberSession oAuthMemberSession, @RequestParam(name = "mountainName") String mountainName, Model model, HttpServletRequest request) throws UnsupportedEncodingException {
         model.addAttribute("showLoading",true);
-        List<MountainInfoDto> allMountainInfoList = mountainInfoService.getAllMountainInfoList(mountainName);
 
         oAuthMemberService.checkMemberLoginType(oAuthMemberSession,model);
-        List<ReviewInfo> top7GoodReview = reviewService.findTop7GoodReview();
+        reviewRankingHelper.findTop7GoodReview(model);
+
+        List<MountainInfoDto> allMountainInfoList = mountainInfoService.getAllMountainInfoList(mountainName);
 
         if(allMountainInfoList.size()!=0){
             HttpSession session = request.getSession(false);
@@ -98,8 +100,6 @@ public class MountainInfoController {
 
         model.addAttribute("loginMember",oAuthMemberSession);
         model.addAttribute("mountainInfoList",allMountainInfoList);
-        model.addAttribute("top7GoodReviewList",top7GoodReview);
-
         return "main/SearchResultList";
     }
 
