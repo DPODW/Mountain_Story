@@ -24,6 +24,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
+    @Setter
     private Member member;
 
     @Column(name = "MOUNTAIN_NAME")

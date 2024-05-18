@@ -11,6 +11,7 @@
 	<script src="/assets/js/loadingFunction.js"></script>
 	<script src="/assets/ajax/checkAccessMember.js"></script>
 	<script src="/assets/ajax/reviewStatFunction.js"></script>
+	<script src="/assets/ajax/reviewDeleteWarn.js"></script>
 </head>
 
 <body class="is-preload">
@@ -100,6 +101,7 @@
 						<div class="reviewContentWriter">
 							<a th:text="'작성자: '+${reviewInfo.getReviewWriter()}"></a>
 							<a class="reviewContentCreateTime" th:text="'작성: '+${reviewInfo.getCreateTime()}"></a>
+							<a class="reviewDeleteWarn">삭제</a>
 						</div>
 					</div>
 					<div class="modal-body">
@@ -117,7 +119,7 @@
 						</button>
 						<a class="reviewRateGoodCount" th:text="${reviewInfo.getReviewRatingGoodCount()}"></a>
 
-						<button type="button"  class="rateGoodAccessCheck rateBtnPointer">
+						<button type="button"  class="rateBadAccessCheck rateBtnPointer">
 							<img src="/images/reviewBad.png"  class="rateBadBtn">
 						</button>
 						<a class="reviewRateBadCount" th:text="${reviewInfo.getReviewRatingBadCount()}"></a>

@@ -31,7 +31,6 @@ public class ReviewController {
         return "redirect:/mountain/info/search/one/"+mountainIndex;
     }
 
-
     @PostMapping("/rating/{reviewNumber}/{reviewRatingStat}")
     public ResponseEntity<String> reviewRating(@PathVariable Long reviewNumber,@PathVariable boolean reviewRatingStat,@LoginMember OAuthMemberSession oAuthMemberSession){
         reviewService.reviewRatingPlus(reviewNumber,reviewRatingStat,oAuthMemberSession);
@@ -44,6 +43,13 @@ public class ReviewController {
            throw new AjaxException("리뷰 작성 규칙 틀림");
         }
         return ResponseEntity.ok("ok");
+    }
+
+    @PostMapping("/delete/{reviewNumber}")
+    public ResponseEntity<String> reviewDelete(@PathVariable Long reviewNumber){
+        reviewService.deleteReviewById(reviewNumber);
+        return ResponseEntity.ok("ok");
+        //TODO: 다른 html에도 적용 필요 (AJAX)
     }
 
 

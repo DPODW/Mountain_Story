@@ -6,6 +6,9 @@ import com.mountainstory.project.repository.member.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -75,16 +78,16 @@ public class OAuthMemberService implements OAuth2UserService<OAuth2UserRequest, 
         }
     }
 
-    public String kakaoMemberDelete(String accessToken,String userId){
-        URI uri = UriComponentsBuilder
-                .fromUriString("https://kapi.kakao.com/v1/user/unlink")
-                .queryParam("Authorization","Bearer"+accessToken)
-                .build()
-                .toUri();
-        RestTemplate restTemplate = new RestTemplate();
+    public String kakaoMemberDelete(String accessToken){
+        String uri = "https://kapi.kakao.com/v1/user/unlink";
 
-        ResponseEntity<String> forEntity = restTemplate.getForEntity(uri, String.class);
-        log.info("카카오 탈퇴>{}",forEntity.getBody());
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type","application/x-www-form-urlencoded");
+        headers.set("Authorization","Bearer "+accessToken);
+        HttpEntity<String> entity = new HttpEntity<String>("", headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> forEntity = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
         return forEntity.getBody();
     }
 

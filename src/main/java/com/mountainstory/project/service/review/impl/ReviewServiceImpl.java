@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -44,7 +45,7 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.save(reviewInfoResult);
     }
 
-
+    @Transactional
     @Override
     public void deleteReviewById(Long reviewNumber) {
         reviewRepository.deleteReviewByReviewNumber(reviewNumber);

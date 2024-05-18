@@ -19,10 +19,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -84,7 +81,6 @@ public class MemberController {
         model.addAttribute("loginMember",oAuthMemberSession);
         model.addAttribute("memberInfoById",memberInfoById);
 
-        log.info("엑세스 토큰{}",oAuthMemberSession.getAccessToken());
         return "main/memberInfo";
     }
 
@@ -94,16 +90,14 @@ public class MemberController {
         HttpSession session = request.getSession(false);
 
         if (oAuthMemberSession!=null && session.getAttribute("Member")!=null){
-            oAuthMemberService.kakaoMemberDelete(oAuthMemberSession.getAccessToken(),oAuthMemberSession.getId());
-            session.invalidate();
-//           oAuthMemberService.naverMemberLogout(oAuthMemberSession.getAccessToken());
-
+            if(oAuthMemberSession.getType().equals("naver")){
+                oAuthMemberService.naverMemberLogout(oAuthMemberSession.getAccessToken());
+            }else {
+                oAuthMemberService.kakaoMemberDelete(oAuthMemberSession.getAccessToken());
+            }
         }
-        //TODO: OAuth2 회원 탈퇴 API 를 구현해야 하는듯
-        return "redirect:/home";
+        return "redirect:/logout";
     }
-
-
 
     @PostMapping("/access/check")
     public ResponseEntity<String> memberAccessCheck(@LoginMember OAuthMemberSession oAuthMemberSession){
@@ -111,5 +105,14 @@ public class MemberController {
            throw new AjaxException("회원 아님");
        }else
            return ResponseEntity.ok("ok");
+    }
+
+    @PostMapping("/reviewer/check")
+    public ResponseEntity<String> reviewWriterCheck(@LoginMember OAuthMemberSession oAuthMemberSession, @RequestParam String memberId){
+        if(oAuthMemberSession.getId().equals(memberId)){
+            log.info("동일");
+        }
+        return ResponseEntity.badRequest().build();
+        //TODO: AJAX 로 요청해서 잘 작동하는지 테스트 필요
     }
 }
