@@ -108,11 +108,12 @@ public class MemberController {
     }
 
     @PostMapping("/reviewer/check")
-    public ResponseEntity<String> reviewWriterCheck(@LoginMember OAuthMemberSession oAuthMemberSession, @RequestParam String memberId){
-        if(oAuthMemberSession.getId().equals(memberId)){
-            log.info("동일");
+    public ResponseEntity<String> reviewWriterCheck(@LoginMember OAuthMemberSession oAuthMemberSession, @RequestParam String reviewerId){
+        if(oAuthMemberSession.getId().equals(reviewerId)){
+            return ResponseEntity.ok("ok");
+        }else{
+            throw new AjaxException("틀ㄹ");
         }
-        return ResponseEntity.badRequest().build();
         //TODO: AJAX 로 요청해서 잘 작동하는지 테스트 필요
     }
 }

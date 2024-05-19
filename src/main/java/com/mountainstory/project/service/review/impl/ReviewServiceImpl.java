@@ -138,6 +138,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     private static ReviewInfo reviewEntityToDto(Review review) {
         ReviewInfo reviewInfo = new ReviewInfo();
+        reviewInfo.setMemberId(review.getMember().getId());
         reviewInfo.setReviewTitle(review.getReviewTitle());
         reviewInfo.setReviewMountainName(review.getMountainName());
         reviewInfo.setReviewContent(review.getReviewContent());

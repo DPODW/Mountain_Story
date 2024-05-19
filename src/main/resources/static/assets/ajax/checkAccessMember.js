@@ -51,3 +51,26 @@ $(document).ready(function() {
         });
     });
 });
+
+
+$(document).ready(function() {
+    $(".checkReviewer").click(function (event) {
+        const reviewerId = $(this).closest('.modal').find('.OnlyjQueryReviewerId').val();
+        console.log(reviewerId);
+        event.preventDefault();
+        $.ajax({
+            url: "/member/reviewer/check",
+            data:{
+              reviewerId: reviewerId
+            },
+            type: "POST",
+            async: true,
+            success: function (response) {
+                alert("통과!");
+            },
+            error: function (error) {
+                alert("통과 실패!");
+            }
+        });
+    });
+});

@@ -230,6 +230,7 @@
                             <div class="reviewContentWriter">
                                 <a th:text="'작성자: '+${reviewInfo.getReviewWriter()}"></a>
                                 <a class="reviewContentCreateTime" th:text="'작성: '+${reviewInfo.getCreateTime()}"></a>
+                                <a class="checkReviewer">삭제</a>
                             </div>
                         </div>
                         <div class="modal-body">
@@ -237,7 +238,10 @@
                         </div>
                         <div class="modal-footer reviewRateLayout">
                             <a class="reviewRateTitle">후기가 도움이 되셨나요?</a>
+
                             <input type="hidden" class="OnlyjQueryReviewNumber" th:value="${reviewInfo.getReviewNumber()}">
+                            <input type="hidden" class="OnlyjQueryReviewerId" th:value="${reviewInfo.getMemberId()}">
+
                             <button type="button"  class="rateGoodAccessCheck rateBtnPointer">
                                 <img src="/images/reviewGood.png" class="rateGoodBtn">
                             </button>
