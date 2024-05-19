@@ -71,22 +71,22 @@ public class ReviewServiceImpl implements ReviewService {
     public void reviewRatingPlus(Long mountainReviewNumber,boolean reviewRatingStat,OAuthMemberSession oAuthMemberSession) {
         Member member = new Member();
         member.getMemberInfo(oAuthMemberSession.getEmail(), oAuthMemberSession.getName(), oAuthMemberSession.getId(), oAuthMemberSession.getType());
+        Review reviewInfo = reviewRepository.getReferenceById(mountainReviewNumber);
 
-        if(reviewInFoHistoryRepository.findByMemberIdAndReviewNumber(member,mountainReviewNumber)!=null){
+        if(reviewInFoHistoryRepository.findByMemberIdAndReviewNumber(member,reviewInfo)!=null){
           throw new DuplicateKeyException("이미 "+ mountainReviewNumber + " 번 게시글에 평가를 완료한 회원입니다.");
         }
 
-        Review reviewInfo = reviewRepository.getReferenceById(mountainReviewNumber);
         ReviewRatingHistory reviewRatingHistory = new ReviewRatingHistory();
 
         if(reviewRatingStat==true){
-            reviewRatingHistory.createReviewRatingHistory(mountainReviewNumber,member,true);
+            reviewRatingHistory.createReviewRatingHistory(reviewInfo,member,true);
             reviewInFoHistoryRepository.save(reviewRatingHistory);
 
             reviewInfo.setReviewGoodCount(reviewInfo.getReviewGoodCount()+1);
             reviewRepository.save(reviewInfo);
         }else{
-            reviewRatingHistory.createReviewRatingHistory(mountainReviewNumber,member,false);
+            reviewRatingHistory.createReviewRatingHistory(reviewInfo,member,false);
             reviewInFoHistoryRepository.save(reviewRatingHistory);
 
             reviewInfo.setReviewBadCount(reviewInfo.getReviewBadCount()+1);

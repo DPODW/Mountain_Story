@@ -24,16 +24,15 @@ public class FindReviewInFoRepoImpl implements FindReviewInFoRepo {
         QReviewRatingHistory qReviewRatingHistory = QReviewRatingHistory.reviewRatingHistory;
         QReview qReview = QReview.review;
 
-        List<Long> reviewRatingHistoryList =  jpaQueryFactory
-                .select(qReviewRatingHistory.reviewNumber)
-                .from(qReviewRatingHistory)
+        List<ReviewRatingHistory> reviewRatingHistoryList = jpaQueryFactory
+                .selectFrom(qReviewRatingHistory)
                 .where(qReviewRatingHistory.isReviewed.eq(ratingStat).and(qReviewRatingHistory.memberId.eq(memberId)))
                 .fetch();
 
         List<Review> reviewRatingList = jpaQueryFactory
                 .select(qReview)
                 .from(qReview)
-                .where(qReview.reviewNumber.in(reviewRatingHistoryList))
+                .where(qReview.reviewNumber.in(reviewRatingHistoryList))//반복하면서 숫자 가져오기. . .?
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(qReview.reviewNumber.desc())

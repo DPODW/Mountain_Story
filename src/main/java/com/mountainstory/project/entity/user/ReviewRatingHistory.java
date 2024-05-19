@@ -13,18 +13,20 @@ public class ReviewRatingHistory {
     @Column(name = "REVIEW_HISTORY_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewHistoryId;
+
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member memberId;
 
-    @Column(name = "REVIEW_NUMBER")
-    private Long reviewNumber;
+    @ManyToOne
+    @JoinColumn(name = "REVIEW_NUMBER")
+    private Review reviewNumber;
 
     @Column(name = "IS_REVIEWED")
     private boolean isReviewed;
 
 
-    public ReviewRatingHistory createReviewRatingHistory(Long reviewNumber, Member memberId, boolean isReviewed) {
+    public ReviewRatingHistory createReviewRatingHistory(Review reviewNumber, Member memberId, boolean isReviewed) {
         this.reviewNumber = reviewNumber;
         this.memberId = memberId;
         this.isReviewed = isReviewed;

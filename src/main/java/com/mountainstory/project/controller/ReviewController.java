@@ -45,11 +45,11 @@ public class ReviewController {
         return ResponseEntity.ok("ok");
     }
 
-    @PostMapping("/delete/{reviewNumber}")
+    @DeleteMapping("/delete/{reviewNumber}")
     public ResponseEntity<String> reviewDelete(@PathVariable Long reviewNumber){
         reviewService.deleteReviewById(reviewNumber);
         return ResponseEntity.ok("ok");
-        //TODO: 다른 html에도 적용 필요 (AJAX)
+        //리뷰가 삭제되면 리뷰 평가 기록도 전부 제거되어야 한다.
     }
 
 

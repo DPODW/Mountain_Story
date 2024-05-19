@@ -104,9 +104,7 @@
 	<div style="text-align: center;">
 		<a th:href="@{/home}"><button type="button" class="btn btn-success">홈으로 이동</button></a>
 
-		<form>
 			<button type="button" id="memberDeleteWarn" class="btn btn-danger" style="margin-left: 200px;">회원 탈퇴</button>
-		</form>
 	</div>
 </div>
 
@@ -120,6 +118,7 @@
 					<div class="reviewContentWriter">
 						<a th:text="'작성자: '+${rankingTop7.getReviewWriter()}"></a>
 						<a class="reviewContentCreateTime" th:text="'작성: '+${rankingTop7.getCreateTime()}"></a>
+						<a class="checkReviewer">삭제</a>
 					</div>
 				</div>
 				<div class="modal-body">
@@ -131,6 +130,7 @@
 					<a class="reviewRateTitle">후기가 도움이 되셨나요?</a>
 
 					<input type="hidden" class="OnlyjQueryReviewNumber" th:value="${rankingTop7.getReviewNumber()}">
+					<input type="hidden" class="OnlyjQueryReviewerId" th:value="${rankingTop7.getMemberId()}">
 
 					<button type="button" class="rateGoodAccessCheck rateBtnPointer">
 						<img src="/images/reviewGood.png" class="rateGoodBtn">
@@ -152,9 +152,11 @@
 </div>
 <!-- Scripts -->
 <script src="/assets/ajax/memberDeleteWarn.js"></script>
-<script src="/assets/js/loadingFunction.js"></script>
+<script src="/assets/ajax/reviewDeleteWarn.js"></script>
 <script src="/assets/ajax/reviewStatFunction.js"></script>
 <script src="/assets/ajax/checkAccessMember.js"></script>
+<script src="/assets/ajax/checkReviewContent.js"></script>
+<script src="/assets/js/showReviewFunction.js"></script>
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/jquery.scrolly.min.js"></script>
 <script src="/assets/js/jquery.scrollex.min.js"></script>
@@ -162,9 +164,9 @@
 <script src="/assets/js/breakpoints.min.js"></script>
 <script src="/assets/js/util.js"></script>
 <script src="/assets/js/main.js"></script>
+<script src="/assets/js/main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-
 </body>
 </html>

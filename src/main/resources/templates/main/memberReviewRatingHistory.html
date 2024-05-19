@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="/assets/css/main.css" />
 	<link rel="stylesheet" href="/assets/css/mountain-info.css" />
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="/assets/js/loadingFunction.js"></script>
+
 </head>
 
 <body class="is-preload">
@@ -156,6 +156,7 @@
 					<div class="reviewContentWriter">
 						<a th:text="'작성자: '+${rankingTop7.getReviewWriter()}"></a>
 						<a class="reviewContentCreateTime" th:text="'작성: '+${rankingTop7.getCreateTime()}"></a>
+						<a class="checkReviewer">삭제</a>
 					</div>
 				</div>
 				<div class="modal-body">
@@ -166,6 +167,7 @@
 					<a class="reviewRateTitle">후기가 도움이 되셨나요?</a>
 
 					<input type="hidden" class="OnlyjQueryReviewNumber" th:value="${rankingTop7.getReviewNumber()}">
+					<input type="hidden" class="OnlyjQueryReviewerId" th:value="${rankingTop7.getMemberId()}">
 
 					<button type="button" class="rateGoodAccessCheck rateBtnPointer">
 						<img src="/images/reviewGood.png" class="rateGoodBtn">
@@ -186,8 +188,10 @@
 	</div>
 </div>
 
-<script src="/assets/ajax/checkAccessMember.js"></script>
+<script src="/assets/ajax/reviewDeleteWarn.js"></script>
 <script src="/assets/ajax/reviewStatFunction.js"></script>
+<script src="/assets/ajax/checkAccessMember.js"></script>
+<script src="/assets/ajax/checkReviewContent.js"></script>
 <script src="/assets/js/showReviewFunction.js"></script>
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/jquery.scrolly.min.js"></script>

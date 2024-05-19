@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -83,8 +84,8 @@ public class MemberController {
 
         return "main/memberInfo";
     }
-
-    @PostMapping("/delete")
+    @ResponseStatus(HttpStatus.SEE_OTHER) //응답 상태 정의 (정의 안하면 delete 방식으로 재요청되기 때문)
+    @DeleteMapping("/delete")
     public String memberInfoDelete(@LoginMember OAuthMemberSession oAuthMemberSession, HttpServletRequest request){
         memberService.deleteMemberById(oAuthMemberSession.getId());
         HttpSession session = request.getSession(false);
@@ -109,11 +110,10 @@ public class MemberController {
 
     @PostMapping("/reviewer/check")
     public ResponseEntity<String> reviewWriterCheck(@LoginMember OAuthMemberSession oAuthMemberSession, @RequestParam String reviewerId){
-        if(oAuthMemberSession.getId().equals(reviewerId)){
+        if(oAuthMemberSession!=null && oAuthMemberSession.getId().equals(reviewerId)){
             return ResponseEntity.ok("ok");
         }else{
-            throw new AjaxException("틀ㄹ");
+            throw new AjaxException("error");
         }
-        //TODO: AJAX 로 요청해서 잘 작동하는지 테스트 필요
     }
 }

@@ -50,6 +50,8 @@ public class Review {
     @Column(name = "REVIEW_BAD_COUNT")
     private int reviewBadCount;
 
+    @OneToMany(mappedBy = "reviewNumber")
+    private List<ReviewRatingHistory> reviewRatingHistory = new ArrayList<ReviewRatingHistory>();
 
     public Review createReviewInfo(Member member, String mountainName,String mountainUniqueNo, String reviewContent, String reviewTitle, LocalDateTime createTime) {
         this.member = member;

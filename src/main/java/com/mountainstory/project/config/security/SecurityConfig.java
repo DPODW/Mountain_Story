@@ -26,6 +26,8 @@ public class SecurityConfig {
 
     String[] publicForm = {"/home","/mountain/info/search/one/{mountainIndex}","/mountain/info/search/list","/member/access/check",
 
+            "/member/reviewer/check",
+
             "/assets/css/**", "/assets/js/**", "/images/**","/assets/ajax/**"};
 
 

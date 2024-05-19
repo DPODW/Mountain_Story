@@ -1,5 +1,6 @@
 document.write('<script src="/ajax/checkReviewContent.js"></script>');
 document.write('<script src="/ajax/reviewStatFunction.js"></script>');
+document.write('<script src="/ajax/reviewDeleteWarn.js"></script>');
 
 $("#reviewAccessCheck").click(function (event) {
         event.preventDefault();
@@ -56,7 +57,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     $(".checkReviewer").click(function (event) {
         const reviewerId = $(this).closest('.modal').find('.OnlyjQueryReviewerId').val();
-        console.log(reviewerId);
+        const reviewNumber = $(this).closest('.modal').find('.OnlyjQueryReviewNumber').val();
         event.preventDefault();
         $.ajax({
             url: "/member/reviewer/check",
@@ -66,10 +67,10 @@ $(document).ready(function() {
             type: "POST",
             async: true,
             success: function (response) {
-                alert("통과!");
+                reviewDeleteFunction(reviewNumber);
             },
             error: function (error) {
-                alert("통과 실패!");
+                alert("본인이 작성한 후기만 삭제 가능합니다.");
             }
         });
     });
