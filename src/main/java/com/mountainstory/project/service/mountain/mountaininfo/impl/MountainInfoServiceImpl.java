@@ -38,7 +38,7 @@ public class MountainInfoServiceImpl implements MountainInfoService {
     public List<MountainInfoDto> getAllMountainInfoList(String mountainName) throws UnsupportedEncodingException {
         List<MountainInfoDto> mountainInfoDtoList = searchMountainInfo(mountainName,LIST_DEFAULT_PAGE_NUMBER,LIST_DEFAULT_RESULT_COUNT);
         convertMountainName.removePartSameMountain(mountainName,mountainInfoDtoList);
-//        setImgToDtoList(mountainInfoDtoList);
+        setImgToDtoList(mountainInfoDtoList);
         return mountainInfoDtoList;
     }
 
@@ -70,7 +70,7 @@ public class MountainInfoServiceImpl implements MountainInfoService {
 
     @Override
     public List<MountainImgDto> searchMountainImg(String mountainNumber) {
-        //TODO: 이미지 반복 요청이 리스트 호출 시간 지연의 주범임. . .
+        //이미지 반복 요청이 리스트 호출 시간 지연의 주범임. . .
         URI uri = UriComponentsBuilder
                 .fromUriString("http://apis.data.go.kr/1400000/service/cultureInfoService2/mntInfoImgOpenAPI2")
                 .queryParam("mntiListNo",mountainNumber)

@@ -4,6 +4,8 @@ import com.mountainstory.project.config.auth.session.LoginMember;
 import com.mountainstory.project.config.auth.session.OAuthMemberSession;
 import com.mountainstory.project.dto.review.ReviewInfo;
 import com.mountainstory.project.service.review.ReviewService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +30,7 @@ public class HomeController {
 
 
     @GetMapping("")
-    public String homePage(@LoginMember OAuthMemberSession oAuthMemberSession, Model model){
+    public String homePage(@LoginMember OAuthMemberSession oAuthMemberSession, Model model, HttpServletRequest request){
         oAuthMemberService.checkMemberLoginType(oAuthMemberSession,model);
         reviewRankingHelper.findTop7GoodReview(model);
 

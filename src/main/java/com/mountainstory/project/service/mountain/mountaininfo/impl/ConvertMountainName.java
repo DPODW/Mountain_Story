@@ -17,7 +17,6 @@ public class ConvertMountainName {
             return mountainName;
     }
 
-    //TODO: 학습 필요
     protected void removePartSameMountain(String mountainName, List<MountainInfoDto> mountainInfoDtoList) {
         mountainInfoDtoList.removeIf(mountainInfoDto -> !mountainName.equals(deleteSpecialSymbols(mountainInfoDto.getMountainName())) ||
                         mountainInfoDto.getMountainHigh().equals("0")

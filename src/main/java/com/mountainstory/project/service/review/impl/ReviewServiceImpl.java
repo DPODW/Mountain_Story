@@ -69,6 +69,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void reviewRatingPlus(Long mountainReviewNumber,boolean reviewRatingStat,OAuthMemberSession oAuthMemberSession) {
+        //reviewRatingHistory 에 값을 저장할때, 영속성 전이(CASCADE) 를 이용하여 reviewRepo 에 접근, goodCount 를 +1 을 하게끔
+        //구현해도 되지 않을까? -> 불가능. 영속성 전이는 부모 -> 자식 관계에서 가능하다. reviewRating 은 review 의 자식이기 때문에,
+        //논리적으로 불가능하다.
+
+
         Member member = new Member();
         member.getMemberInfo(oAuthMemberSession.getEmail(), oAuthMemberSession.getName(), oAuthMemberSession.getId(), oAuthMemberSession.getType());
         Review reviewInfo = reviewRepository.getReferenceById(mountainReviewNumber);

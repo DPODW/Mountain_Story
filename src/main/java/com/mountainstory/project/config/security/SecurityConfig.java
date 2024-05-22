@@ -24,6 +24,8 @@ public class SecurityConfig {
 
     private final OAuthMemberService OAuthMemberService;
 
+    private final LoginAuthenticationEntryPoint loginAuthenticationEntryPoint;
+
     String[] publicForm = {"/home","/mountain/info/search/one/{mountainIndex}","/mountain/info/search/list","/member/access/check",
 
             "/member/reviewer/check",
@@ -37,6 +39,7 @@ public class SecurityConfig {
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.disable())
                 .authorizeHttpRequests(request -> request.requestMatchers(publicForm).permitAll().anyRequest().authenticated())
+                .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->  httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(loginAuthenticationEntryPoint))
                 .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
                         .successHandler(successHandler())
                         .failureHandler(failureHandler())

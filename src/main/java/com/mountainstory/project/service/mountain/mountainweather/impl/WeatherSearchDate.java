@@ -19,8 +19,6 @@ public class WeatherSearchDate {
             LocalDateTime midNight = LocalDateTime.now().minusDays(1);
             return midNight.format(formatter);
         }
-
-        log.info("현재 시간>>{}",nowBaseDate.format(formatter));
         return nowBaseDate.format(formatter);
     }
 

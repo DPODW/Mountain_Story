@@ -36,13 +36,9 @@ import java.util.List;
 @Controller
 public class MountainInfoController {
     private final MountainInfoService mountainInfoService;
-
     private final MountainWeatherService mountainWeatherService;
-
     private final OAuthMemberService oAuthMemberService;
-
     private final ReviewService reviewService;
-
     private final PagingFunction pagingFunction;
     private final ReviewRankingHelper reviewRankingHelper;
 
@@ -66,7 +62,7 @@ public class MountainInfoController {
         HttpSession session = request.getSession(false);
 
         List<MountainInfoDto> allMountainInfoList = (List<MountainInfoDto>) session.getAttribute("allMountainInfoList");
-        //TODO: 세션 무효화를 하지 않아야, 새로고침이 이루어짐. (무효화는 필수이기 때문에, 추후 무효화 로직을 해당 메소드에 영향을 받지 않는 곳에 구현해야함
+
 
         MountainInfoDto mountainInfoOne = mountainInfoService.setCoordinateInfo(allMountainInfoList.get(mountainIndex));
         MountainWeather mountainWeather = mountainWeatherService.getMountainWeather(mountainInfoOne.getMountainCoordinate(), mountainInfoOne.getMountainLocation());
@@ -97,6 +93,8 @@ public class MountainInfoController {
         if(allMountainInfoList.size()!=0){
             HttpSession session = request.getSession(false);
             session.setAttribute("allMountainInfoList",allMountainInfoList);
+            session.setMaxInactiveInterval(1800);
+            //세션 최대시간 설정으로 세션 관리
         }
 
         model.addAttribute("loginMember",oAuthMemberSession);
