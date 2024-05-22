@@ -20,14 +20,14 @@ public class ReviewRatingHistory {
 
     @ManyToOne
     @JoinColumn(name = "REVIEW_NUMBER")
-    private Review reviewNumber;
+    private Review ratingReviewInfo;
 
     @Column(name = "IS_REVIEWED")
     private boolean isReviewed;
 
 
-    public ReviewRatingHistory createReviewRatingHistory(Review reviewNumber, Member memberId, boolean isReviewed) {
-        this.reviewNumber = reviewNumber;
+    public ReviewRatingHistory createReviewRatingHistory(Review ratingReviewInfo, Member memberId, boolean isReviewed) {
+        this.ratingReviewInfo = ratingReviewInfo;
         this.memberId = memberId;
         this.isReviewed = isReviewed;
         return this;

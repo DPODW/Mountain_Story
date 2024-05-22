@@ -1,6 +1,5 @@
   function reviewGoodFunction(reviewNumber){
         const nowUrl = window.location.href;
-        console.log(reviewNumber)
         $.ajax({
             url: "/mountain/info/review/rating/"+reviewNumber+"/true",
             type: "POST",

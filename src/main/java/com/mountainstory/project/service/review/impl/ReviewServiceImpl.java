@@ -73,7 +73,7 @@ public class ReviewServiceImpl implements ReviewService {
         member.getMemberInfo(oAuthMemberSession.getEmail(), oAuthMemberSession.getName(), oAuthMemberSession.getId(), oAuthMemberSession.getType());
         Review reviewInfo = reviewRepository.getReferenceById(mountainReviewNumber);
 
-        if(reviewInFoHistoryRepository.findByMemberIdAndReviewNumber(member,reviewInfo)!=null){
+        if(reviewInFoHistoryRepository.findByMemberIdAndRatingReviewInfo(member,reviewInfo)!=null){
           throw new DuplicateKeyException("이미 "+ mountainReviewNumber + " 번 게시글에 평가를 완료한 회원입니다.");
         }
 

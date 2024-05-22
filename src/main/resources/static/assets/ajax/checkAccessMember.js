@@ -19,7 +19,8 @@ $("#reviewAccessCheck").click(function (event) {
 
 $(document).ready(function() {
 $(".rateGoodAccessCheck").click(function (event) {
-    const reviewNumber = $(this).siblings(".OnlyjQueryReviewNumber").val();
+    const $modalFooter = $(this).closest('.modal-footer');
+    const reviewNumber = $modalFooter.find('.OnlyjQueryReviewNumber').val();
     event.preventDefault();
     $.ajax({
         url: "/member/access/check",
@@ -37,7 +38,8 @@ $(".rateGoodAccessCheck").click(function (event) {
 
 $(document).ready(function() {
     $(".rateBadAccessCheck").click(function (event) {
-        const reviewNumber = $(this).siblings(".OnlyjQueryReviewNumber").val();
+        const $modalFooter = $(this).closest('.modal-footer');
+        const reviewNumber = $modalFooter.find('.OnlyjQueryReviewNumber').val();
         event.preventDefault();
         $.ajax({
             url: "/member/access/check",
@@ -56,8 +58,10 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $(".checkReviewer").click(function (event) {
-        const reviewerId = $(this).closest('.modal').find('.OnlyjQueryReviewerId').val();
-        const reviewNumber = $(this).closest('.modal').find('.OnlyjQueryReviewNumber').val();
+        const $modalContent = $(this).closest('.modal-content');
+        const reviewNumber = $modalContent.find('.OnlyjQueryReviewNumber').val();
+        const reviewerId = $modalContent.find('.OnlyjQueryReviewerId').val();
+
         event.preventDefault();
         $.ajax({
             url: "/member/reviewer/check",

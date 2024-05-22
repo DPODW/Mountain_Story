@@ -85,23 +85,23 @@
 
         <div class="sky-content">
             <h4 class="todayTempAndSkyText">오늘의 하늘은 ?</h4>
-            <img th:if="${mountainWeather.getSkyState() == '맑음'}" class="centerImg" src="/images/weather/sun.png">
-            <img th:if="${mountainWeather.getSkyState() == '구름 많음'}" class="centerImg" src="/images/weather/cloud.png">
-            <img th:if="${mountainWeather.getSkyState() == '흐림'}" class="centerImg" src="/images/weather/badCloud.png">
+            <img th:if="${mountainWeather.getSkyState() == '맑음'}" class="centerImg" src="/images/weather/sunnn.gif">
+            <img th:if="${mountainWeather.getSkyState() == '구름 많음'}" class="centerImg" src="/images/weather/cloud.gif">
+            <img th:if="${mountainWeather.getSkyState() == '흐림'}" class="centerImg" src="/images/weather/frog.gif">
             <h4 class="skyText" th:text="${mountainWeather.getSkyState()}"></h4>
         </div>
 
         <div class="temperature-content">
-            <img class="temperatureImg" src="/images/weather/temp.png">
+            <img class="temperatureImg" src="/images/weather/temperature.gif">
             <h4 class="todayTempAndSkyText">오늘의 온도는 ?</h4>
             <h3 class="temperatureText" th:text="${mountainWeather.getCurrentTemperature()}+'°C'"></h3>
         </div>
 
         <div class="rain-content">
             <div th:unless="${mountainWeather.getRainForm() == 'X'}">
-                <img th:if="${mountainWeather.getRainForm() == '비' or mountainWeather.getRainForm() == '소나기'}" class="circleImg" src="/images/weather/rain.png">
-                <img th:if="${mountainWeather.getRainForm() == '비/눈'}" class="circleImg" src="/images/weather/rainAndSnow.png">
-                <img th:if="${mountainWeather.getRainForm() == '눈'}" class="circleImg" src="/images/weather/snow.png">
+                <img th:if="${mountainWeather.getRainForm() == '비' or mountainWeather.getRainForm() == '소나기'}" class="circleImg" src="/images/weather/rain.gif">
+                <img th:if="${mountainWeather.getRainForm() == '비/눈'}" class="circleImg" src="/images/weather/SnowOrRain.gif">
+                <img th:if="${mountainWeather.getRainForm() == '눈'}" class="circleImg" src="/images/weather/snow.gif">
                 <h3 class="percentText" th:text="${mountainWeather.getRainPercentage()}+'%'"></h3>
                 <div class="chart">
                     <div class="chart-bar" th:style="'background: conic-gradient(#3874ff ' + ${mountainWeather.getRainPercentage()} + '%, lightgray 0%);'" data-deg="50"></div>
@@ -114,7 +114,7 @@
             </div>
 
             <div th:if="${mountainWeather.getRainForm() == 'X'}">
-                <img class="notRainAndSnowImg" src="/images/weather/notRainAndSnow.png">
+                <img class="notRainAndSnowImg" src="/images/weather/clear.gif">
                 <h4 class="rainAndSnowPercent">비/눈 예보가 없습니다</h4>
             </div>
         </div>
@@ -132,21 +132,21 @@
 
         <div class="wind-content">
             <h4 class="windAndDustTitleText">오늘의 바람은 ?</h4>
-            <img class="centerImg" src="/images/weather/wind.png">
+            <img class="centerImg" src="/images/weather/wind.gif">
             <h4 class="windAndDustStateText" th:text="${mountainWeather.getAverageWindSpeed()}"></h4>
         </div>
 
 
         <div class="microDust-content">
             <h4 class="windAndDustTitleText">오늘의 미세먼지 ?</h4>
-            <img class="DustImg" src="/images/weather/microDust.png">
+            <img class="DustImg" src="/images/weather/MicroDust.gif">
             <h4 class="windAndDustStateText" th:text="${mountainWeather.getDustInfo().getMicroDustState()}"></h4>
             <p class="dustConcentrationText" th:text="${'농도 ('+mountainWeather.getDustInfo().getMicroDustConcentration()+'㎍/㎥ )'}"></p>
         </div>
 
         <div class="ultrafDust-content">
             <h4 class="windAndDustTitleText">오늘의 초미세먼지 ?</h4>
-            <img class="DustImg" src="/images/weather/UltraMicroDust.png">
+            <img class="DustImg" src="/images/weather/UltraMicroDust.gif">
             <h4 class="windAndDustStateText" th:text="${mountainWeather.getDustInfo().getUltraMicroDustState()}"></h4>
             <p class="dustConcentrationText" th:text="${'농도 ('+mountainWeather.getDustInfo().getUltrafDustConcentration()+'㎍/㎥ )'}"></p>
         </div>
@@ -188,15 +188,19 @@
     <form id="reviewSave" th:action="@{/mountain/info/review}" method="POST">
         <div class="review-form" id="showReviewForm">
                 <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">제목</label>
-                    <input type="text" class="form-control" id="exampleFormControlInput1" name="reviewTitle" placeholder="후기 제목을 입력해주세요">
+                    <label for="exampleFormControlInput1" class="form-label">제목
+                        <a style="font-size: 12px; margin-left: 20px; font-weight: bolder;">(4글자 이상 12글자 이하로 입력해주세요 )</a>
+                    </label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1" name="reviewTitle" maxlength="12" placeholder="후기 제목을 입력해주세요">
                     <input type="hidden" name="reviewMountainName" th:value="${mountainInfoOne.getMountainName()}">
                     <input type="hidden" name="mountainUniqueNo" th:value="${mountainInfoOne.getMountainNo()}">
                     <input type="hidden" name="mountainIndex" id="mountainIndex" th:value="${mountainIndex}">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">내용</label>
-                    <textarea class="form-control reviewTextArea" id="exampleFormControlTextarea1" rows="3" name="reviewContent" placeholder="후기를 입력해주세요"></textarea>
+                    <label for="exampleFormControlTextarea1" class="form-label">내용
+                        <a style="font-size: 12px; margin-left: 20px; font-weight: bolder;">(15글자 이상 200글자 이하로 입력해주세요 )</a>
+                    </label>
+                    <textarea class="form-control reviewTextArea" id="exampleFormControlTextarea1" rows="3" name="reviewContent" maxlength="200" placeholder="후기를 입력해주세요"></textarea>
                 </div>
                 <button type="submit" class="btn btn-success" id="reviewAccessCheck">후기 등록하기</button>
             <button type="button" class="btn btn-secondary reviewCloseBtn" id="closeReviewFormBtn">닫기</button>
@@ -228,36 +232,36 @@
                         <div class="modal-header">
                             <h1 class="modal-title fs-5 reviewTitle" id="exampleModalLabel" th:text="${reviewInfo.getReviewTitle()}"><br></h1>
                             <div class="reviewContentWriter">
+                                <a style="margin-right: 22px" th:text="${reviewInfo.getReviewMountainName()}"></a>
                                 <a th:text="'작성자: '+${reviewInfo.getReviewWriter()}"></a>
                                 <a class="reviewContentCreateTime" th:text="'작성: '+${reviewInfo.getCreateTime()}"></a>
-                                <a class="checkReviewer">삭제</a>
                             </div>
+                            <a class="checkReviewer memberDeleteText">삭제</a>
                         </div>
                         <div class="modal-body">
                             <a class="reviewContent" th:text="${reviewInfo.getReviewContent()}"></a>
+                            <input type="hidden" id="reviewNumber" th:value="${reviewInfo.getReviewNumber()}">
                         </div>
-                        <div class="modal-footer reviewRateLayout">
-                            <a class="reviewRateTitle">후기가 도움이 되셨나요?</a>
+
+                        <div class="modal-footer">
+                            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                <button type="button" class="btn btn-primary rateGoodAccessCheck">추천!</button>
+                                <a class="btn btn-outline-primary" th:text="${reviewInfo.getReviewRatingGoodCount()}"></a>
+                            </div>
+
+                            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                <button type="button" class="btn btn-danger rateBadAccessCheck">비추천</button>
+                                <a class="btn btn-outline-danger" th:text="${reviewInfo.getReviewRatingBadCount()}"></a>
+                            </div>
 
                             <input type="hidden" class="OnlyjQueryReviewNumber" th:value="${reviewInfo.getReviewNumber()}">
                             <input type="hidden" class="OnlyjQueryReviewerId" th:value="${reviewInfo.getMemberId()}">
 
-                            <button type="button"  class="rateGoodAccessCheck rateBtnPointer">
-                                <img src="/images/reviewGood.png" class="rateGoodBtn">
-                            </button>
-                            <a class="reviewRateGoodCount" th:text="${reviewInfo.getReviewRatingGoodCount()}"></a>
-
-                            <button type="button"  class="rateBadAccessCheck rateBtnPointer">
-                                <img src="/images/reviewBad.png"  class="rateBadBtn">
-                            </button>
-                            <a class="reviewRateBadCount" th:text="${reviewInfo.getReviewRatingBadCount()}"></a>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                            <button type="button" class="btn btn-secondary reviewCloseBtn" data-bs-dismiss="modal">닫기</button>
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
          </tr>
         </tbody>
@@ -278,36 +282,33 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5 reviewTitle" th:text="${rankingTop7.getReviewTitle()}"><br></h1>
+                    <h1 class="modal-title fs-5 reviewTitle"  th:text="${rankingTop7.getReviewTitle()}"><br></h1>
                     <div class="reviewContentWriter">
+                        <a style="margin-right: 22px" th:text="${rankingTop7.getReviewMountainName()}"></a>
                         <a th:text="'작성자: '+${rankingTop7.getReviewWriter()}"></a>
                         <a class="reviewContentCreateTime" th:text="'작성: '+${rankingTop7.getCreateTime()}"></a>
-                        <a class="checkReviewer">삭제</a>
                     </div>
+                    <a class="checkReviewer memberDeleteText">삭제</a>
                 </div>
                 <div class="modal-body">
                     <a class="reviewContent" th:text="${rankingTop7.getReviewContent()}"></a>
-                </div>
+                </div>f
 
-                <div class="modal-footer reviewRateLayout">
-                    <a class="reviewRateTitle">후기가 도움이 되셨나요?</a>
+                <div class="modal-footer">
+                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                        <button type="button" class="btn btn-primary rateGoodAccessCheck">추천!</button>
+                        <a class="btn btn-outline-primary" th:text="${rankingTop7.getReviewRatingGoodCount()}"></a>
+                    </div>
+
+                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                        <button type="button" class="btn btn-danger rateBadAccessCheck">비추천</button>
+                        <a class="btn btn-outline-danger" th:text="${rankingTop7.getReviewRatingBadCount()}"></a>
+                    </div>
 
                     <input type="hidden" class="OnlyjQueryReviewNumber" th:value="${rankingTop7.getReviewNumber()}">
                     <input type="hidden" class="OnlyjQueryReviewerId" th:value="${rankingTop7.getMemberId()}">
 
-                    <button type="button" class="rateGoodAccessCheck rateBtnPointer">
-                        <img src="/images/reviewGood.png" class="rateBadBtn">
-                    </button>
-                    <a class="reviewRateGoodCount" th:text="${rankingTop7.getReviewRatingGoodCount()}"></a>
-
-                    <button type="button"  class="rateBadAccessCheck rateBtnPointer">
-                        <img src="/images/reviewBad.png"  class="rateBadBtn">
-                    </button>
-                    <a class="reviewRateBadCount" th:text="${rankingTop7.getReviewRatingBadCount()}"></a>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-secondary reviewCloseBtn" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>

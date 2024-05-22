@@ -44,8 +44,8 @@
 .mountain-content-imgInfo{
     position: absolute;
     color: black;
-    margin-left: 510px;
-    margin-top: 537px;
+    margin-left: 470px;
+    margin-top: 205px;
     font-size: 13px;
     color: gray;
 }
@@ -103,7 +103,7 @@
     width: 280px;
     margin-top: 25px;
     margin-left: 390px;
-    height: 300px;
+    height: 350px;
     background-color: white;
     border: solid 2px gainsboro;
     border-radius: 5%;
@@ -113,20 +113,20 @@
 .microDust-content {
     max-width: 350px;
     width: 280px;
-    margin-top: -300px;
+    margin-top: -350px;
     margin-left: 700px;
-    height: 300px;
+    height: 350px;
     background-color: white;
     border: solid 2px gainsboro;
     border-radius: 5%;
 }
-
+/*50차이*/
 .ultrafDust-content {
     max-width: 350px;
     width: 280px;
-    margin-top: -300px;
+    margin-top: -350px;
     margin-left: 1010px;
-    height: 300px;
+    height: 350px;
     background-color: white;
     border: solid 2px gainsboro;
     border-radius: 5%;
@@ -134,9 +134,9 @@
 
 .weatherRating{
     width: 590px;
-    height: 300px;
+    height: 350px;
     margin-left: 1310px;
-    margin-top: -300px;
+    margin-top: -350px;
     background-color: white;
     border: solid 2px gainsboro;
     border-radius: 5%;
@@ -407,6 +407,7 @@
 /*날씨 이미지 관련 CSS */
 .temperatureImg{
     position: absolute;
+    margin-left: 25px;
     width: 120px;
     height: 120px;
     margin-top: 80px;
@@ -505,6 +506,7 @@
 }
 
 .reviewContent{
+    float: left;
     color: black;
     font-size: 15px;
     font-weight: normal;

@@ -21,7 +21,6 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewNumber;
 
-
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     @Setter
@@ -50,7 +49,7 @@ public class Review {
     @Column(name = "REVIEW_BAD_COUNT")
     private int reviewBadCount;
 
-    @OneToMany(mappedBy = "reviewNumber")
+    @OneToMany(mappedBy = "ratingReviewInfo",cascade = CascadeType.REMOVE)
     private List<ReviewRatingHistory> reviewRatingHistory = new ArrayList<ReviewRatingHistory>();
 
     public Review createReviewInfo(Member member, String mountainName,String mountainUniqueNo, String reviewContent, String reviewTitle, LocalDateTime createTime) {

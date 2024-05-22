@@ -39,7 +39,7 @@ public class ReviewController {
 
     @PostMapping("/check/content")
     public ResponseEntity<String> reviewContentCheck(@RequestParam String reviewTitle,@RequestParam String reviewContent){
-        if((reviewTitle.length()<4 || reviewTitle.length()>12) || (reviewContent.length()<15 || reviewContent.length()>100)){
+        if((reviewTitle.length()<4 || reviewTitle.length()>12) || (reviewContent.length()<15 || reviewContent.length()>200)){
            throw new AjaxException("리뷰 작성 규칙 틀림");
         }
         return ResponseEntity.ok("ok");

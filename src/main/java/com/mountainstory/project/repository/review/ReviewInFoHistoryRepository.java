@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReviewInFoHistoryRepository extends JpaRepository<ReviewRatingHistory,Long>, FindReviewInFoRepo {
 
-    ReviewRatingHistory findByMemberIdAndReviewNumber(Member memberId, Review reviewNumber);
+    ReviewRatingHistory findByMemberIdAndRatingReviewInfo(Member memberId, Review reviewNumber);
 
 
 }
