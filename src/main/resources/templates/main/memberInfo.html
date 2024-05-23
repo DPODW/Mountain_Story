@@ -17,8 +17,8 @@
 <body class="is-preload">
 <div id="header">
 	<div class="headerMarginValue">
-		<img src="/images/MountainStoryImg.png" class="mountainStoryImg">
-		<p class="logoText">오늘의 산 !</p>
+		<a href="/home"><img src="/images/free-icon-mountain-8343682.png" class="mountainStoryImg"></a>
+		<a href="/home"><p class="logoText">산 스토리</p></a>
 
 		<div id="OAuthLogin" th:unless="${#authorization.expression('isAuthenticated()')}">
 			<a href="/oauth2/authorization/naver">
@@ -63,7 +63,9 @@
 	</nav>
 
 	<div class="bottom">
-
+		<ul class="icons">
+			<li><a href="https://github.com/DPODW/Mountain_Story"><img src="/images/free-icon-github-733609.png" class="gitHubSize"></a></li>
+		</ul>
 	</div>
 </div>
 

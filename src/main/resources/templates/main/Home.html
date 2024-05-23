@@ -9,7 +9,6 @@
 	<link rel="stylesheet" href="assets/css/mountain-info.css" />
 	<script src="assets/js/loadingFunction.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 	</style>
@@ -18,8 +17,8 @@
 <body class="is-preload">
 <div id="header">
 	<div class="headerMarginValue">
-		<img src="/images/MountainStoryImg.png" class="mountainStoryImg">
-		<p class="logoText">오늘의 산 !</p>
+		<a href="/home"><img src="/images/free-icon-mountain-8343682.png" class="mountainStoryImg"></a>
+		<a href="/home"><p class="logoText">산 스토리</p></a>
 
 		<div id="OAuthLogin" th:unless="${#authorization.expression('isAuthenticated()')}">
 			<a href="/oauth2/authorization/naver">
@@ -62,9 +61,10 @@
 			</ol>
 		</div>
 	</nav>
-
 	<div class="bottom">
-
+		<ul class="icons">
+			<li><a href="https://github.com/DPODW/Mountain_Story"><img src="/images/free-icon-github-733609.png" class="gitHubSize"></a></li>
+		</ul>
 	</div>
 </div>
 
@@ -89,31 +89,18 @@
 					</div>
 				</form>
 			</footer>
-
 		</div>
 	</section>
-
-	<!-- Portfolio -->
-	<section id="portfolio" class="two">
-
-	</section>
-
-	<!-- About Me -->
-	<section id="about" class="three">
-
-	</section>
-
-	<!-- Contact -->
-	<section id="contact" class="four">
-
-	</section>
-
 </div>
 
 <!-- Footer -->
-<div id="footer">
+<div id="footer" class="footerHeight">
+	<button id="dataInfoText"
+			type="button" class="btn btn-outline-secondary" data-bs-toggle="popover" data-bs-title="공공 API" data-bs-content="― 대한민국 산 정보 데이터: 산림청 ― 지역별 날씨 정보 데이터: 기상청 ― 지역별 미세먼지 정보 데이터: 한국환경공단">
+			산 스토리 데이터 출처
+	</button>
 	<ul class="copyright">
-		<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+		<li>&copy; 산스토리. All rights reserved.</li>
 	</ul>
 </div>
 
@@ -156,6 +143,7 @@
 	</div>
 </div>
 <!-- Scripts -->
+<script src="/assets/ajax/browserClose.js"></script>
 <script src="/assets/js/loadingFunction.js"></script>
 <script src="/assets/ajax/reviewDeleteWarn.js"></script>
 <script src="/assets/ajax/reviewStatFunction.js"></script>
@@ -172,5 +160,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script>
+	const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+	const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+</script>
 </body>
 </html>
