@@ -13,7 +13,7 @@
 <body class="is-preload">
 <div id="header">
 	<div class="headerMarginValue">
-		<a href="/home"><img src="/images/free-icon-mountain-8343682.png" class="mountainStoryImg"></a>
+		<a href="/home"><img src="/images/mountainStory.png" class="mountainStoryImg"></a>
 		<a href="/home"><p class="logoText">산 스토리</p></a>
 
 		<div id="OAuthLogin" th:unless="${#authorization.expression('isAuthenticated()')}">
@@ -50,8 +50,7 @@
 
 				<li data-bs-toggle="modal" th:each="rankingTop7,rankingTop7ElementIndex : ${top7GoodReviewList}" th:attr="data-bs-target='#'+${rankingTop7ElementIndex.count}" class="rankingElement">
 					<a class="rankingListTitle" th:text="${rankingTop7.getReviewTitle()}" ></a>
-					<img class="rankingGoodCountImg" src="/images/rankingGoodCount.png">
-					<span class="rankingGoodCount" th:text="${rankingTop7.getReviewRatingGoodCount()}"><img class="rankingGoodCountImg" src="/images/rankingGoodCount.png"></span>
+					<span class="rankingGoodCount" th:text="'추천 + '+${rankingTop7.getReviewRatingGoodCount()}"></span>
 				</li>
 
 			</ol>
@@ -60,7 +59,7 @@
 
 	<div class="bottom">
 		<ul class="icons">
-			<li><a href="https://github.com/DPODW/Mountain_Story"><img src="/images/free-icon-github-733609.png" class="gitHubSize"></a></li>
+			<li><a href="https://github.com/DPODW/Mountain_Story" target='_blank'><img src="/images/free-icon-github-733609.png" class="gitHubSize"></a></li>
 		</ul>
 	</div>
 </div>
@@ -119,12 +118,12 @@
 				<div class="modal-footer">
 					<div class="btn-group" role="group" aria-label="Basic outlined example">
 						<button type="button" class="btn btn-primary rateGoodAccessCheck">추천!</button>
-						<a class="btn btn-outline-primary" th:text="${rankingTop7.getReviewRatingGoodCount()}"></a>
+						<a class="btn btn-outline-primary" th:text="'+ '+${rankingTop7.getReviewRatingGoodCount()}"></a>
 					</div>
 
-					<div class="btn-group" role="group" aria-label="Basic outlined example">
+					<div class="btn-group reviewRateBtnPos" role="group" aria-label="Basic outlined example">
 						<button type="button" class="btn btn-danger rateBadAccessCheck">비추천</button>
-						<a class="btn btn-outline-danger" th:text="${rankingTop7.getReviewRatingBadCount()}"></a>
+						<a class="btn btn-outline-danger" th:text="'+ '+${rankingTop7.getReviewRatingBadCount()}"></a>
 					</div>
 
 					<input type="hidden" class="OnlyjQueryReviewNumber" th:value="${rankingTop7.getReviewNumber()}">

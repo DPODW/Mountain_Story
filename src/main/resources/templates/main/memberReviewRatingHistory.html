@@ -8,14 +8,13 @@
 	<link rel="stylesheet" href="/assets/css/main.css" />
 	<link rel="stylesheet" href="/assets/css/mountain-info.css" />
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 </head>
 
 <body class="is-preload">
 
 <div id="header">
 	<div class="headerMarginValue">
-		<a href="/home"><img src="/images/free-icon-mountain-8343682.png" class="mountainStoryImg"></a>
+		<a href="/home"><img src="/images/mountainStory.png" class="mountainStoryImg"></a>
 		<a href="/home"><p class="logoText">산 스토리</p></a>
 
 		<div id="OAuthLogin" th:unless="${#authorization.expression('isAuthenticated()')}">
@@ -52,8 +51,7 @@
 
 				<li data-bs-toggle="modal" th:each="rankingTop7,rankingTop7ElementIndex : ${top7GoodReviewList}" th:attr="data-bs-target='#A'+${rankingTop7ElementIndex.count}" class="rankingElement">
 					<a class="rankingListTitle" th:text="${rankingTop7.getReviewTitle()}" ></a>
-					<img class="rankingGoodCountImg" src="/images/rankingGoodCount.png">
-					<span class="rankingGoodCount" th:text="${rankingTop7.getReviewRatingGoodCount()}"><img class="rankingGoodCountImg" src="/images/rankingGoodCount.png"></span>
+					<span class="rankingGoodCount" th:text="'추천 + '+${rankingTop7.getReviewRatingGoodCount()}"></span>
 				</li>
 
 			</ol>
@@ -62,7 +60,7 @@
 
 	<div class="bottom">
 		<ul class="icons">
-			<li><a href="https://github.com/DPODW/Mountain_Story"><img src="/images/free-icon-github-733609.png" class="gitHubSize"></a></li>
+			<li><a href="https://github.com/DPODW/Mountain_Story" target='_blank'><img src="/images/free-icon-github-733609.png" class="gitHubSize"></a></li>
 		</ul>
 	</div>
 </div>
@@ -117,12 +115,12 @@
 					<div class="modal-footer">
 						<div class="btn-group" role="group" aria-label="Basic outlined example">
 							<button type="button" class="btn btn-primary rateGoodAccessCheck">추천!</button>
-							<a class="btn btn-outline-primary" th:text="${reviewInfo.getReviewRatingGoodCount()}"></a>
+							<a class="btn btn-outline-primary" th:text="'+ '+${reviewInfo.getReviewRatingGoodCount()}"></a>
 						</div>
 
-						<div class="btn-group" role="group" aria-label="Basic outlined example">
+						<div class="btn-group reviewRateBtnPos" role="group" aria-label="Basic outlined example">
 							<button type="button" class="btn btn-danger rateBadAccessCheck">비추천</button>
-							<a class="btn btn-outline-danger" th:text="${reviewInfo.getReviewRatingBadCount()}"></a>
+							<a class="btn btn-outline-danger" th:text="'+ '+${reviewInfo.getReviewRatingBadCount()}"></a>
 						</div>
 
 						<input type="hidden" class="OnlyjQueryReviewNumber" th:value="${reviewInfo.getReviewNumber()}">
@@ -148,7 +146,7 @@
         </span>
 </div>
 <div th:each="rankingTop7,rankingTop7ElementIndex : ${top7GoodReviewList}">
-	<div class="modal fade" th:id="'A'+${rankingTop7ElementIndex.count}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" th:id="'A'+${rankingTop7ElementIndex.count}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -157,38 +155,33 @@
 						<a style="margin-right: 22px" th:text="${rankingTop7.getReviewMountainName()}"></a>
 						<a th:text="'작성자: '+${rankingTop7.getReviewWriter()}"></a>
 						<a class="reviewContentCreateTime" th:text="'작성: '+${rankingTop7.getCreateTime()}"></a>
-						<a class="checkReviewer">삭제</a>
 					</div>
+					<a class="checkReviewer memberDeleteText">삭제</a>
 				</div>
 				<div class="modal-body">
 					<a class="reviewContent" th:text="${rankingTop7.getReviewContent()}"></a>
 				</div>
 
-				<div class="modal-footer reviewRateLayout">
-					<a class="reviewRateTitle">후기가 도움이 되셨나요?</a>
+				<div class="modal-footer">
+					<div class="btn-group" role="group" aria-label="Basic outlined example">
+						<button type="button" class="btn btn-primary rateGoodAccessCheck">추천!</button>
+						<a class="btn btn-outline-primary" th:text="'+ '+${rankingTop7.getReviewRatingGoodCount()}"></a>
+					</div>
+
+					<div class="btn-group reviewRateBtnPos" role="group" aria-label="Basic outlined example">
+						<button type="button" class="btn btn-danger rateBadAccessCheck">비추천</button>
+						<a class="btn btn-outline-danger" th:text="'+ '+${rankingTop7.getReviewRatingBadCount()}"></a>
+					</div>
 
 					<input type="hidden" class="OnlyjQueryReviewNumber" th:value="${rankingTop7.getReviewNumber()}">
 					<input type="hidden" class="OnlyjQueryReviewerId" th:value="${rankingTop7.getMemberId()}">
 
-					<button type="button" class="rateGoodAccessCheck rateBtnPointer">
-						<img src="/images/reviewGood.png" class="rateGoodBtn">
-					</button>
-					<a class="reviewRateGoodCount" th:text="${rankingTop7.getReviewRatingGoodCount()}"></a>
-
-					<button type="button"  class="rateGoodAccessCheck rateBtnPointer">
-						<img src="/images/reviewBad.png"  class="rateBadBtn">
-					</button>
-					<a class="reviewRateBadCount" th:text="${rankingTop7.getReviewRatingBadCount()}"></a>
-				</div>
-
-				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary reviewCloseBtn" data-bs-dismiss="modal">닫기</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
 <script src="/assets/ajax/reviewDeleteWarn.js"></script>
 <script src="/assets/ajax/reviewStatFunction.js"></script>
 <script src="/assets/ajax/checkAccessMember.js"></script>

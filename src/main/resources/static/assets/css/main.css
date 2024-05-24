@@ -2697,8 +2697,9 @@ button:active,
 
 .rankingGoodCount{
 	position: absolute;
+	color: #007bff;
 	margin-top: -17px;
-	margin-left: -60px;
+	margin-left: -100px;
 }
 
 .rankingGoodCountImg{
@@ -2746,6 +2747,7 @@ button:active,
 
 .reviewCloseBtn{
 	float: right;
+	position: absolute
 }
 /*member*/
 #memberInfoLayout{
@@ -2824,3 +2826,9 @@ button:active,
 	margin-left: 850px;
 	margin-top: 10px;
 }
+
+.reviewRateBtnPos{
+	margin-right: 200px
+}
+
+.reviewClos

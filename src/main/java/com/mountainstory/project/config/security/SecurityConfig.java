@@ -72,10 +72,6 @@ public class SecurityConfig {
         response.sendRedirect("/home");
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        //TODO:시큐리티 비밀번호 자동 설정을 방지하기 위한 UserDetail 생성 (추후 제거할것)
-        return new InMemoryUserDetailsManager();
-    }
+
 
 }
