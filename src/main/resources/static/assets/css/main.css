@@ -2831,4 +2831,24 @@ button:active,
 	margin-right: 200px
 }
 
-.reviewClos
+.errorPage{
+	height: 850px;
+}
+
+.errorImg{
+	position: absolute;
+	margin-left: 580px;
+}
+
+.errorText{
+	width: 500px;
+	font-size: 16px;
+	margin-left: 530px;
+	margin-top: 400px;
+}
+
+.errorHomeBtn{
+	position: absolute;
+	margin-left: 720px;
+	margin-top: 40px;
+}

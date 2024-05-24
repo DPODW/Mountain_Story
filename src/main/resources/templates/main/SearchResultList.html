@@ -47,12 +47,10 @@
 		<div class="rankingBorder">
 			<h1 class="rankingTitle">추천 많이 받은 리뷰 TOP7</h1>
 			<ol class="rankingList">
-
 				<li data-bs-toggle="modal" th:each="rankingTop7,rankingTop7ElementIndex : ${top7GoodReviewList}" th:attr="data-bs-target='#'+${rankingTop7ElementIndex.count}" class="rankingElement">
 					<a class="rankingListTitle" th:text="${rankingTop7.getReviewTitle()}" ></a>
 					<span class="rankingGoodCount" th:text="'추천 + '+${rankingTop7.getReviewRatingGoodCount()}"></span>
 				</li>
-
 			</ol>
 		</div>
 	</nav>
@@ -73,26 +71,31 @@
 	</div>
 </form>
 
+<div class="mountainListEmptyDesign" th:if="${mountainInfoList.isEmpty()}">
+	<img src="/images/mountainListEmpty.gif" class="mountainListEmptyImg">
+	<p class="mountainListEmptyWarn"><span class="mountainListEmptyWarnDetail">검색 결과가 없습니다.</span> 입력하신 산 이름을 다시 한번 확인해주세요!</p>
+</div>
 
-<h3 class="listResultText">검색 결과 입니다</h3>
+<div th:if="${!mountainInfoList.isEmpty()}">
+	<h3 class="listResultText">검색 결과 입니다</h3>
+	<div class="card mb-3 listResultCard" th:each="mountainInfo,mountainInfoStat: ${mountainInfoList}">
+		<div class="row g-0">
 
-<div class="card mb-3 listResultCard" th:each="mountainInfo,mountainInfoStat: ${mountainInfoList}">
-	<div class="row g-0">
-
-		<div class="col-md-8">
-			<div class="card-body" >
-				<p class="card-text" th:text="'산 이름: '+${mountainInfo.getMountainName()}"></p>
-				<p class="card-text listMountainHigh" th:text="'산 높이: '+${mountainInfo.getMountainHigh()}+'m'"></p>
-				<a class="btn btn-outline-success searchMountainWeather" th:href="@{/mountain/info/search/one/{mountainIndex}(mountainIndex=${mountainInfoStat.index})}">날씨 확인하기</a>
-				<p class="card-text" th:text="'산 위치: '+${mountainInfo.getMountainLocation()}"></p>
+			<div class="col-md-8">
+				<div class="card-body" >
+					<p class="card-text" th:text="'산 이름: '+${mountainInfo.getMountainName()}"></p>
+					<p class="card-text listMountainHigh" th:text="'산 높이: '+${mountainInfo.getMountainHigh()}+'m'"></p>
+					<a class="btn btn-outline-success searchMountainWeather" th:href="@{/mountain/info/search/one/{mountainIndex}(mountainIndex=${mountainInfoStat.index})}">날씨 확인하기</a>
+					<p class="card-text" th:text="'산 위치: '+${mountainInfo.getMountainLocation()}"></p>
+				</div>
 			</div>
-		</div>
 
-		<div class="col-md-4" th:if="${mountainInfo.getMountainImgUrl() != null}">
-			<img class="listMountainImg"  th:src="'http://www.forest.go.kr/images/data/down/mountain/' + ${mountainInfo.getMountainImgUrl()}">
-		</div>
-		<div class="col-md-4" th:unless="${mountainInfo.getMountainImgUrl()}">
-			<img class="listMountainImg"  src="/images/noImg.png">
+			<div class="col-md-4" th:if="${mountainInfo.getMountainImgUrl() != null}">
+				<img class="listMountainImg"  th:src="'http://www.forest.go.kr/images/data/down/mountain/' + ${mountainInfo.getMountainImgUrl()}">
+			</div>
+			<div class="col-md-4" th:unless="${mountainInfo.getMountainImgUrl()}">
+				<img class="listMountainImg"  src="/images/noImg.png">
+			</div>
 		</div>
 	</div>
 </div>

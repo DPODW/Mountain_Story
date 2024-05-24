@@ -550,3 +550,21 @@
     font-weight: normal;
     color: black;
 }
+
+.mountainListEmptyDesign{
+    margin-left: 550px;
+}
+
+.mountainListEmptyImg{
+    width: 300px;
+    margin-left: 350px;
+    margin-top: 200px;
+}
+
+.mountainListEmptyWarn{
+    margin-left: 160px;
+}
+
+.mountainListEmptyWarnDetail{
+    font-weight: bolder; color: black; text-decoration: underline;
+}
