@@ -108,13 +108,14 @@ public class MountainWeatherImpl implements MountainWeatherService {
             hikingAdvice.setTodayCloths("summerClothes");
         }
 
-
+        log.info("현재 비 폼 >>{}",mountainWeather.getRainForm());
         switch (mountainWeather.getRainForm()){
+
             case "X":
                 hikingAdvice.setTodayRainOrSnow("X");
                 break;
 
-            case "비":
+            case "비", "소나기":
                 hikingAdvice.setTodayRainOrSnow("rainDay");
                 break;
 
@@ -147,8 +148,7 @@ public class MountainWeatherImpl implements MountainWeatherService {
                 break;
         }
 
-
-        if (mountainWeather.getDustInfo().getMicroDustConcentration()>=81 && mountainWeather.getDustInfo().getUltrafDustConcentration()>=36){
+        if (mountainWeather.getDustInfo().getMicroDustConcentration()>=81 || mountainWeather.getDustInfo().getUltrafDustConcentration()>=36){
             hikingAdvice.setTodayDustInfo("DustHigh");
         }
         return hikingAdvice;
