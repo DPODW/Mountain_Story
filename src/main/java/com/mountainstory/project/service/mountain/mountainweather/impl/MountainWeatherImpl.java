@@ -16,10 +16,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.util.List;
 
 @Slf4j
 @Service
 public class MountainWeatherImpl implements MountainWeatherService {
+
+    private static final int PARENT_LOCATION_LIST_INDEX = 1;
+
+    private static final int CHILD_LOCATION_LIST_INDEX = 0;
 
     private final ConvertWeatherLocation convertWeatherLocation;
 
@@ -65,20 +70,20 @@ public class MountainWeatherImpl implements MountainWeatherService {
 
     @Override
     public DustInfo searchMicroDust(String mountainLocation) throws UnsupportedEncodingException, ParseException {
-        String encodeMountainLocation = URLEncoder.encode(convertWeatherLocation.convertedShortLocation(mountainLocation), "UTF-8");
+        List<String> mountainLocationList = convertWeatherLocation.convertedShortLocation(mountainLocation);
         URI uri = UriComponentsBuilder
                 .fromUriString("http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureSidoLIst")
                 .queryParam("serviceKey",openApiServiceKey)
                 .queryParam("returnType","JSON")
-                .queryParam("numOfRows","1")
+                .queryParam("numOfRows","50")
                 .queryParam("pageNo","1")
-                .queryParam("sidoName",encodeMountainLocation)
+                .queryParam("sidoName",mountainLocationList.get(PARENT_LOCATION_LIST_INDEX))
                 .queryParam("searchCondition","HOUR")
                 .build(true)
                 .toUri();
         RestTemplate restTemplate = new RestTemplate();
         String jsonWeatherPollutionInfo = restTemplate.getForObject(uri, String.class);
-        return weatherJsonToDto.getDustInfo(jsonWeatherPollutionInfo);
+        return weatherJsonToDto.getDustInfo(jsonWeatherPollutionInfo,mountainLocationList.get(CHILD_LOCATION_LIST_INDEX));
     }
 
     @Override

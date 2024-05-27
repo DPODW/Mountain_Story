@@ -96,28 +96,47 @@ public class WeatherJsonToDto {
         return mountainWeather;
     }
 
-    protected DustInfo getDustInfo(String jsonWeatherPollutionInfo) throws ParseException {
+    protected DustInfo getDustInfo(String jsonWeatherPollutionInfo,String mountainChildLocation) throws ParseException {
         DustInfo dustInfo = new DustInfo();
         JSONParser jsonParser = new JSONParser();
+
+
         JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonWeatherPollutionInfo);
         JSONObject jsonResponse = (JSONObject) jsonObject.get("response");
         JSONObject jsonBody = (JSONObject) jsonResponse.get("body");
         JSONArray jsonItems = (JSONArray) jsonBody.get("items");
 
-        jsonItems.forEach(items -> {
-            JSONObject pollutionInfo = (JSONObject) items;
-            int microDustConcentration = Integer.parseInt(pollutionInfo.get("pm10Value").toString());
-            int ultraDustConcentration = Integer.parseInt(pollutionInfo.get("pm25Value").toString());
+        if(!jsonItems.isEmpty()){
+            JSONObject firstElement = (JSONObject) jsonItems.get(0);
 
-            dustInfo.setMicroDustConcentration(microDustConcentration);
-            dustInfo.setUltrafDustConcentration(ultraDustConcentration);
+            jsonItems.forEach(items -> {
+                JSONObject pollutionInfo = (JSONObject) items;
 
-            String microDust = translateWeatherCode.convertMicroDust(microDustConcentration);
-            String ultraMicroDust = translateWeatherCode.convertUltraMicroDust(ultraDustConcentration);
+                if(pollutionInfo.get("cityName").equals(mountainChildLocation)){
+                    createDustInfo(dustInfo, pollutionInfo);
+                }else{
+                    createDustInfo(dustInfo,firstElement);
+                    //만약 일치하는 하위 지역 이름이 없을시, 첫번째 요소로 dustInfo 생성
+                }
+            });
+        }
 
-            dustInfo.setMicroDustState(microDust);
-            dustInfo.setUltraMicroDustState(ultraMicroDust);
-        });
         return dustInfo;
+    }
+
+
+
+    private void createDustInfo(DustInfo dustInfo, JSONObject pollutionInfo) {
+        int microDustConcentration = Integer.parseInt(pollutionInfo.get("pm10Value").toString());
+        int ultraDustConcentration = Integer.parseInt(pollutionInfo.get("pm25Value").toString());
+
+        dustInfo.setMicroDustConcentration(microDustConcentration);
+        dustInfo.setUltrafDustConcentration(ultraDustConcentration);
+
+        String microDust = translateWeatherCode.convertMicroDust(microDustConcentration);
+        String ultraMicroDust = translateWeatherCode.convertUltraMicroDust(ultraDustConcentration);
+
+        dustInfo.setMicroDustState(microDust);
+        dustInfo.setUltraMicroDustState(ultraMicroDust);
     }
 }
