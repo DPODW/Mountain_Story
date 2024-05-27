@@ -1,0 +1,56 @@
+[33m8ac24da[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{0}: commit: feat:미세먼지 '시 군 구' 별로 자세히 조회할수 있도록 변경
+[33m868aa99[m HEAD@{1}: pull origin master: Fast-forward
+[33m1543b37[m HEAD@{2}: reset: moving to HEAD
+[33m1543b37[m HEAD@{3}: reset: moving to HEAD
+[33m1543b37[m HEAD@{4}: reset: moving to HEAD~
+[33m9cf2614[m HEAD@{5}: reset: moving to HEAD@{16}
+[33m1543b37[m HEAD@{6}: reset: moving to HEAD
+[33m1543b37[m HEAD@{7}: reset: moving to HEAD~
+[33m9cf2614[m HEAD@{8}: reset: moving to HEAD@{13}
+[33m868aa99[m HEAD@{9}: pull origin master: Fast-forward
+[33m1543b37[m HEAD@{10}: reset: moving to HEAD
+[33m1543b37[m HEAD@{11}: reset: moving to HEAD~
+[33m9cf2614[m HEAD@{12}: reset: moving to HEAD@{9}
+[33m868aa99[m HEAD@{13}: pull origin master: Fast-forward
+[33me800240[m HEAD@{14}: reset: moving to HEAD
+[33me800240[m HEAD@{15}: reset: moving to HEAD~
+[33m1543b37[m HEAD@{16}: reset: moving to HEAD~
+[33m9cf2614[m HEAD@{17}: reset: moving to HEAD@{4}
+[33m1543b37[m HEAD@{18}: reset: moving to HEAD
+[33m1543b37[m HEAD@{19}: reset: moving to HEAD^
+[33m9cf2614[m HEAD@{20}: reset: moving to HEAD^
+[33m4731a27[m HEAD@{21}: pull origin master: Merge made by the 'ort' strategy.
+[33m9cf2614[m HEAD@{22}: commit: feat: 미세먼지 '시,구,군' 기준으로 자세히 검색할수있도록 기능 개선
+[33m1543b37[m HEAD@{23}: commit: feat: 에러 페이지 및 산 검색 결과 없을때만 생성되는 경고문 디자인 구현 완료
+[33me800240[m HEAD@{24}: pull origin master: Fast-forward
+[33m0c7b4b2[m HEAD@{25}: commit: feat: 회원 세션 만료시간 설정, 메인 화면 디자인 개선
+[33m4ed8399[m HEAD@{26}: pull origin master: Fast-forward
+[33m625f288[m HEAD@{27}: commit: feat:산 날씨 결과 이미지 변경 및 레이아웃 일부 수정
+[33mb70853e[m HEAD@{28}: pull origin master: Fast-forward
+[33mb1addfa[m HEAD@{29}: commit: feat: 리뷰 개별 삭제 기능 구현 및 작성자 검증 기능 구현
+[33m3d24a06[m HEAD@{30}: pull origin master: Fast-forward
+[33m36e8df5[m HEAD@{31}: commit: feat:회원정보 조회 디자인 구현
+[33mef672f3[m HEAD@{32}: pull origin master: Fast-forward
+[33m22a03b7[m HEAD@{33}: commit: feat:추천 및 비추천시 중복 요청이 발생하는 버그 해결
+[33m3b108dc[m HEAD@{34}: pull origin master: Fast-forward
+[33mff7cad3[m HEAD@{35}: commit: feat:회원별 작성 게시글 확인 화면 디자인 개선
+[33m3cfb070[m HEAD@{36}: commit: feat:리뷰 작성시 입력값 검증 기능 구현
+[33mc585e3b[m HEAD@{37}: pull origin master: Fast-forward
+[33m7b582ed[m HEAD@{38}: commit: feat: 좋아요 싫어요 기능 페이징 적용 완료
+[33m27fcca0[m HEAD@{39}: pull origin master: Fast-forward
+[33m19f3202[m HEAD@{40}: commit: feat: 후기 내용 접근시 다른 후기 내용이 보여지는 버그 수정
+[33m09068c0[m HEAD@{41}: pull origin master: Fast-forward
+[33m6c65db3[m HEAD@{42}: commit: feat: 후기 기능 구현. 댓글 기능은 추천 기능으로 변경(추천 기능 구현 필요)
+[33m4a82c92[m HEAD@{43}: commit: feat: 디자인 개선 및 로딩 기능 구현
+[33md493e18[m HEAD@{44}: commit: feat: 날씨 정보 화면 출력 일부 구현 , 미세먼지 API 구현
+[33m39d4475[m HEAD@{45}: commit: feat:날씨 API 현재 날짜 및 데이터 제공 시간 가져오는 기능 구현
+[33mbc4ef39[m HEAD@{46}: commit: feat: 지역 정보로 날씨 정보 가져오는 기능 구현
+[33m671381b[m HEAD@{47}: pull origin master: Fast-forward
+[33ma2d3a71[m HEAD@{48}: commit: feat:산 지역명으로 좌표값 검색 기능 구현
+[33m2160b73[m HEAD@{49}: commit: feat: 산 이미지 호출 API 코드 개선(복잡한 로직 메소드로 추출)
+[33m4a2e4db[m HEAD@{50}: commit: feat: 산 번호로 이미지 호출 API 구현 완료.
+[33m54865cd[m HEAD@{51}: commit: feat: 산 정보 조회 API 구현 및 XML -> DTO 파싱 완료
+[33mcce4e9f[m HEAD@{52}: commit: feat: 네이버 로그아웃 구현
+[33m0fdfcd1[m HEAD@{53}: commit: feat: 카카오 로그아웃 구현
+[33m2937ad8[m HEAD@{54}: commit: feat: OAuth2 네이버 , 카카오 로그인 구현
+[33m9dee891[m HEAD@{55}: commit (initial): feat:기본 설정 및 기본 화면 개발

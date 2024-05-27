@@ -113,7 +113,10 @@ public class MountainWeatherImpl implements MountainWeatherService {
             hikingAdvice.setTodayCloths("summerClothes");
         }
 
+<<<<<<< Updated upstream
         log.info("현재 비 폼 >>{}",mountainWeather.getRainForm());
+=======
+>>>>>>> Stashed changes
         switch (mountainWeather.getRainForm()){
 
             case "X":
