@@ -6,9 +6,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class TranslateWeatherCode {
-
-    //TODO: 추후 커스텀 예외를 구현해서 -> return null 을 예외로 변경
-    //5xx 통합 예외로 걍 처리
     protected String skyCode(String skyState){
         switch (skyState){
             case "1":

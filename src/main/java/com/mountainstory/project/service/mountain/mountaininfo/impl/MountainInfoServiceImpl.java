@@ -64,6 +64,8 @@ public class MountainInfoServiceImpl implements MountainInfoService {
         RestTemplate restTemplate = new RestTemplate();
         MountainInfoXml mountainInfoXml = restTemplate.getForObject(uri, MountainInfoXml.class);
         List<MountainInfoDto> mountainInfoDtoList = mountainInfoXml.getBody().getMountainInfoDto();
+
+        log.info("{}",mountainInfoDtoList);
         return mountainInfoDtoList;
     }
 

@@ -63,8 +63,8 @@ public class MountainInfoController {
 
         List<MountainInfoDto> allMountainInfoList = (List<MountainInfoDto>) session.getAttribute("allMountainInfoList");
 
-
         MountainInfoDto mountainInfoOne = mountainInfoService.setCoordinateInfo(allMountainInfoList.get(mountainIndex));
+
         MountainWeather mountainWeather = mountainWeatherService.getMountainWeather(mountainInfoOne.getMountainCoordinate(), mountainInfoOne.getMountainLocation());
 
         Page<ReviewInfo> reviewList = reviewService.findReviewList(mountainInfoOne.getMountainNo(),pageable);
