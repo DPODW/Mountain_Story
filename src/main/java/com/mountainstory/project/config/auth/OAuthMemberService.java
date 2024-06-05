@@ -116,7 +116,7 @@ public class OAuthMemberService implements OAuth2UserService<OAuth2UserRequest, 
                 .fromUriString("https://nid.naver.com/oauth2.0/authorize")
                 .queryParam("response_type","code")
                 .queryParam("client_id",naverClientId)
-                .queryParam("redirect_uri","http://localhost:8080/login/oauth2/code/naver")
+                .queryParam("redirect_uri","http://52.79.115.206:8080/login/oauth2/code/naver")
                 .queryParam("state","test")
                 .queryParam("auth_type","reauthenticate")
                 .build()
