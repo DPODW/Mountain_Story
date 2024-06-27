@@ -42,7 +42,8 @@
 * Docker 로 Container 를 생성하여 배포합니다.
 * 아래 사진은 일련의 배포 과정을 도식화한 것 입니다.
   <br>
-![배포 과정](https://github.com/DPODW/redmeTest/assets/110981825/ba569de6-af98-4eef-88ad-8915135a7070)
+![산스토리 배포과정](https://github.com/DPODW/Mountain_Story/assets/110981825/d6d5437b-8505-4c45-b155-005b63da65d8)
+
 
 <br>
 
