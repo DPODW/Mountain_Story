@@ -8,6 +8,7 @@ import com.mountainstory.project.service.mountain.mountaininfo.MountainInfoServi
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.io.UnsupportedEncodingException;
@@ -36,9 +37,15 @@ public class MountainInfoServiceImpl implements MountainInfoService {
 
     @Override
     public List<MountainInfoDto> getAllMountainInfoList(String mountainName) throws UnsupportedEncodingException {
+        StopWatch stopWatch = new StopWatch();
+
         List<MountainInfoDto> mountainInfoDtoList = searchMountainInfo(mountainName,LIST_DEFAULT_PAGE_NUMBER,LIST_DEFAULT_RESULT_COUNT);
         convertMountainName.removePartSameMountain(mountainName,mountainInfoDtoList);
+
+        stopWatch.start();
         setImgToDtoList(mountainInfoDtoList);
+        stopWatch.stop();
+        log.info("{}",stopWatch.prettyPrint());
         return mountainInfoDtoList;
     }
 
@@ -64,15 +71,12 @@ public class MountainInfoServiceImpl implements MountainInfoService {
         RestTemplate restTemplate = new RestTemplate();
         MountainInfoXml mountainInfoXml = restTemplate.getForObject(uri, MountainInfoXml.class);
         List<MountainInfoDto> mountainInfoDtoList = mountainInfoXml.getBody().getMountainInfoDto();
-
-        log.info("{}",mountainInfoDtoList);
         return mountainInfoDtoList;
     }
 
 
     @Override
     public List<MountainImgDto> searchMountainImg(String mountainNumber) {
-        //이미지 반복 요청이 리스트 호출 시간 지연의 주범임. . .
         URI uri = UriComponentsBuilder
                 .fromUriString("http://apis.data.go.kr/1400000/service/cultureInfoService2/mntInfoImgOpenAPI2")
                 .queryParam("mntiListNo",mountainNumber)
@@ -99,5 +103,7 @@ public class MountainInfoServiceImpl implements MountainInfoService {
             }
         });
     }
+
+
 
 }

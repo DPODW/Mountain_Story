@@ -51,8 +51,6 @@ public class MountainInfoController {
         this.reviewRankingHelper = reviewRankingHelper;
     }
 
-    //TODO:get~ 메소드가 존재하니까 api 들은 범위를 제한해도될듯
-
 
     @GetMapping("/one/{mountainIndex}")
     public String mountainInfoOne(@PageableDefault(page=0, size=10, sort="reviewNumber", direction=Sort.Direction.DESC) Pageable pageable, @LoginMember OAuthMemberSession oAuthMemberSession, @PathVariable(name = "mountainIndex") Integer mountainIndex,
@@ -94,7 +92,6 @@ public class MountainInfoController {
             HttpSession session = request.getSession(false);
             session.setAttribute("allMountainInfoList",allMountainInfoList);
             session.setMaxInactiveInterval(1800);
-            //세션 최대시간 설정으로 세션 관리
         }
 
         model.addAttribute("loginMember",oAuthMemberSession);

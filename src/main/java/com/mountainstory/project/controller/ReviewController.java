@@ -49,7 +49,7 @@ public class ReviewController {
     public ResponseEntity<String> reviewDelete(@PathVariable Long reviewNumber){
         reviewService.deleteReviewById(reviewNumber);
         return ResponseEntity.ok("ok");
-        //리뷰가 삭제되면 리뷰 평가 기록도 전부 제거되어야 한다.
+        //리뷰 삭제시 -> JPA CASCADE 로 리뷰 추천 기록까지 함께 삭제
     }
 
 

@@ -104,6 +104,7 @@ public class WeatherJsonToDto {
         JSONObject jsonResponse = (JSONObject) jsonObject.get("response");
         JSONObject jsonBody = (JSONObject) jsonResponse.get("body");
         JSONArray jsonItems = (JSONArray) jsonBody.get("items");
+
         if(!jsonItems.isEmpty()){
             JSONObject firstElement = (JSONObject) jsonItems.get(0);
            try{

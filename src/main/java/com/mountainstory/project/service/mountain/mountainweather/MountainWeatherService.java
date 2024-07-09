@@ -20,3 +20,5 @@ public interface MountainWeatherService {
 
     HikingAdvice createHikingAdvice(MountainWeather mountainWeather);
 }
+
+

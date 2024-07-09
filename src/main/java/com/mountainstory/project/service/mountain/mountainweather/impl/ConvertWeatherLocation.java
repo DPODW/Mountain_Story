@@ -15,14 +15,18 @@ public class ConvertWeatherLocation {
     private static final int FOUR_WORDS_LOCATION = 4;
 
     protected List<String> convertedShortLocation(String mountainLocation) throws UnsupportedEncodingException {
+        log.info(">>{}",mountainLocation);
+
         String mountainLocationEmptyReplace = mountainLocation.replaceAll("\\s+"," ");
         //일관성을 위해 위치 값 (ex 서울특별시 중랑구 면목동) 사이의 공백을 하나로 통일함
 
         int parentLocationIndex = mountainLocationEmptyReplace.indexOf(' ');
         String parentLocation = mountainLocationEmptyReplace.substring(0, parentLocationIndex).trim();
+        log.info(">>>{}",parentLocation);
 
         int childLocationIndex = mountainLocationEmptyReplace.indexOf(' ',parentLocationIndex+1);
         String childLocation = mountainLocationEmptyReplace.substring(parentLocationIndex+1,childLocationIndex).trim();
+        log.info(">>>>{}",childLocation);
 
         List<String> convertLocation = new ArrayList<>();
         convertLocation.add(childLocation);
@@ -45,7 +49,6 @@ public class ConvertWeatherLocation {
 
             default:
                 convertLocation.add(URLEncoder.encode(parentLocation.substring(0,2), "UTF-8"));
-                log.info("{}",parentLocation.substring(0,2));
                 return convertLocation;
         }
 

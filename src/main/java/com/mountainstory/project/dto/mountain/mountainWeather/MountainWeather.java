@@ -11,6 +11,8 @@ import lombok.ToString;
 @Getter
 public class MountainWeather {
 
+    //아래 주석 영문 3글자는 기상청 API 가 제공하는 코드임. EX) TMP == 평균 온도를 의미
+
     //TMP (1시간 기온)
     private double currentTemperature;
 

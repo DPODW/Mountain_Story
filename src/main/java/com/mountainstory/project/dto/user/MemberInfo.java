@@ -19,7 +19,6 @@ public class MemberInfo {
 
     private String memberJoinDate;
 
-    //TODO: 여기서 엔티티의 reviewList 를 정의, 가져와서 사용 가능 (응용)
 
     public MemberInfo(String memberEmail, String memberType, String memberName, String memberJoinDate) {
         this.memberEmail = memberEmail;

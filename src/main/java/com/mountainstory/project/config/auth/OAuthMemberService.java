@@ -57,7 +57,6 @@ public class OAuthMemberService implements OAuth2UserService<OAuth2UserRequest, 
         String tokenValue = userRequest.getAccessToken().getTokenValue();
         httpSession.setAttribute("Member", new OAuthMemberSession(member,tokenValue));
         httpSession.setMaxInactiveInterval(1800);
-        //회원 세션 만료시간 (30분)
 
         return new DefaultOAuth2User(null,
                 attributes.getAttributes(),
