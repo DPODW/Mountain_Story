@@ -26,6 +26,7 @@ public class SmogInfoServiceImpl implements SmogInfoService {
     private String openApiServiceKey;
 
     private static final int EXIST_CHILD_DETAIL2 = 2;
+
     @Override
     public List<String> searchTMLocation(String mountainLocation) throws UnsupportedEncodingException, ParseException {
         String encodeMountainLocation = URLEncoder.encode(convertedApiLocation(mountainLocation), "UTF-8");
@@ -44,6 +45,7 @@ public class SmogInfoServiceImpl implements SmogInfoService {
     }
 
 
+    //미세먼지 농도를 관제센터 기준으로 찾는 API 또한 있다. 현재는 사용 x
     @Override
     public String searchMeasuringStation(String tmX, String tmY) {
         URI uri = UriComponentsBuilder
@@ -57,7 +59,6 @@ public class SmogInfoServiceImpl implements SmogInfoService {
                 .toUri();
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> forEntity = restTemplate.getForEntity(uri, String.class);
-        log.info("{}",forEntity.getBody());
         return forEntity.getBody();
     }
 

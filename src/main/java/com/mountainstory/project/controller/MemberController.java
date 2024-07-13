@@ -84,6 +84,7 @@ public class MemberController {
 
         return "main/memberInfo";
     }
+
     @ResponseStatus(HttpStatus.SEE_OTHER) //응답 상태 정의 (정의 안하면 delete 방식으로 재요청되기 때문)
     @DeleteMapping("/delete")
     public String memberInfoDelete(@LoginMember OAuthMemberSession oAuthMemberSession, HttpServletRequest request){

@@ -30,7 +30,7 @@ public class HomeController {
 
 
     @GetMapping("")
-    public String homePage(@LoginMember OAuthMemberSession oAuthMemberSession, Model model, HttpServletRequest request){
+    public String homePage(@LoginMember OAuthMemberSession oAuthMemberSession, Model model){
         oAuthMemberService.checkMemberLoginType(oAuthMemberSession,model);
         reviewRankingHelper.findTop7GoodReview(model);
 

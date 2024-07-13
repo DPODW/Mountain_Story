@@ -36,7 +36,7 @@
 				<ol class="breadcrumb userMenu">
 					<li class="breadcrumb-item"><a th:href="@{/member/myInfo}">마이 페이지</a></li>
 					<li class="breadcrumb-item"><a th:href="@{/member/review/history}">게시 글</a></li>
-					<li class="breadcrumb-item"th:if="${kakao}"><a href="https://kauth.kakao.com/oauth/logout?client_id=0d05cb8e8296ee92d3df6bb356bd1566&logout_redirect_uri=http://52.79.115.206:8080/logout">로그아웃</a></li>
+					<li class="breadcrumb-item"th:if="${kakao}"><a href="https://kauth.kakao.com/oauth/logout?client_id=0d05cb8e8296ee92d3df6bb356bd1566&logout_redirect_uri=http://localhost:8080/logout">로그아웃</a></li>
 					<li class="breadcrumb-item"th:if="${naver}"><a href="/home/naverLogout">로그아웃</a></li>
 				</ol>
 			</nav>

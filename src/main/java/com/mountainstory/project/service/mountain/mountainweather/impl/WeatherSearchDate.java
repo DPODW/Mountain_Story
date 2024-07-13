@@ -22,6 +22,7 @@ public class WeatherSearchDate {
         return nowBaseDate.format(formatter);
     }
 
+
     protected String bastTime(){
         LocalDateTime formattedTime = getLocalDateTime();
 

@@ -37,15 +37,9 @@ public class MountainInfoServiceImpl implements MountainInfoService {
 
     @Override
     public List<MountainInfoDto> getAllMountainInfoList(String mountainName) throws UnsupportedEncodingException {
-        StopWatch stopWatch = new StopWatch();
-
         List<MountainInfoDto> mountainInfoDtoList = searchMountainInfo(mountainName,LIST_DEFAULT_PAGE_NUMBER,LIST_DEFAULT_RESULT_COUNT);
         convertMountainName.removePartSameMountain(mountainName,mountainInfoDtoList);
-
-        stopWatch.start();
         setImgToDtoList(mountainInfoDtoList);
-        stopWatch.stop();
-        log.info("{}",stopWatch.prettyPrint());
         return mountainInfoDtoList;
     }
 

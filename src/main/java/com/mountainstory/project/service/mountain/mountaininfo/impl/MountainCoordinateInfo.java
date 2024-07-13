@@ -26,7 +26,6 @@ public class MountainCoordinateInfo {
         this.locationRepository = locationRepository;
     }
 
-
     protected MountainCoordinate getMountainCoordinate(String mountainLocationAll){
         MountainLocation mountainLocation = splitMountainLocation(mountainLocationAll);
         MountainCoordinate locationToCoordinate = locationRepository.findCoordinateToLocation(mountainLocation.getLocationParent(),

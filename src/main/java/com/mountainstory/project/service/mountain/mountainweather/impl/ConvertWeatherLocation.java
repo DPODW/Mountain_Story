@@ -15,23 +15,20 @@ public class ConvertWeatherLocation {
     private static final int FOUR_WORDS_LOCATION = 4;
 
     protected List<String> convertedShortLocation(String mountainLocation) throws UnsupportedEncodingException {
-        log.info(">>{}",mountainLocation);
-
         String mountainLocationEmptyReplace = mountainLocation.replaceAll("\\s+"," ");
         //일관성을 위해 위치 값 (ex 서울특별시 중랑구 면목동) 사이의 공백을 하나로 통일함
 
         int parentLocationIndex = mountainLocationEmptyReplace.indexOf(' ');
         String parentLocation = mountainLocationEmptyReplace.substring(0, parentLocationIndex).trim();
-        log.info(">>>{}",parentLocation);
 
         int childLocationIndex = mountainLocationEmptyReplace.indexOf(' ',parentLocationIndex+1);
         String childLocation = mountainLocationEmptyReplace.substring(parentLocationIndex+1,childLocationIndex).trim();
-        log.info(">>>>{}",childLocation);
 
         List<String> convertLocation = new ArrayList<>();
         convertLocation.add(childLocation);
         //하위 지역은 WeatherJsonToDto 에서 사용되어야 하고, 미세먼지 제공 API 가 요청하는 지역은 상위 지역이다.
         //그렇기 때문에 인코딩은 상위 지역만 이루어지면 된다. ( 하위 지역에 인코딩 할 시 WeatherJsonToDto 에서 조건 검사 오류 발생 115Line)
+
 
         switch (parentLocation.length()){
             case THREE_WORDS_LOCATION:

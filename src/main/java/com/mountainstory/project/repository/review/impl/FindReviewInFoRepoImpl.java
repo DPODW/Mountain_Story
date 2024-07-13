@@ -40,7 +40,7 @@ public class FindReviewInFoRepoImpl implements FindReviewInFoRepo {
         List<Review> reviewRatingList = jpaQueryFactory
                 .select(qReview)
                 .from(qReview)
-                .where(qReview.reviewNumber.in(ratingReviewNumberList))//반복하면서 숫자 가져오기. . .?
+                .where(qReview.reviewNumber.in(ratingReviewNumberList))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(qReview.reviewNumber.desc())
