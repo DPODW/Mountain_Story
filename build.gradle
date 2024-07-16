@@ -47,6 +47,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }
+//LOCAL 환경에선 MySQL 이 아닌 mariaDB 를 사용. (현재 배포 X 라서 mariaDB 로 변경)
 
 tasks.named('test') {
 	useJUnitPlatform()
